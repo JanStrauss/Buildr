@@ -11,10 +11,12 @@ import org.bukkit.inventory.ItemStack;
 public class Buildr_PlayerListener extends PlayerListener {
 	
 	private Buildr plugin;
+	private Buildr_BlockToDropConv converter;
 	
 	public Buildr_PlayerListener(Buildr plugin) {
 		super();
 		this.plugin = plugin;
+		this.converter = new Buildr_BlockToDropConv();
 	}
 
 @Override
@@ -24,7 +26,7 @@ public void onPlayerInteract(PlayerInteractEvent event) {
 			// Check for Drops
 			
 			if (!plugin.checkWorldBuildMode(event.getClickedBlock().getWorld())) {
-				for (ItemStack stk : Buildr_BlockToDropConv.convert(event.getClickedBlock())) {
+				for (ItemStack stk : converter.convert(event.getClickedBlock())) {
 					if (stk != null) {
 						event.getClickedBlock().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(), stk);
 					}
