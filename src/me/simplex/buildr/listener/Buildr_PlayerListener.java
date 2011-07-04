@@ -38,7 +38,7 @@ public class Buildr_PlayerListener extends PlayerListener {
 		}
 		  
 	}
-	
+
 	@Override
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		if (plugin.checkPlayerBuildMode(event.getPlayer())) {

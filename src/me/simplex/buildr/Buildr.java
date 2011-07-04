@@ -8,6 +8,7 @@ import me.simplex.buildr.listener.Buildr_EntityListener;
 import me.simplex.buildr.listener.Buildr_PlayerListener;
 import me.simplex.buildr.listener.Buildr_WeatherListener;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -34,6 +35,8 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_EntityListener entityListener;
 	  private Buildr_PlayerListener playerListener;
 	  private Buildr_WeatherListener weatherListener;
+	  
+	  private Buildr_Commands cmdHandler;
 
 	  private Thread thread;
 	  private Buildr_TimeHandleThread timeHandler;
@@ -54,6 +57,9 @@ public class Buildr extends JavaPlugin {
 	public void onEnable() {
 		//init
 		 pm = getServer().getPluginManager();
+		 
+		cmdHandler =  new Buildr_Commands(this);
+		 
 		 entityListener = new Buildr_EntityListener(this);
 		 playerListener = new Buildr_PlayerListener(this);
 		 weatherListener = new Buildr_WeatherListener();
@@ -76,6 +82,7 @@ public class Buildr extends JavaPlugin {
 		 pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Event.Priority.Normal, this); // No Pickups
 		 pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Event.Priority.Normal, this); // Always Sun
 		 
+		 
 		 // TimeThread
 		 timeHandler = new Buildr_TimeHandleThread(this);
 		 thread = new Thread(timeHandler,prefix+"Time Handler");
@@ -84,8 +91,46 @@ public class Buildr extends JavaPlugin {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,String label, String[] args) {
-		// TODO Auto-generated method stub
-		return super.onCommand(sender, command, label, args);
+		if (!(sender instanceof Player)) { //disable console 
+			return true;
+		}
+		
+		if (command.getName().equals("globalbuild")) {
+			if (permissionHandler.has((Player)sender, "buildr.cmd.globalbuild")) {
+				World world;
+				if (args[0] != null) {
+					world = getServer().getWorld(args[0]);
+				}
+				else {
+					world = ((Player)sender).getWorld();
+				}
+				if (world != null) {
+					cmdHandler.cmd_globalbuild(sender, world);
+				}
+				else {
+					sender.sendMessage(ChatColor.RED+"There is no world with this name");
+				}
+				return true;
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the Permission to perform this action");
+				return true;
+			}
+			
+		}
+		else if (command.getName().equals("build")) {
+			if (permissionHandler.has((Player)sender, "buildr.cmd.build")) {
+				cmdHandler.cmd_build(sender);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the Permission to perform this action");
+			}
+			return true;
+		}
+		else {
+			return false;
+		}
+		
 	}
 	
 	private void setupPermissions() {
@@ -150,5 +195,14 @@ public class Buildr extends JavaPlugin {
 
 	public void setPlayerbuildmode(ArrayList<Player> playerbuildmode) {
 		this.playerbuildmode = playerbuildmode;
+	}
+
+	public void enterBuildmode(Player sender) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void leaveBuildmode(Player sender) {
+		// TODO Auto-generated method stub
+		
 	}
 }
