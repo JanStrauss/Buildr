@@ -21,14 +21,18 @@ public class Buildr extends JavaPlugin {
 	
 	  //tech
 	  public static PermissionHandler permissionHandler;
-	  public Buildr_EntityListener EntityListener;
 	  public Logger log = Logger.getLogger("Minecraft");
+	  
+	  private Buildr_EntityListener entityListener;
+	  private Buildr_BlockListener blockListener;
+
 	  private String prefix;
 	  private String version;
-	  private String pluginDirectory;
+	  //private String pluginDirectory;
 	  private PluginManager pm;
 	  
 	  //logic
+	  private HashMap<String, Object> settings;
 	  private ArrayList<World> worldbuildmode;
 	  private ArrayList<Player> playerbuildmode;
 
@@ -41,10 +45,10 @@ public class Buildr extends JavaPlugin {
 	public void onEnable() {
 		//init
 		 pm = getServer().getPluginManager();
-		 EntityListener = new Buildr_EntityListener(this);
+		 entityListener = new Buildr_EntityListener(this);
+		 blockListener = new Buildr_BlockListener(this);
 		 version = getDescription().getVersion();
 		 prefix = "[Buildr] ";
-		 
 		 
 		 worldbuildmode =  new ArrayList<World>();
 		 playerbuildmode = new ArrayList<Player>();
@@ -55,9 +59,9 @@ public class Buildr extends JavaPlugin {
 		 
 		 //register Listener
 		 //TODO
-		 pm.registerEvent(Type.ENTITY_DAMAGE, EntityListener, Event.Priority.Normal, this);
-		 pm.registerEvent(Type.ENTITY_TARGET, EntityListener, Event.Priority.Normal, this);
-		 pm.registerEvent(Type.ITEM_SPAWN, EntityListener, Event.Priority.Normal, this);
+		 pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this);
+		 pm.registerEvent(Type.ENTITY_TARGET, entityListener, Event.Priority.Normal, this);
+		 pm.registerEvent(Type.ITEM_SPAWN, entityListener, Event.Priority.Normal, this);
 	}
 	
 	@Override
@@ -92,5 +96,6 @@ public class Buildr extends JavaPlugin {
 	protected boolean checkPlayerBuildMode(Player player){
 		return playerbuildmode.contains(player);
 	}
+	
 
 }
