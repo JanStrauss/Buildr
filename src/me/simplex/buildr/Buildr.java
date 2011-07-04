@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import me.simplex.buildr.listener.Buildr_EntityListener;
+import me.simplex.buildr.listener.Buildr_PlayerListener;
+import me.simplex.buildr.listener.Buildr_WeatherListener;
+
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
@@ -104,14 +108,14 @@ public class Buildr extends JavaPlugin {
 		log.info(prefix+msg);
 	}
 	
-	protected boolean checkWorldBuildMode(World world){
+	public boolean checkWorldBuildMode(World world){
 		return worldbuildmode.contains(world);
 	}
-	protected boolean checkPlayerBuildMode(Player player){
+	public boolean checkPlayerBuildMode(Player player){
 		return playerbuildmode.contains(player);
 	}
 	
-	protected boolean checkPlayerItemInHandIsPickaxe(Player player){
+	public boolean checkPlayerItemInHandIsPickaxe(Player player){
 		if (player.getItemInHand().getType() == Material.DIAMOND_PICKAXE ||
 			player.getItemInHand().getType() == Material.IRON_PICKAXE ||
 			player.getItemInHand().getType() == Material.STONE_PICKAXE ||

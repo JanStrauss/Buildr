@@ -1,4 +1,6 @@
-package me.simplex.buildr;
+package me.simplex.buildr.listener;
+
+import me.simplex.buildr.Buildr;
 
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.weather.WeatherListener;

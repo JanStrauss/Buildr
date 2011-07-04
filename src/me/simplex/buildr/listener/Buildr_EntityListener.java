@@ -1,4 +1,6 @@
-package me.simplex.buildr;
+package me.simplex.buildr.listener;
+
+import me.simplex.buildr.Buildr;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
