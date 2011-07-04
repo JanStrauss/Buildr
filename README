@@ -2,13 +2,13 @@ FEATURES:
 	Global build mode:
 		Weather is always Sun
 		Time:  Won't get night while in build mode
-		No Drops from breaking Blocks
+		-No Drops from breaking Blocks
 	User build mode:
 		Switch between different inventorys for building and normal playing
-		Instant Block Break
+		-Instant Block Break
 		Place blocks in x height over the user
-		Godmode
+		-Godmode
 		/top port
 		Unlimited Items
-		No Pickups
+		-No Pickups
 		Wallbuilder

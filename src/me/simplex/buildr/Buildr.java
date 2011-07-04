@@ -60,10 +60,11 @@ public class Buildr extends JavaPlugin {
 		 
 		 //register Listener
 		 //TODO
-		 pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this);
-		 pm.registerEvent(Type.ENTITY_TARGET, entityListener, Event.Priority.Normal, this);
-		 pm.registerEvent(Type.ITEM_SPAWN, entityListener, Event.Priority.Normal, this);
-		 pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Event.Priority.Normal, this);
+		 pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this); // Godmode: no dmg
+		 pm.registerEvent(Type.ENTITY_TARGET, entityListener, Event.Priority.Normal, this); // Godmode: no aggro
+		 pm.registerEvent(Type.ITEM_SPAWN, entityListener, Event.Priority.Normal, this); // No Blockdrops
+		 pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Event.Priority.Normal, this); // Instant Blockbreak
+		 pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Event.Priority.Normal, this); // No Pickups
 	}
 	
 	@Override
