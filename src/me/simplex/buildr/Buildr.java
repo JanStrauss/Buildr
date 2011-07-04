@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -24,7 +25,7 @@ public class Buildr extends JavaPlugin {
 	  public Logger log = Logger.getLogger("Minecraft");
 	  
 	  private Buildr_EntityListener entityListener;
-	  private Buildr_BlockListener blockListener;
+	  private Buildr_PlayerListener playerListener;
 
 	  private String prefix;
 	  private String version;
@@ -46,7 +47,7 @@ public class Buildr extends JavaPlugin {
 		//init
 		 pm = getServer().getPluginManager();
 		 entityListener = new Buildr_EntityListener(this);
-		 blockListener = new Buildr_BlockListener(this);
+		 playerListener = new Buildr_PlayerListener(this);
 		 version = getDescription().getVersion();
 		 prefix = "[Buildr] ";
 		 
@@ -62,6 +63,7 @@ public class Buildr extends JavaPlugin {
 		 pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this);
 		 pm.registerEvent(Type.ENTITY_TARGET, entityListener, Event.Priority.Normal, this);
 		 pm.registerEvent(Type.ITEM_SPAWN, entityListener, Event.Priority.Normal, this);
+		 pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Event.Priority.Normal, this);
 	}
 	
 	@Override
@@ -97,5 +99,22 @@ public class Buildr extends JavaPlugin {
 		return playerbuildmode.contains(player);
 	}
 	
-
+	protected boolean checkPlayerItemInHandIsPickaxe(Player player){
+		if (player.getItemInHand().getType() == Material.DIAMOND_PICKAXE ||
+			player.getItemInHand().getType() == Material.IRON_PICKAXE ||
+			player.getItemInHand().getType() == Material.STONE_PICKAXE ||
+			player.getItemInHand().getType() == Material.WOOD_PICKAXE) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	/**
+	 * @return the settings HashMap of Buildr
+	 */
+	public HashMap<String, Object> getSettings() {
+		return settings;
+	}
 }
