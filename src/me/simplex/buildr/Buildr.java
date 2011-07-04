@@ -24,12 +24,15 @@ public class Buildr extends JavaPlugin {
 	  public static PermissionHandler permissionHandler;
 	  public Logger log = Logger.getLogger("Minecraft");
 	  
+	  private String prefix;
+	  private String version;
+	  
 	  private Buildr_EntityListener entityListener;
 	  private Buildr_PlayerListener playerListener;
 	  private Buildr_WeatherListener weatherListener;
 
-	  private String prefix;
-	  private String version;
+	  private Thread thread;
+	  private Buildr_TimeHandleThread timeHandler;
 	  //private String pluginDirectory;
 	  private PluginManager pm;
 	  
@@ -40,7 +43,7 @@ public class Buildr extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		// TODO Auto-generated method stub
+		timeHandler.setAlive(false);
 	}
 
 	@Override
@@ -68,6 +71,11 @@ public class Buildr extends JavaPlugin {
 		 pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Event.Priority.Normal, this); // Instant Blockbreak
 		 pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Event.Priority.Normal, this); // No Pickups
 		 pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Event.Priority.Normal, this); // Always Sun
+		 
+		 // TimeThread
+		 timeHandler = new Buildr_TimeHandleThread(this);
+		 thread = new Thread(timeHandler,prefix+"Time Handler");
+	     thread.start();
 	}
 	
 	@Override
@@ -115,10 +123,28 @@ public class Buildr extends JavaPlugin {
 		}
 	}
 	
+	//get+set 
+	
 	/**
 	 * @return the settings HashMap of Buildr
 	 */
 	public HashMap<String, Object> getSettings() {
 		return settings;
+	}
+
+	public ArrayList<World> getWorldbuildmode() {
+		return worldbuildmode;
+	}
+
+	public void setWorldbuildmode(ArrayList<World> worldbuildmode) {
+		this.worldbuildmode = worldbuildmode;
+	}
+
+	public ArrayList<Player> getPlayerbuildmode() {
+		return playerbuildmode;
+	}
+
+	public void setPlayerbuildmode(ArrayList<Player> playerbuildmode) {
+		this.playerbuildmode = playerbuildmode;
 	}
 }
