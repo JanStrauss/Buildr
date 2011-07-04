@@ -26,6 +26,7 @@ public class Buildr extends JavaPlugin {
 	  
 	  private Buildr_EntityListener entityListener;
 	  private Buildr_PlayerListener playerListener;
+	  private Buildr_WeatherListener weatherListener;
 
 	  private String prefix;
 	  private String version;
@@ -48,6 +49,7 @@ public class Buildr extends JavaPlugin {
 		 pm = getServer().getPluginManager();
 		 entityListener = new Buildr_EntityListener(this);
 		 playerListener = new Buildr_PlayerListener(this);
+		 weatherListener = new Buildr_WeatherListener();
 		 version = getDescription().getVersion();
 		 prefix = "[Buildr] ";
 		 
@@ -65,6 +67,7 @@ public class Buildr extends JavaPlugin {
 		 pm.registerEvent(Type.ITEM_SPAWN, entityListener, Event.Priority.Normal, this); // No Blockdrops
 		 pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Event.Priority.Normal, this); // Instant Blockbreak
 		 pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Event.Priority.Normal, this); // No Pickups
+		 pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Event.Priority.Normal, this); // Always Sun
 	}
 	
 	@Override
