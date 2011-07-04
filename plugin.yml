@@ -1,0 +1,25 @@
+name: Buildr
+main: me.simplex.buildr.Buildr
+version: 0.1.0
+website: http://www.over9000.eu
+author: simplex
+description: >
+             Plugin that makes building alot easier, faster and more comfortable.
+commands:
+  globalbuild:
+    description: Toggles the Global Buildmode
+    aliases: [gb]
+    usage: |
+           /<command>
+           Example: /<command>
+  build:
+    description: Toggles the User Buildmode
+    aliases: [ub,userbuild]
+    usage: |
+           /<command>
+           Example: /<command>
+   wall:
+    description: Starts the Tracking of building a Wall
+    usage: |
+           /<command> 
+           Example: /<command> place corner 1 & corner 2

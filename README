@@ -1,0 +1,13 @@
+FEATURES:
+	Global build mode:
+		Weather is always Sun
+		Time:  Won't get night while in build mode
+	User build mode:
+		Switch between different inventorys for building and normal playing
+		Instant Block Break
+		Place blocks in x height over the user
+		Godmode
+		/top port
+		Unlimited Items
+		No Pickups
+		Wallbuilder
