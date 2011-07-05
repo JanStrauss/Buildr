@@ -6,6 +6,7 @@ import me.simplex.buildr.util.Buildr_BlockToDropConv;
 import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -49,6 +50,14 @@ public class Buildr_PlayerListener extends PlayerListener {
 	
 	@Override
 	public void onPlayerQuit(PlayerQuitEvent event) {
+		if (plugin.checkPlayerBuildMode(event.getPlayer())) {
+			plugin.leaveBuildmode(event.getPlayer());
+			plugin.log("removed "+event.getPlayer().getName()+" from builders");
+		}
+	}
+	
+	@Override
+	public void onPlayerKick(PlayerKickEvent event) {
 		if (plugin.checkPlayerBuildMode(event.getPlayer())) {
 			plugin.leaveBuildmode(event.getPlayer());
 			plugin.log("removed "+event.getPlayer().getName()+" from builders");

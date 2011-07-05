@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import me.simplex.buildr.util.Buildr_ItemStackSaveContainer;
+
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -24,36 +26,19 @@ public class Buildr_InventoryManager {
 		ItemStack[] newInv = loadBackupInventory(player);
 		
 		saveBackupInventory(player, currInv);
-		
+			
 		changeCurrentInventory(player, newInv);
+		
 	}
 
-
-
 	private ItemStack[] loadCurrentInventory(Player player){
-		ItemStack[] stacks = player.getInventory().getContents();
-		ItemStack[] fullinv = new ItemStack[stacks.length+4];
-		
-		//System.out.println("Stacks: "+stacks.length);
-		for (int i = 0; i < stacks.length; i++) {
-			fullinv[i] = stacks[i];
-		}
-		fullinv[stacks.length+1] = player.getInventory().getHelmet();
-		fullinv[stacks.length+2] = player.getInventory().getChestplate();
-		fullinv[stacks.length+3] = player.getInventory().getLeggings();
-		fullinv[stacks.length+4] = player.getInventory().getBoots();
-		
-		return fullinv;
+		return  player.getInventory().getContents();
 	}
 	
 	private void changeCurrentInventory(Player player, ItemStack[] newInv){
-		for (int i = 0; i < newInv.length-4; i++) {
+		for (int i = 0; i < player.getInventory().getSize(); i++) {
 			player.getInventory().setItem(i, newInv[i]);
 		}
-		player.getInventory().setHelmet(newInv[newInv.length-3]);
-		player.getInventory().setChestplate(newInv[newInv.length-2]);
-		player.getInventory().setLeggings(newInv[newInv.length-1]);
-		player.getInventory().setBoots(newInv[newInv.length]);
 	}
 	
 	
@@ -61,34 +46,45 @@ public class Buildr_InventoryManager {
 	 * @param invtype true= normal, false=build
 	 * @return fullinv with Armor
 	 */
+
 	private ItemStack[] loadBackupInventory(Player player){
 		ObjectInputStream objctInStrm;
-		ItemStack[] input=null;
-		try {
-			objctInStrm = new ObjectInputStream(new FileInputStream(plugin.getPluginDirectory()+File.separator+"inv_backups"+File.separator+player+".inv"));
-			input = (ItemStack[])objctInStrm.readObject();
-			objctInStrm.close();
+		Buildr_ItemStackSaveContainer[] FileContainer =null;
 
+		try {
+			objctInStrm = new ObjectInputStream(new FileInputStream(plugin.getPluginDirectory()+File.separator+"inv_backups"+File.separator+player.getName()+".inv"));
+			FileContainer = (Buildr_ItemStackSaveContainer[])objctInStrm.readObject();
+			objctInStrm.close();
 		} catch (FileNotFoundException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		if (input != null) {
-			return input;
+		ItemStack[] inventory= new ItemStack[FileContainer.length];
+		for (int i = 0; i < FileContainer.length; i++) {
+			if (FileContainer[i]!=null) {
+				inventory[i] = new ItemStack(FileContainer[i].getType(), FileContainer[i].getAmount(), FileContainer[i].getDurability(), FileContainer[i].getMaterial_data());
+			}
 		}
-		else {
-			return null;
-		}
-
+		return inventory;
 	}
 	
 	private void saveBackupInventory(Player player,ItemStack[] inv){
+		Buildr_ItemStackSaveContainer[] FileContainer =new Buildr_ItemStackSaveContainer[inv.length];
+		for (int i = 0; i < inv.length; i++) {
+			if (inv[i]!= null) {
+				byte savedata = 0;
+				if (inv[i].getData() != null) {
+					savedata = inv[i].getData().getData();
+				}
+				FileContainer[i] = new Buildr_ItemStackSaveContainer(inv[i].getTypeId(), inv[i].getAmount(), inv[i].getDurability(), savedata);
+			}
+		}
+		
 		try {
 			ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(plugin.getPluginDirectory()+File.separator+"inv_backups"+File.separator+player.getName()+".inv"));
-			objctOutStrm.writeObject(inv);
+			objctOutStrm.writeObject(FileContainer);
 			objctOutStrm.flush();
 			objctOutStrm.close();
 		} catch (IOException e) {
@@ -96,19 +92,21 @@ public class Buildr_InventoryManager {
 		}
 	}
 	
-	public void startupCheck(){
-		 new File(plugin.getPluginDirectory()+File.separator+"inv_backups").mkdir();
+	public boolean startupCheck(){
+		return new File(plugin.getPluginDirectory()+File.separator+"inv_backups").mkdir();
 	}
 	
 	private void checkBackupFile(Player player) {
 		if (new File(plugin.getPluginDirectory()+File.separator+"inv_backups"+File.separator+player.getName()+".inv").exists()) {
+			plugin.log("InvBackup for "+player.getName()+" found");
 			return;
 		}
 		createNewBuildInv(player);
+		plugin.log("InvBackup for "+player.getName()+" created");
 	}
 
 	private void createNewBuildInv(Player player) {
-		ItemStack[] newinv = new ItemStack[39];
+		ItemStack[] newinv = new ItemStack[40];
 		newinv[0] = new ItemStack(278); //Diamond Pickaxe
 		newinv[1] = new ItemStack(50,64); //Torch
 		newinv[6] = new ItemStack(1, 64); //Stone

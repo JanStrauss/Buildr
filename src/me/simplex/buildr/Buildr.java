@@ -99,6 +99,9 @@ public class Buildr extends JavaPlugin {
 			log("...");
 			log("...");
 		}
+		if (invManager.startupCheck()) {
+			log("created Inventory directory");
+		}
 
 		//register Listener
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this); // Godmode: no dmg
@@ -108,6 +111,9 @@ public class Buildr extends JavaPlugin {
 		pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Event.Priority.Normal, this); // No Pickups
 		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Event.Priority.Normal, this); // Always Sun
 		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Event.Priority.Normal, this); // Unlimited Stacks
+		pm.registerEvent(Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this); // Inv reset
+		pm.registerEvent(Type.PLAYER_KICK, playerListener, Event.Priority.Normal, this); // Inv reset
+		
 		if ((Boolean)settings.get("SPAM_ON_STARTUP")) {
 			log("Listener registered");
 		}

@@ -15,7 +15,9 @@ public Buildr_WeatherListener(Buildr buildr) {
 @Override
 public void onWeatherChange(WeatherChangeEvent event) {
 	if (plugin.checkWorldBuildMode(event.getWorld())) {
-		event.setCancelled(true);
+		if (event.toWeatherState()) {
+			event.setCancelled(true);
+		}
 	}
 }
 }
