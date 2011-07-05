@@ -37,9 +37,10 @@ public void onEntityDamage(EntityDamageEvent event) {
 @Override
 	public void onEntityTarget(EntityTargetEvent event) {
 		if (event.getTarget() instanceof Player) {
-			if (plugin.checkPlayerBuildMode((Player)event.getEntity())) {
+			if (plugin.checkPlayerBuildMode((Player)event.getTarget())) {
 				event.setCancelled(true);
 			}
 		}
 	}
+
 }

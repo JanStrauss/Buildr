@@ -24,19 +24,18 @@ public class Buildr_PlayerListener extends PlayerListener {
 @Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsPickaxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
-			event.getClickedBlock().setType(Material.AIR);
-			
+
 			// Check for Drops
-			if (!plugin.checkWorldBuildMode(event.getClickedBlock().getWorld())) {
+			if (!(plugin.checkWorldBuildMode(event.getClickedBlock().getWorld()))) {
 				for (ItemStack stk : converter.convert(event.getClickedBlock())) {
 					if (stk != null) {
 						event.getClickedBlock().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(), stk);
 					}
 				}
 			}
+			event.getClickedBlock().setType(Material.AIR);
 			event.setCancelled(true);
 		}
-		  
 	}
 
 	@Override
@@ -44,5 +43,6 @@ public class Buildr_PlayerListener extends PlayerListener {
 		if (plugin.checkPlayerBuildMode(event.getPlayer())) {
 			event.setCancelled(true);
 		}
+		//System.out.println("pickup: "+event.getItem().getItemStack().getTypeId()+"cancelled: "+event.isCancelled());
 	}
 }

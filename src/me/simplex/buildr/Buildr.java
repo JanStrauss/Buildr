@@ -27,7 +27,7 @@ public class Buildr extends JavaPlugin {
 	
 	  //tech
 	  public static PermissionHandler permissionHandler;
-	  public Logger log = Logger.getLogger("Minecraft");
+	  private Logger log = Logger.getLogger("Minecraft");
 	  
 	  private String prefix;
 	  private String version;
@@ -98,7 +98,7 @@ public class Buildr extends JavaPlugin {
 		if (command.getName().equals("globalbuild")) {
 			if (checkPermission((Player)sender, "buildr.cmd.globalbuild")) {
 				World world;
-				if (args[0] != null) {
+				if (args.length > 0) {
 					world = getServer().getWorld(args[0]);
 				}
 				else {
@@ -149,7 +149,7 @@ public class Buildr extends JavaPlugin {
 	    log("Found and will use plugin "+((Permissions)permissionsPlugin).getDescription().getFullName());
 	}
 	
-	protected void log(String msg){
+	public void log(String msg){
 		log.info(prefix+msg);
 	}
 	
@@ -211,6 +211,14 @@ public class Buildr extends JavaPlugin {
 		
 	}
 	public void leaveBuildmode(Player sender) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void enterGlobalbuildmode(Player sender) {
+		// TODO Auto-generated method stub
+		
+	}
+	public void leaveGlobalbuildmode(Player sender) {
 		// TODO Auto-generated method stub
 		
 	}

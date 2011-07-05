@@ -18,12 +18,12 @@ commands:
     usage: |
            /<command>
            Example: /<command>
-   wall:
+  wall:
     description: Starts the wall building function
     usage: |
            /<command> 
            Example: /<command> place corner 1 & corner 2
-   airfloor:
+  airfloor:
     description: places a block of material x y blocks above the player
     usage: |
            /<command> <material #> <height #>

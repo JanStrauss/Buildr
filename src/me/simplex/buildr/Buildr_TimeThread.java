@@ -10,11 +10,13 @@ public class Buildr_TimeThread implements Runnable {
 
 	public Buildr_TimeThread(Buildr plugin) {
 		this.plugin = plugin;
+		this.alive=true;
 	}
 
 
 	@Override
 	public void run() {
+		plugin.log("started TimeThread.");
 		while(isAlive()){
 			try {
 				Thread.sleep(30000); //sleep 30sec
@@ -27,7 +29,9 @@ public class Buildr_TimeThread implements Runnable {
 				plugin.log("time reset");
 			}
 		}
+		plugin.log("Time checked");
 		}
+		plugin.log("stopped TimeThread.");
 	}
 	public boolean isAlive() {
 		return alive;
