@@ -21,7 +21,7 @@ public class Buildr_ConfigManager {
     }
 	
 	public boolean checkConfigFile(){
-		return !(new File(plugin.getPluginDirectory()+File.separator+"settings.cfg").exists());
+		return new File(plugin.getPluginDirectory()+File.separator+"settings.cfg").exists();
     }
 	
 	@SuppressWarnings("unchecked")
@@ -57,5 +57,6 @@ public class Buildr_ConfigManager {
 	public void createSettings(){
 		HashMap<String, Object> settings = new HashMap<String, Object>();
 		settings.put("SPAM_ON_STARTUP", true);
+		saveSettings(settings);
 	}
 }

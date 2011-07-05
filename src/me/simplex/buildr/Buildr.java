@@ -79,14 +79,14 @@ public class Buildr extends JavaPlugin {
 		worldbuildmode =  new ArrayList<World>();
 		playerbuildmode = new ArrayList<Player>();
 		 
-		//load
+		//load settings
 		log("Buildr v"+version+" loading..");
 		setupPermissions();
 		
 		if (cfgManager.checkDirectory()) {
 			log("created Buildr directory");
 		}
-		if (cfgManager.checkConfigFile()) {
+		if (!cfgManager.checkConfigFile()) {
 			cfgManager.createSettings();
 			log("created Buildr Configfile settings.cfg");
 		}
@@ -117,6 +117,9 @@ public class Buildr extends JavaPlugin {
 		timeHandler = new Buildr_TimeThread(this);
 		thread = new Thread(timeHandler,prefix+"Time Handler");
 		thread.start();
+		if ((Boolean)settings.get("SPAM_ON_STARTUP")) {
+			log("started TimeThread");
+		}
 		log("Buildr v"+version+" loaded");
 	}
 	
@@ -213,14 +216,14 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	
-	public void enterBuildmode(Player sender) {
-		getPlayerbuildmode().add((Player)sender);
-		invManager.switchInventory((Player)sender);
+	public void enterBuildmode(Player player) {
+		getPlayerbuildmode().add(player);
+		invManager.switchInventory(player);
 	}
 	
-	public void leaveBuildmode(Player sender) {
-		getPlayerbuildmode().remove((Player)sender);
-		invManager.switchInventory((Player)sender);
+	public void leaveBuildmode(Player player) {
+		getPlayerbuildmode().remove(player);
+		invManager.switchInventory(player);
 	}
 	
 	public void enterGlobalbuildmode(World world) {
@@ -262,6 +265,6 @@ public class Buildr extends JavaPlugin {
 	public String getPluginDirectory() {
 		return pluginDirectory;
 	}
-
+	
 
 }

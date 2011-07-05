@@ -19,6 +19,7 @@ public class Buildr_InventoryManager {
 	}
 	
 	public void switchInventory(Player player){
+		checkBackupFile(player);
 		ItemStack[] currInv = loadCurrentInventory(player);
 		ItemStack[] newInv = loadBackupInventory(player);
 		
@@ -26,6 +27,8 @@ public class Buildr_InventoryManager {
 		
 		changeCurrentInventory(player, newInv);
 	}
+
+
 
 	private ItemStack[] loadCurrentInventory(Player player){
 		ItemStack[] stacks = player.getInventory().getContents();
@@ -84,7 +87,7 @@ public class Buildr_InventoryManager {
 	
 	private void saveBackupInventory(Player player,ItemStack[] inv){
 		try {
-			ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(plugin.getPluginDirectory()+File.separator+"inv_backups"+File.separator+player+".inv"));
+			ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(plugin.getPluginDirectory()+File.separator+"inv_backups"+File.separator+player.getName()+".inv"));
 			objctOutStrm.writeObject(inv);
 			objctOutStrm.flush();
 			objctOutStrm.close();
@@ -92,4 +95,27 @@ public class Buildr_InventoryManager {
 			e.printStackTrace();
 		}
 	}
+	
+	public void startupCheck(){
+		 new File(plugin.getPluginDirectory()+File.separator+"inv_backups").mkdir();
+	}
+	
+	private void checkBackupFile(Player player) {
+		if (new File(plugin.getPluginDirectory()+File.separator+"inv_backups"+File.separator+player.getName()+".inv").exists()) {
+			return;
+		}
+		createNewBuildInv(player);
+	}
+
+	private void createNewBuildInv(Player player) {
+		ItemStack[] newinv = new ItemStack[39];
+		newinv[0] = new ItemStack(278); //Diamond Pickaxe
+		newinv[1] = new ItemStack(50,64); //Torch
+		newinv[6] = new ItemStack(1, 64); //Stone
+		newinv[7] = new ItemStack(4, 64); //Cobblestone
+		newinv[8] = new ItemStack(5, 64); //Planks
+		
+		saveBackupInventory(player, newinv);
+	}
+	
 }

@@ -27,4 +27,9 @@ commands:
     description: places a block of material x y blocks above the player
     usage: |
            /<command> <material #> <height #>
-           Example: /<command> place corner 1 & corner 2
+           Example: /<command> 4 20
+  wool:
+    description: gives a Stack of wool in the specified color to the player
+    usage: |
+           /<command> <color>
+           Example: /<command> black

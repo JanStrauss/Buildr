@@ -8,6 +8,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
 
 public class Buildr_PlayerListener extends PlayerListener {
@@ -44,5 +45,13 @@ public class Buildr_PlayerListener extends PlayerListener {
 			event.setCancelled(true);
 		}
 		//System.out.println("pickup: "+event.getItem().getItemStack().getTypeId()+"cancelled: "+event.isCancelled());
+	}
+	
+	@Override
+	public void onPlayerQuit(PlayerQuitEvent event) {
+		if (plugin.checkPlayerBuildMode(event.getPlayer())) {
+			plugin.leaveBuildmode(event.getPlayer());
+			plugin.log("removed "+event.getPlayer().getName()+" from builders");
+		}
 	}
 }
