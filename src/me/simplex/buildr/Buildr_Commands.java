@@ -40,5 +40,4 @@ public class Buildr_Commands {
 			plugin.leaveBuildmode((Player)sender);
 		}
 	}
-
 }

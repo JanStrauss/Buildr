@@ -39,7 +39,7 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_Commands cmdHandler;
 
 	  private Thread thread;
-	  private Buildr_TimeHandleThread timeHandler;
+	  private Buildr_TimeThread timeHandler;
 	  //private String pluginDirectory;
 	  private PluginManager pm;
 	  
@@ -84,7 +84,7 @@ public class Buildr extends JavaPlugin {
 		 
 		 
 		 // TimeThread
-		 timeHandler = new Buildr_TimeHandleThread(this);
+		 timeHandler = new Buildr_TimeThread(this);
 		 thread = new Thread(timeHandler,prefix+"Time Handler");
 	     thread.start();
 	}
@@ -96,7 +96,7 @@ public class Buildr extends JavaPlugin {
 		}
 		
 		if (command.getName().equals("globalbuild")) {
-			if (permissionHandler.has((Player)sender, "buildr.cmd.globalbuild")) {
+			if (checkPermission((Player)sender, "buildr.cmd.globalbuild")) {
 				World world;
 				if (args[0] != null) {
 					world = getServer().getWorld(args[0]);
@@ -119,7 +119,7 @@ public class Buildr extends JavaPlugin {
 			
 		}
 		else if (command.getName().equals("build")) {
-			if (permissionHandler.has((Player)sender, "buildr.cmd.build")) {
+			if (checkPermission((Player)sender, "buildr.cmd.build")) {
 				cmdHandler.cmd_build(sender);
 			}
 			else {
@@ -151,6 +151,15 @@ public class Buildr extends JavaPlugin {
 	
 	protected void log(String msg){
 		log.info(prefix+msg);
+	}
+	
+	public boolean checkPermission(Player player, String node){
+		if (permissionHandler!=null) {
+			return permissionHandler.has(player, node);
+		}
+		else {
+			return player.isOp();
+		}
 	}
 	
 	public boolean checkWorldBuildMode(World world){

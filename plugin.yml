@@ -19,7 +19,12 @@ commands:
            /<command>
            Example: /<command>
    wall:
-    description: Starts the Tracking of building a Wall
+    description: Starts the wall building function
     usage: |
            /<command> 
+           Example: /<command> place corner 1 & corner 2
+   airfloor:
+    description: places a block of material x y blocks above the player
+    usage: |
+           /<command> <material #> <height #>
            Example: /<command> place corner 1 & corner 2

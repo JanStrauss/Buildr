@@ -2,13 +2,13 @@ package me.simplex.buildr;
 
 import org.bukkit.World;
 
-public class Buildr_TimeHandleThread implements Runnable {
+public class Buildr_TimeThread implements Runnable {
 	Buildr plugin;
 	boolean alive;
 
 
 
-	public Buildr_TimeHandleThread(Buildr plugin) {
+	public Buildr_TimeThread(Buildr plugin) {
 		this.plugin = plugin;
 	}
 
@@ -22,7 +22,7 @@ public class Buildr_TimeHandleThread implements Runnable {
 				e.printStackTrace();
 			} 
 		for (World world : plugin.getWorldbuildmode()) {
-			if (world.getTime()>=1000) {
+			if (world.getTime()>=10000) {
 				world.setTime(0);
 				plugin.log("time reset");
 			}
