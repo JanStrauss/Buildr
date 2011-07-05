@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.logging.Logger;
 
+import me.simplex.buildr.listener.Buildr_BlockListener;
 import me.simplex.buildr.listener.Buildr_EntityListener;
 import me.simplex.buildr.listener.Buildr_PlayerListener;
 import me.simplex.buildr.listener.Buildr_WeatherListener;
@@ -35,18 +36,22 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_EntityListener entityListener;
 	  private Buildr_PlayerListener playerListener;
 	  private Buildr_WeatherListener weatherListener;
+	  private Buildr_BlockListener blockListener;
 	  
 	  private Buildr_Commands cmdHandler;
+	  private Buildr_InventoryManager invManager;
+	  private Buildr_ConfigManager cfgManager;
 
 	  private Thread thread;
 	  private Buildr_TimeThread timeHandler;
-	  //private String pluginDirectory;
+	  private String pluginDirectory;
 	  private PluginManager pm;
 	  
 	  //logic
 	  private HashMap<String, Object> settings;
 	  private ArrayList<World> worldbuildmode;
 	  private ArrayList<Player> playerbuildmode;
+
 
 	@Override
 	public void onDisable() {
@@ -56,37 +61,63 @@ public class Buildr extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		//init
-		 pm = getServer().getPluginManager();
+		pm = getServer().getPluginManager();
 		 
 		cmdHandler =  new Buildr_Commands(this);
+		invManager = new Buildr_InventoryManager(this);
+		cfgManager = new Buildr_ConfigManager(this);
 		 
-		 entityListener = new Buildr_EntityListener(this);
-		 playerListener = new Buildr_PlayerListener(this);
-		 weatherListener = new Buildr_WeatherListener();
-		 version = getDescription().getVersion();
-		 prefix = "[Buildr] ";
+		entityListener = new Buildr_EntityListener(this);
+		playerListener = new Buildr_PlayerListener(this);
+		weatherListener = new Buildr_WeatherListener(this);
+		blockListener = new Buildr_BlockListener(this);
 		 
-		 worldbuildmode =  new ArrayList<World>();
-		 playerbuildmode = new ArrayList<Player>();
+		pluginDirectory =  "plugins/Buildr";
+		version = getDescription().getVersion();
+		prefix = "[Buildr] ";
 		 
-		 //load
-		 log("Buildr v"+version+" loading..");
-		 setupPermissions();
+		worldbuildmode =  new ArrayList<World>();
+		playerbuildmode = new ArrayList<Player>();
 		 
-		 //register Listener
-		 //TODO
-		 pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this); // Godmode: no dmg
-		 pm.registerEvent(Type.ENTITY_TARGET, entityListener, Event.Priority.Normal, this); // Godmode: no aggro
-		 pm.registerEvent(Type.ITEM_SPAWN, entityListener, Event.Priority.Normal, this); // No Blockdrops
-		 pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Event.Priority.Normal, this); // Instant Blockbreak
-		 pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Event.Priority.Normal, this); // No Pickups
-		 pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Event.Priority.Normal, this); // Always Sun
+		//load
+		log("Buildr v"+version+" loading..");
+		setupPermissions();
+		
+		if (cfgManager.checkDirectory()) {
+			log("created Buildr directory");
+		}
+		if (cfgManager.checkConfigFile()) {
+			cfgManager.createSettings();
+			log("created Buildr Configfile settings.cfg");
+		}
+		this.settings = cfgManager.loadSettings();
+		log("loaded settings.cfg");
+		if ((Boolean)settings.get("SPAM_ON_STARTUP")) {
+			//TODO:
+			log("printing detailed config:");
+			log("...");
+			log("...");
+			log("...");
+		}
+
+		//register Listener
+		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this); // Godmode: no dmg
+		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Event.Priority.Normal, this); // Godmode: no aggro
+		pm.registerEvent(Type.ITEM_SPAWN, entityListener, Event.Priority.Normal, this); // No Blockdrops
+		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Event.Priority.Normal, this); // Instant Blockbreak
+		pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Event.Priority.Normal, this); // No Pickups
+		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Event.Priority.Normal, this); // Always Sun
+		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Event.Priority.Normal, this); // Unlimited Stacks
+		if ((Boolean)settings.get("SPAM_ON_STARTUP")) {
+			log("Listener registered");
+		}
+
 		 
-		 
-		 // TimeThread
-		 timeHandler = new Buildr_TimeThread(this);
-		 thread = new Thread(timeHandler,prefix+"Time Handler");
-	     thread.start();
+		// TimeThread
+		timeHandler = new Buildr_TimeThread(this);
+		thread = new Thread(timeHandler,prefix+"Time Handler");
+		thread.start();
+		log("Buildr v"+version+" loaded");
 	}
 	
 	@Override
@@ -181,6 +212,28 @@ public class Buildr extends JavaPlugin {
 		}
 	}
 	
+	
+	public void enterBuildmode(Player sender) {
+		getPlayerbuildmode().add((Player)sender);
+		invManager.switchInventory((Player)sender);
+	}
+	
+	public void leaveBuildmode(Player sender) {
+		getPlayerbuildmode().remove((Player)sender);
+		invManager.switchInventory((Player)sender);
+	}
+	
+	public void enterGlobalbuildmode(World world) {
+		getWorldbuildmode().add(world);
+		world.setStorm(false);
+		world.setThundering(false);
+		world.setWeatherDuration(0);
+		world.setTime(0);
+	}
+	public void leaveGlobalbuildmode(World world) {
+		getWorldbuildmode().remove(world);
+	}
+	
 	//get+set 
 	
 	/**
@@ -206,20 +259,9 @@ public class Buildr extends JavaPlugin {
 		this.playerbuildmode = playerbuildmode;
 	}
 
-	public void enterBuildmode(Player sender) {
-		// TODO Auto-generated method stub
-		
+	public String getPluginDirectory() {
+		return pluginDirectory;
 	}
-	public void leaveBuildmode(Player sender) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void enterGlobalbuildmode(Player sender) {
-		// TODO Auto-generated method stub
-		
-	}
-	public void leaveGlobalbuildmode(Player sender) {
-		// TODO Auto-generated method stub
-		
-	}
+
+
 }

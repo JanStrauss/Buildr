@@ -7,12 +7,15 @@ import org.bukkit.event.weather.WeatherListener;
 
 public class Buildr_WeatherListener extends WeatherListener {
 	private Buildr plugin;
+	
+public Buildr_WeatherListener(Buildr buildr) {
+		this.plugin = buildr;
+	}
+
 @Override
 public void onWeatherChange(WeatherChangeEvent event) {
 	if (plugin.checkWorldBuildMode(event.getWorld())) {
 		event.setCancelled(true);
-		event.getWorld().setStorm(false);
-		event.getWorld().setThundering(false);
 	}
 }
 }

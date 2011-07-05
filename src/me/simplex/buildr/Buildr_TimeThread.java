@@ -16,13 +16,11 @@ public class Buildr_TimeThread implements Runnable {
 
 	@Override
 	public void run() {
-		plugin.log("started TimeThread.");
+		if ((Boolean)plugin.getSettings().get("SPAM_ON_STARTUP")) {
+			plugin.log("started TimeThread.");
+		}
+
 		while(isAlive()){
-			try {
-				Thread.sleep(30000); //sleep 30sec
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			} 
 		for (World world : plugin.getWorldbuildmode()) {
 			if (world.getTime()>=10000) {
 				world.setTime(0);
@@ -30,6 +28,11 @@ public class Buildr_TimeThread implements Runnable {
 			}
 		}
 		plugin.log("Time checked");
+		try {
+			Thread.sleep(30000); //sleep 30sec
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		} 
 		}
 		plugin.log("stopped TimeThread.");
 	}

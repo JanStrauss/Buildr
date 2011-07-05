@@ -8,13 +8,13 @@ description: >
 commands:
   globalbuild:
     description: Toggles the Global Buildmode
-    aliases: [gb]
+    aliases: [gb,gbm]
     usage: |
            /<command>
            Example: /<command>
   build:
     description: Toggles the User Buildmode
-    aliases: [ub,userbuild]
+    aliases: [ub,gbm,userbuild]
     usage: |
            /<command>
            Example: /<command>

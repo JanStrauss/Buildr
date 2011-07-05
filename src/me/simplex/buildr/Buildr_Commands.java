@@ -14,31 +14,33 @@ public class Buildr_Commands {
 	
 	protected void cmd_globalbuild(CommandSender sender,World world){
 		if (plugin.getWorldbuildmode().contains(world)) {
-			plugin.getWorldbuildmode().remove(world);
+			plugin.leaveGlobalbuildmode(world);
 			sender.sendMessage("Globalbuildmode disabled");
 			for (Player inhab : world.getPlayers()) {
 				inhab.sendMessage(ChatColor.AQUA+((Player)sender).getName()+" disabled the Globalbuildmode on the world you are currently in");
 			}
+			plugin.log("Globalbuildmode disabled in World "+world.getName());
 		}
 		else {
-			plugin.getWorldbuildmode().add(world);
+			plugin.enterGlobalbuildmode(world);
 			sender.sendMessage("Globalbuildmode enabled");
 			for (Player inhab : world.getPlayers()) {
 				inhab.sendMessage(ChatColor.AQUA+((Player)sender).getName()+" ensabled the Globalbuildmode on the world you are currently in");
 			}
+			plugin.log("Globalbuildmode enabled in World "+world.getName());
 		}
 	}
 	
 	protected void cmd_build(CommandSender sender){
 		if (plugin.getPlayerbuildmode().contains((Player)sender)) {
-			plugin.getPlayerbuildmode().remove((Player)sender);
+			
 			sender.sendMessage(ChatColor.BLUE+"Buildmode disabled");
-			plugin.enterBuildmode((Player)sender);
+			plugin.leaveBuildmode((Player)sender);
 		}
 		else {
-			plugin.getPlayerbuildmode().add((Player)sender);
+			
 			sender.sendMessage(ChatColor.BLUE+"Buildmode enabled");
-			plugin.leaveBuildmode((Player)sender);
+			plugin.enterBuildmode((Player)sender);
 		}
 	}
 }
