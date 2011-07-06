@@ -25,6 +25,7 @@ commands:
            Example: /<command> place corner 1 & corner 2
   airfloor:
     description: places a block (area) of material x y blocks above the player
+    aliases: [af,airf]
     usage: |
            /<command> <material #> <height #>
            Example: /<command> 4 20 3

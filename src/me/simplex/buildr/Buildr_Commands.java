@@ -117,7 +117,7 @@ public class Buildr_Commands {
 				x++;
 			}
 		}
-		sender.sendMessage("Block placed.");
+		sender.sendMessage("Block(s) placed");
 		plugin.getUndoList().addToStack(UnDoList, player);
 		plugin.log(player.getName()+" used /airfloor: "+UnDoList.size()+" blocks affected");
 	}
