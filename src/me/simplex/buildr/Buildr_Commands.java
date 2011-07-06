@@ -118,7 +118,7 @@ public class Buildr_Commands {
 		}
 		sender.sendMessage("Block placed.");
 		plugin.getUndoList().addToStack(UnDoList, player);
-		plugin.log(player.getName()+" used /airfloor: "+UnDoList.size()+" blocks affected.");
+		plugin.log(player.getName()+" used /airfloor: "+UnDoList.size()+" blocks affected");
 	}
 	/**
 	 * 
@@ -132,6 +132,7 @@ public class Buildr_Commands {
 				block.setType(undos.get(block));
 			}
 			plugin.log(player.getName()+" used /bu: "+undos.size()+" blocks affected");
+			sender.sendMessage(undos.size()+" blocks restored");
 		}
 		else {
 			sender.sendMessage("Nothing to undo");
