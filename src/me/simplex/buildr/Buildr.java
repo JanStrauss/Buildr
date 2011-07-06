@@ -306,9 +306,10 @@ public class Buildr extends JavaPlugin {
 		}
 		
 		//Wall
-		else if (command.getName().equalsIgnoreCase("clearinv")) {
+		else if (command.getName().equalsIgnoreCase("wall")) {
+			System.out.println(args.length);
 			if (checkPermission((Player)sender, "buildr.cmd.wall")) {
-				if (args.length >0 && args.length <3) {
+				if (args.length >=1 && args.length <=2) {
 					Material material;
 					int id;
 					try {
@@ -326,10 +327,12 @@ public class Buildr extends JavaPlugin {
 					}
 					if (args.length==1) {
 							cmdHandler.cmd_wall(sender, material, false);
+							return true;
 					}
 					else if (args.length==2) {
 						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
 							cmdHandler.cmd_wall(sender, material, true);
+							return true;
 						}
 						else {
 							return false;
@@ -413,6 +416,7 @@ public class Buildr extends JavaPlugin {
 		for (Buildr_Wallbuilder wallbuilder : startedWalls) {
 			if (wallbuilder.getWallcreater() == player) {
 				startedWalls.remove(wallbuilder);
+				return;
 			}
 		}
 	}

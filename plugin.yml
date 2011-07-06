@@ -22,8 +22,7 @@ commands:
     description: Starts the wall building function
     aliases: [bw]
     usage: |
-           /<command> <material #> <a|air|aironly>
-           Example: /<command> 20 a will start the wall building function which only place glass over air
+           /<command> <material #> {a|air|aironly}
   airfloor:
     description: places a block (area) of material x y blocks above the player
     aliases: [af,airf]

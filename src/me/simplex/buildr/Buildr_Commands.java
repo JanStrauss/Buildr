@@ -218,5 +218,6 @@ public class Buildr_Commands {
 	 */
 	protected void cmd_clrInv(CommandSender sender) {
 		((Player)sender).getInventory().clear();
+		sender.sendMessage("Inventory cleared");
 	}
 }

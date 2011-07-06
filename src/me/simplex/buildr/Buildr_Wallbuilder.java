@@ -29,11 +29,12 @@ public class Buildr_Wallbuilder {
 	
 	public boolean checkCoordinates(Block position2){
 		this.position2=position2;
-		
-		if (checkWallType()==null) {
+		Buildr_WallType wallType = checkWallType();
+		if (wallType==null) {
 			return false;
 		}
 		else {
+			this.type = wallType;
 			return true;
 		}
 	}
@@ -59,9 +60,11 @@ public class Buildr_Wallbuilder {
 		int y = starty;
 		int z = startz;
 		
-		for (int i = 0; i < calcDistance(position1.getX(), position2.getX()); i++) {			//Y
-			for (int j = 0; j < calcDistance(position1.getZ(), position2.getZ()); j++) {		//z
-				
+		int distY = calcDistance(position1.getY(), position2.getY());
+		int distZ = calcDistance(position1.getZ(), position2.getZ());
+		
+		for (int i = 0; i < distY; i++) {			//y
+			for (int j = 0; j < distZ; j++) {		//z
 				Block actionBlock = position1.getWorld().getBlockAt(fixed_X, y, z);
 				
 				if (aironly) {
@@ -92,9 +95,11 @@ public class Buildr_Wallbuilder {
 		int x = startx;
 		int z = startz;
 		
-		for (int i = 0; i < calcDistance(position1.getX(), position2.getX()); i++) {			//x
-			for (int j = 0; j < calcDistance(position1.getZ(), position2.getZ()); j++) {		//z
-				
+		int distX = calcDistance(position1.getX(), position2.getX());
+		int distZ = calcDistance(position1.getZ(), position2.getZ());
+		
+		for (int i = 0; i < distX; i++) {			//x
+			for (int j = 0; j < distZ; j++) {		//z
 				Block actionBlock = position1.getWorld().getBlockAt(x, fixed_Y, z);
 				
 				if (aironly) {
@@ -125,9 +130,11 @@ public class Buildr_Wallbuilder {
 		int x = startx;
 		int y = starty;
 		
-		for (int i = 0; i < calcDistance(position1.getX(), position2.getX()); i++) {			//x
-			for (int j = 0; j < calcDistance(position1.getZ(), position2.getZ()); j++) {		//y
-				
+		int distX = calcDistance(position1.getX(), position2.getX());
+		int distY = calcDistance(position1.getY(), position2.getY());
+		
+		for (int i = 0; i < distX; i++) {			//x
+			for (int j = 0; j < distY; j++) {		//y
 				Block actionBlock = position1.getWorld().getBlockAt(x, y, fixed_Z);
 				
 				if (aironly) {
@@ -163,7 +170,7 @@ public class Buildr_Wallbuilder {
 		if (distance >100) {
 			distance = 100;
 		}
-		return distance;
+		return distance+1;
 	}
 	
 	private Buildr_WallType checkWallType(){

@@ -11,8 +11,8 @@ FEATURES/TODO (- means done):
 		-Godmode
 		-Unlimited Items
 		-No Pickups
-		-Stairs drop Stairs
-	Wallbuilder
+	-Stairs drop Stairs
+	-Wallbuilder
 	-/wool <color>
 	-/top port
 	-Place a block/blocks in x height over the user
