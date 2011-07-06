@@ -85,7 +85,7 @@ public class Buildr_Commands {
 	 */
 	protected void cmd_airfloor(CommandSender sender, int material, int height, int size){
 		Player player = (Player)sender;
-		int blockheight = player.getLocation().getBlockY()+height;
+		int blockheight = player.getLocation().getBlockY()+height-1;
 		Location location = new Location(player.getWorld(), player.getLocation().getBlockX(), blockheight, player.getLocation().getBlockZ());
 		HashMap<Block, Material> UnDoList = new HashMap<Block, Material>();		
 		if (blockheight > 128) {
