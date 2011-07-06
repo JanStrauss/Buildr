@@ -108,7 +108,10 @@ public class Buildr_InventoryManager {
 	private void createNewBuildInv(Player player) {
 		ItemStack[] newinv = new ItemStack[40];
 		newinv[0] = new ItemStack(278); //Diamond Pickaxe
-		newinv[1] = new ItemStack(50,64); //Torch
+		newinv[1] = new ItemStack(280); //Stick
+		newinv[2] = new ItemStack(50,64); //Torch
+		
+		newinv[5] = new ItemStack(20, 64); //Stone
 		newinv[6] = new ItemStack(1, 64); //Stone
 		newinv[7] = new ItemStack(4, 64); //Cobblestone
 		newinv[8] = new ItemStack(5, 64); //Planks

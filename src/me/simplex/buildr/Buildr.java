@@ -8,6 +8,7 @@ import me.simplex.buildr.listener.Buildr_BlockListener;
 import me.simplex.buildr.listener.Buildr_EntityListener;
 import me.simplex.buildr.listener.Buildr_PlayerListener;
 import me.simplex.buildr.listener.Buildr_WeatherListener;
+import me.simplex.buildr.util.Buildr_UnDoStack;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -41,6 +42,7 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_Commands cmdHandler;
 	  private Buildr_InventoryManager invManager;
 	  private Buildr_ConfigManager cfgManager;
+	  private Buildr_UnDoStack unDoStack;
 
 	  private Thread thread;
 	  private Buildr_TimeThread timeHandler;
@@ -66,6 +68,7 @@ public class Buildr extends JavaPlugin {
 		cmdHandler =  new Buildr_Commands(this);
 		invManager = new Buildr_InventoryManager(this);
 		cfgManager = new Buildr_ConfigManager(this);
+		unDoStack = new Buildr_UnDoStack(this);
 		 
 		entityListener = new Buildr_EntityListener(this);
 		playerListener = new Buildr_PlayerListener(this);
@@ -135,7 +138,7 @@ public class Buildr extends JavaPlugin {
 			return true;
 		}
 		
-		if (command.getName().equals("globalbuild")) {
+		if (command.getName().equalsIgnoreCase("globalbuild")) {
 			if (checkPermission((Player)sender, "buildr.cmd.globalbuild")) {
 				World world;
 				if (args.length > 0) {
@@ -158,9 +161,19 @@ public class Buildr extends JavaPlugin {
 			}
 			
 		}
-		else if (command.getName().equals("build")) {
+		else if (command.getName().equalsIgnoreCase("build")) {
 			if (checkPermission((Player)sender, "buildr.cmd.build")) {
 				cmdHandler.cmd_build(sender);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the Permission to perform this action");
+			}
+			return true;
+		}
+
+		else if (command.getName().equalsIgnoreCase("top")) {
+			if (checkPermission((Player)sender, "buildr.cmd.top")) {
+				cmdHandler.cmd_top(sender);
 			}
 			else {
 				sender.sendMessage(ChatColor.RED+"You dont have the Permission to perform this action");
@@ -170,7 +183,6 @@ public class Buildr extends JavaPlugin {
 		else {
 			return false;
 		}
-		
 	}
 	
 	private void setupPermissions() {
@@ -270,6 +282,10 @@ public class Buildr extends JavaPlugin {
 
 	public String getPluginDirectory() {
 		return pluginDirectory;
+	}
+
+	public Buildr_UnDoStack getUndoList(Player player) {
+		return unDoStack;
 	}
 	
 
