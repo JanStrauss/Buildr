@@ -2,7 +2,7 @@ package me.simplex.buildr;
 
 import java.util.HashMap;
 
-import me.simplex.buildr.util.Buildr_WoolConv;
+import me.simplex.buildr.util.Buildr_WoolData;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -148,7 +148,7 @@ public class Buildr_Commands {
 	 * @param material
 	 * @param amount
 	 */
-	public void cmd_give(CommandSender sender, String material, int amount, String player) {
+	protected void cmd_give(CommandSender sender, String material, int amount, String player) {
 		Material give_mat = null;
 		try {
 			give_mat = Material.getMaterial(Integer.parseInt(material));
@@ -179,10 +179,10 @@ public class Buildr_Commands {
 	}
 	
 	protected void cmd_wool(CommandSender sender, String args) {
-		args.toUpperCase();
-		Buildr_WoolConv woolcolor;
+		String upcase= args.toUpperCase();
+		Buildr_WoolData woolcolor;
 		try {
-			woolcolor = Enum.valueOf(Buildr_WoolConv.class, args);
+			woolcolor = Enum.valueOf(Buildr_WoolData.class, upcase);
 		} catch (IllegalArgumentException e) {
 			sender.sendMessage("No such color");
 			return;
@@ -190,5 +190,13 @@ public class Buildr_Commands {
 		((Player)sender).getInventory().addItem(woolcolor.giveStack());
 		String ret = "Gave yourself a stack of "+woolcolor.toString().toLowerCase()+" wool";
 		sender.sendMessage(ret);
+	}
+
+	/**
+	 * 
+	 * @param sender
+	 */
+	protected void cmd_clrInv(CommandSender sender) {
+		((Player)sender).getInventory().clear();
 	}
 }

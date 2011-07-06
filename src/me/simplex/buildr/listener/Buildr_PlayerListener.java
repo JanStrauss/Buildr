@@ -1,7 +1,7 @@
 package me.simplex.buildr.listener;
 
 import me.simplex.buildr.Buildr;
-import me.simplex.buildr.util.Buildr_BlockToDropConv;
+import me.simplex.buildr.util.Buildr_BlockToDropConverter;
 
 import org.bukkit.Material;
 import org.bukkit.event.block.Action;
@@ -15,12 +15,12 @@ import org.bukkit.inventory.ItemStack;
 public class Buildr_PlayerListener extends PlayerListener {
 	
 	private Buildr plugin;
-	private Buildr_BlockToDropConv converter;
+	private Buildr_BlockToDropConverter converter;
 	
 	public Buildr_PlayerListener(Buildr plugin) {
 		super();
 		this.plugin = plugin;
-		this.converter = new Buildr_BlockToDropConv(plugin);
+		this.converter = new Buildr_BlockToDropConverter(plugin);
 	}
 
 @Override

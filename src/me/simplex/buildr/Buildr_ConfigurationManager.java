@@ -9,10 +9,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 
-public class Buildr_ConfigManager {
+public class Buildr_ConfigurationManager {
 	Buildr plugin;
 	
-	public Buildr_ConfigManager(Buildr plugin){
+	public Buildr_ConfigurationManager(Buildr plugin){
 		this.plugin = plugin;
 	}
 	

@@ -8,11 +8,11 @@ import me.simplex.buildr.Buildr;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
-public class Buildr_BlockToDropConv {
+public class Buildr_BlockToDropConverter {
 	private Random rnd = new Random();
 	private Buildr plugin;
 	
-	public Buildr_BlockToDropConv(Buildr plugin) {
+	public Buildr_BlockToDropConverter(Buildr plugin) {
 		this.plugin = plugin;
 	}
 	/**

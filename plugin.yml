@@ -20,9 +20,10 @@ commands:
            Example: /<command>
   wall:
     description: Starts the wall building function
+    aliases: [bw]
     usage: |
            /<command> 
-           Example: /<command> place corner 1 & corner 2
+           Example: type /<command> then mark corner 1 & corner 2
   airfloor:
     description: places a block (area) of material x y blocks above the player
     aliases: [af,airf]
@@ -51,4 +52,9 @@ commands:
     usage: |
            /<command> <player> <itemid #> <amount #>
            Example: /<command> 20 50 gives a stack of 50 Glass to the player
-  
+  clearinv:
+    description: clears the inventory of the player
+    aliases: [clrinv,ci,clearinventory]
+    usage: |
+           /<command> 
+           Example: /<command>

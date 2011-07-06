@@ -2,7 +2,7 @@ package me.simplex.buildr.util;
 
 import org.bukkit.inventory.ItemStack;
 
-public enum Buildr_WoolConv {
+public enum Buildr_WoolData {
 	 WHITE((short)0),
 	 ORANGE((short)1),
 	 MAGENTA((short)2),
@@ -22,7 +22,7 @@ public enum Buildr_WoolConv {
 	
 	private short dmg_value;
 	
-	private Buildr_WoolConv(short dmg_value) {
+	private Buildr_WoolData(short dmg_value) {
 		this.dmg_value = dmg_value;
 	}
 

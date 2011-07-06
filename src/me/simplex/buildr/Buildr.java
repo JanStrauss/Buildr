@@ -41,7 +41,7 @@ public class Buildr extends JavaPlugin {
 	  
 	  private Buildr_Commands cmdHandler;
 	  private Buildr_InventoryManager invManager;
-	  private Buildr_ConfigManager cfgManager;
+	  private Buildr_ConfigurationManager cfgManager;
 	  private Buildr_UnDoStack unDoStack;
 
 	  private Thread thread;
@@ -67,7 +67,7 @@ public class Buildr extends JavaPlugin {
 		 
 		cmdHandler =  new Buildr_Commands(this);
 		invManager = new Buildr_InventoryManager(this);
-		cfgManager = new Buildr_ConfigManager(this);
+		cfgManager = new Buildr_ConfigurationManager(this);
 		unDoStack = new Buildr_UnDoStack();
 		 
 		entityListener = new Buildr_EntityListener(this);
@@ -273,6 +273,7 @@ public class Buildr extends JavaPlugin {
 			}
 			return true;
 		}
+		
 		//WOOL
 		else if (command.getName().equalsIgnoreCase("wool")) {
 			if (checkPermission((Player)sender, "buildr.cmd.wool")) {
@@ -280,6 +281,20 @@ public class Buildr extends JavaPlugin {
 					return false;
 				}
 				cmdHandler.cmd_wool(sender, args[0]);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
+		//ClearInv
+		else if (command.getName().equalsIgnoreCase("clearinv")) {
+			if (checkPermission((Player)sender, "buildr.cmd.clearinv")) {
+				if (args.length!=0) {
+					return false;
+				}
+				cmdHandler.cmd_clrInv(sender);
 			}
 			else {
 				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");

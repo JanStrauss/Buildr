@@ -1,8 +1,8 @@
 FEATURES/TODO (- means done):
 	-Permissions
 	Config
-	Global build mode:
-		?Weather is always Sun
+	-Global build mode:
+		-Weather is always Sun
 		-Time:  Won't get night while in globalbuild mode
 		-No Drops from breaking Blocks
 	-User build mode:
@@ -13,7 +13,8 @@ FEATURES/TODO (- means done):
 		-No Pickups
 		-Stairs drop Stairs
 	Wallbuilder
-	/wool <color>
+	-/wool <color>
 	-/top port
 	-Place a block/blocks in x height over the user
-	direct /give command
+	-direct /give command
+	-/clearinv command
