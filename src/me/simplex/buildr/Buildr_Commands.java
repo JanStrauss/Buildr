@@ -97,12 +97,10 @@ public class Buildr_Commands {
 		}
 		else {
 			int offset;
-			if ((size % 2) == 0) {
-				offset = size/2;
-			}
-			else {
-				offset = (size-1)/2;
-			}
+			
+			if ((size % 2) == 0) {offset = size/2;}
+			else {offset = (size-1)/2;}
+			
 			int x= location.getBlockX()-offset;
 			int z= location.getBlockZ()-offset;
 			
@@ -115,7 +113,21 @@ public class Buildr_Commands {
 				x++;
 			}
 		}
-		plugin.getUndoList(player).addToStack(UnDoList, player);
-		plugin.log("Done. "+UnDoList.size()+" blocks affected.");
+		plugin.getUndoList().addToStack(UnDoList, player);
+		plugin.log(player.getName()+" used /airfloor: "+UnDoList.size()+" blocks affected.");
+	}
+	/**
+	 * 
+	 * @param sender
+	 */
+	protected void cmd_undo(CommandSender sender){
+		Player player = (Player)sender;
+		HashMap<Block, Material> undos = plugin.getUndoList().getAndDeleteFromStack(player);
+		if (undos != null) {
+			plugin.log(player.getName()+" used /bu: "+undos.size()+" blocks affected");
+		}
+		else {
+			sender.sendMessage("Nothing to undo");
+		}
 	}
 }

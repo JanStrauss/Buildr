@@ -68,7 +68,7 @@ public class Buildr extends JavaPlugin {
 		cmdHandler =  new Buildr_Commands(this);
 		invManager = new Buildr_InventoryManager(this);
 		cfgManager = new Buildr_ConfigManager(this);
-		unDoStack = new Buildr_UnDoStack(this);
+		unDoStack = new Buildr_UnDoStack();
 		 
 		entityListener = new Buildr_EntityListener(this);
 		playerListener = new Buildr_PlayerListener(this);
@@ -138,6 +138,7 @@ public class Buildr extends JavaPlugin {
 			return true;
 		}
 		
+		//GLOBALBUILD
 		if (command.getName().equalsIgnoreCase("globalbuild")) {
 			if (checkPermission((Player)sender, "buildr.cmd.globalbuild")) {
 				World world;
@@ -156,30 +157,77 @@ public class Buildr extends JavaPlugin {
 				return true;
 			}
 			else {
-				sender.sendMessage(ChatColor.RED+"You dont have the Permission to perform this action");
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
 				return true;
 			}
 			
 		}
+		
+		//BUILD
 		else if (command.getName().equalsIgnoreCase("build")) {
 			if (checkPermission((Player)sender, "buildr.cmd.build")) {
 				cmdHandler.cmd_build(sender);
 			}
 			else {
-				sender.sendMessage(ChatColor.RED+"You dont have the Permission to perform this action");
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
 			}
 			return true;
 		}
-
+		
+		//TOP
 		else if (command.getName().equalsIgnoreCase("top")) {
 			if (checkPermission((Player)sender, "buildr.cmd.top")) {
 				cmdHandler.cmd_top(sender);
 			}
 			else {
-				sender.sendMessage(ChatColor.RED+"You dont have the Permission to perform this action");
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
 			}
 			return true;
 		}
+		
+		// AIRFLOOR
+		else if (command.getName().equalsIgnoreCase("airfloor")) {
+			if (checkPermission((Player)sender, "buildr.cmd.airfloor")) {
+				try {
+					int material=0,height=0,size=0;
+					if (args.length > 3 && args.length < 2) {
+						return false;
+					}
+					if (args.length == 3) {
+						size = Math.abs(Integer.parseInt(args[2]));
+						if (size > 100) {
+							size = 100;
+						}
+					}
+					height = Math.abs(Integer.parseInt(args[1]));
+					material = Math.abs(Integer.parseInt(args[2]));
+					if (Material.getMaterial(material)== null) {
+						sender.sendMessage("Invalid Material");
+						return true;
+					}
+					cmdHandler.cmd_airfloor(sender, material, height, size);
+					} 
+				catch (NumberFormatException e) {
+					sender.sendMessage("Wrong format, usage: /airfloor <material> <height> <size>");
+				}
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
+		else if (command.getName().equalsIgnoreCase("undo")) {
+			if (checkPermission((Player)sender, "buildr.cmd.undo")) {
+				cmdHandler.cmd_undo(sender);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
+		//ELSE
 		else {
 			return false;
 		}
@@ -284,7 +332,7 @@ public class Buildr extends JavaPlugin {
 		return pluginDirectory;
 	}
 
-	public Buildr_UnDoStack getUndoList(Player player) {
+	public Buildr_UnDoStack getUndoList() {
 		return unDoStack;
 	}
 	

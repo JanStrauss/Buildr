@@ -4,18 +4,15 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Stack;
 
-import me.simplex.buildr.Buildr;
-
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class Buildr_UnDoStack {
 	private ArrayList<Buildr_StackItem> playerUndos;
-	private Buildr plugin;
+
 	
-	public Buildr_UnDoStack(Buildr buildr) {
-		this.plugin = buildr;
+	public Buildr_UnDoStack() {
 		playerUndos = new ArrayList<Buildr_StackItem>();
 	}
 
@@ -26,6 +23,9 @@ public class Buildr_UnDoStack {
 		else {
 			newStack(player,blocks);
 		}
+		if (giveStack(player).size() >20) {
+			giveStack(player).removeElementAt(giveStack(player).size()-1);
+		}
 	}
 	
 	private void newStack(Player player, HashMap<Block, Material> blocks) {
@@ -35,7 +35,6 @@ public class Buildr_UnDoStack {
 	public HashMap<Block, Material> getAndDeleteFromStack(Player player){
 		if (checkPlayerUndoStackExist(player)) {
 			if (!giveStack(player).empty()) {
-				plugin.log(player.getName()+" used /bu: "+giveStack(player).pop().size()+" blocks affected");
 				return giveStack(player).pop();
 			}
 		}
