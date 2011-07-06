@@ -92,8 +92,8 @@ public class Buildr_Commands {
 			blockheight = 128;
 		}
 		if (size == 0 || size == 1) {
-			player.getWorld().getBlockAt(location).setTypeId(material);
 			UnDoList.put(player.getWorld().getBlockAt(location),player.getWorld().getBlockAt(location).getType());
+			player.getWorld().getBlockAt(location).setTypeId(material);
 		}
 		else {
 			int offset;
