@@ -2,7 +2,7 @@ package me.simplex.buildr;
 
 import java.util.HashMap;
 
-import me.simplex.buildr.util.Buildr_WoolData;
+import me.simplex.buildr.util.Buildr_WoolType;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -177,12 +177,16 @@ public class Buildr_Commands {
 		giveto.getInventory().addItem(new ItemStack(give_mat,amount));
 		sender.sendMessage("Gave "+giveto.getName()+" a stack of "+amount+" "+give_mat.toString()+"(ID: "+give_mat.getId()+")");
 	}
-	
+	/**
+	 * 
+	 * @param sender
+	 * @param args
+	 */
 	protected void cmd_wool(CommandSender sender, String args) {
 		String upcase= args.toUpperCase();
-		Buildr_WoolData woolcolor;
+		Buildr_WoolType woolcolor;
 		try {
-			woolcolor = Enum.valueOf(Buildr_WoolData.class, upcase);
+			woolcolor = Enum.valueOf(Buildr_WoolType.class, upcase);
 		} catch (IllegalArgumentException e) {
 			sender.sendMessage("No such color");
 			return;
@@ -190,6 +194,18 @@ public class Buildr_Commands {
 		((Player)sender).getInventory().addItem(woolcolor.giveStack());
 		String ret = "Gave yourself a stack of "+woolcolor.toString().toLowerCase()+" wool";
 		sender.sendMessage(ret);
+	}
+	/**
+	 * 
+	 * @param sender
+	 * @param material
+	 * @param aironly
+	 */
+	protected void cmd_wall(CommandSender sender, Material material, boolean aironly) {
+		if (plugin.checkPlayerHasStartedWall((Player)sender)) {
+			
+		}
+		plugin.getStartedWalls().add(new Buildr_Wallbuilder((Player)sender, material, aironly));
 	}
 
 	/**

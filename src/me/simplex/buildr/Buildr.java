@@ -53,6 +53,7 @@ public class Buildr extends JavaPlugin {
 	  private HashMap<String, Object> settings;
 	  private ArrayList<World> worldbuildmode;
 	  private ArrayList<Player> playerbuildmode;
+	  private ArrayList<Buildr_Wallbuilder> startedWalls;
 
 
 	@Override
@@ -65,22 +66,23 @@ public class Buildr extends JavaPlugin {
 		//init
 		pm = getServer().getPluginManager();
 		 
-		cmdHandler =  new Buildr_Commands(this);
-		invManager = new Buildr_InventoryManager(this);
-		cfgManager = new Buildr_ConfigurationManager(this);
-		unDoStack = new Buildr_UnDoStack();
+		cmdHandler 		= new Buildr_Commands(this);
+		invManager 		= new Buildr_InventoryManager(this);
+		cfgManager 		= new Buildr_ConfigurationManager(this);
+		unDoStack 		= new Buildr_UnDoStack();
 		 
-		entityListener = new Buildr_EntityListener(this);
-		playerListener = new Buildr_PlayerListener(this);
+		entityListener 	= new Buildr_EntityListener(this);
+		playerListener 	= new Buildr_PlayerListener(this);
 		weatherListener = new Buildr_WeatherListener(this);
-		blockListener = new Buildr_BlockListener(this);
+		blockListener 	= new Buildr_BlockListener(this);
 		 
 		pluginDirectory =  "plugins/Buildr";
-		version = getDescription().getVersion();
-		prefix = "[Buildr] ";
+		version 		= getDescription().getVersion();
+		prefix 			= "[Buildr] ";
 		 
-		worldbuildmode =  new ArrayList<World>();
+		worldbuildmode 	=  new ArrayList<World>();
 		playerbuildmode = new ArrayList<Player>();
+		startedWalls 	= new ArrayList<Buildr_Wallbuilder>();
 		 
 		//load settings
 		log("Buildr v"+version+" loading..");
@@ -343,6 +345,14 @@ public class Buildr extends JavaPlugin {
 	public boolean checkPlayerBuildMode(Player player){
 		return playerbuildmode.contains(player);
 	}
+	public boolean checkPlayerHasStartedWall(Player player){
+		for (Buildr_Wallbuilder wallbuilder : startedWalls) {
+			if (wallbuilder.getWallcreater() == player) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	public boolean checkPlayerItemInHandIsPickaxe(Player player){
 		if (player.getItemInHand().getType() == Material.DIAMOND_PICKAXE ||
@@ -355,6 +365,7 @@ public class Buildr extends JavaPlugin {
 			return false;
 		}
 	}
+	
 	
 	
 	public void enterBuildmode(Player player) {
@@ -391,16 +402,9 @@ public class Buildr extends JavaPlugin {
 		return worldbuildmode;
 	}
 
-	public void setWorldbuildmode(ArrayList<World> worldbuildmode) {
-		this.worldbuildmode = worldbuildmode;
-	}
 
 	public ArrayList<Player> getPlayerbuildmode() {
 		return playerbuildmode;
-	}
-
-	public void setPlayerbuildmode(ArrayList<Player> playerbuildmode) {
-		this.playerbuildmode = playerbuildmode;
 	}
 
 	public String getPluginDirectory() {
@@ -409,6 +413,13 @@ public class Buildr extends JavaPlugin {
 
 	public Buildr_UnDoStack getUndoList() {
 		return unDoStack;
+	}
+
+	/**
+	 * @return the startedWalls
+	 */
+	public ArrayList<Buildr_Wallbuilder> getStartedWalls() {
+		return startedWalls;
 	}
 	
 
