@@ -1,15 +1,17 @@
-FEATURES:
+FEATURES/TODO (- means done):
+	-Permissions
+	Config
 	Global build mode:
-		-Weather is always Sun
+		?Weather is always Sun
 		-Time:  Won't get night while in globalbuild mode
 		-No Drops from breaking Blocks
-	User build mode:
-		Switch between different inventorys for building and normal playing
+	-User build mode:
+		-Switch between different inventorys for building and normal playing
 		-Instant Block Break
-		Place blocks in x height over the user
 		-Godmode
-		/top port
-		Unlimited Items
+		-Unlimited Items
 		-No Pickups
-		Wallbuilder
-		/wool <color>
+	Wallbuilder
+	/wool <color>
+	-/top port
+	Place a block in x height over the user

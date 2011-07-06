@@ -200,7 +200,7 @@ public class Buildr extends JavaPlugin {
 						}
 					}
 					height = Math.abs(Integer.parseInt(args[1]));
-					material = Math.abs(Integer.parseInt(args[2]));
+					material = Math.abs(Integer.parseInt(args[0]));
 					if (Material.getMaterial(material)== null) {
 						sender.sendMessage("Invalid Material");
 						return true;

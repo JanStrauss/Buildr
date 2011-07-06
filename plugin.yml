@@ -24,12 +24,23 @@ commands:
            /<command> 
            Example: /<command> place corner 1 & corner 2
   airfloor:
-    description: places a block of material x y blocks above the player
+    description: places a block (area) of material x y blocks above the player
     usage: |
            /<command> <material #> <height #>
-           Example: /<command> 4 20
+           Example: /<command> 4 20 3
   wool:
     description: gives a Stack of wool in the specified color to the player
     usage: |
            /<command> <color>
            Example: /<command> black
+  top:
+    description: ports the player to the highest block at its current position
+    usage: |
+           /<command> 
+           Example: /<command> 
+  undo:
+    description: Undoes the lastest action the player used (airfloor, wall)
+    aliases: [bu,buildrundo]
+    usage: |
+           /<command> 
+           Example: /<command> 

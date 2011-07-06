@@ -93,7 +93,6 @@ public class Buildr_Commands {
 		}
 		if (size == 0 || size == 1) {
 			player.getWorld().getBlockAt(location).setTypeId(material);
-			sender.sendMessage("Block placed.");
 		}
 		else {
 			int offset;
@@ -101,8 +100,11 @@ public class Buildr_Commands {
 			if ((size % 2) == 0) {offset = size/2;}
 			else {offset = (size-1)/2;}
 			
-			int x= location.getBlockX()-offset;
-			int z= location.getBlockZ()-offset;
+			int xstart= location.getBlockX()-offset;
+			int zstart= location.getBlockZ()-offset;
+			
+			int x= xstart;
+			int z= zstart;
 			
 			for (int i = 0; i < size; i++) { //x
 				for (int j = 0; j < size; j++) {//z
@@ -110,9 +112,11 @@ public class Buildr_Commands {
 					player.getWorld().getBlockAt(x, blockheight, z).setTypeId(material);
 					z++;
 				}
+				z=zstart;
 				x++;
 			}
 		}
+		sender.sendMessage("Block placed.");
 		plugin.getUndoList().addToStack(UnDoList, player);
 		plugin.log(player.getName()+" used /airfloor: "+UnDoList.size()+" blocks affected.");
 	}
@@ -124,6 +128,9 @@ public class Buildr_Commands {
 		Player player = (Player)sender;
 		HashMap<Block, Material> undos = plugin.getUndoList().getAndDeleteFromStack(player);
 		if (undos != null) {
+			for (Block block : undos.keySet()) {
+				block.setType(undos.get(block));
+			}
 			plugin.log(player.getName()+" used /bu: "+undos.size()+" blocks affected");
 		}
 		else {
