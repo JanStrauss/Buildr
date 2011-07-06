@@ -45,3 +45,10 @@ commands:
     usage: |
            /<command> 
            Example: /<command> 
+  give:
+    description: gives a Stack of items to the player
+    aliases: [gv,g]
+    usage: |
+           /<command> <player> <itemid #> <amount #>
+           Example: /<command> 20 50 gives a stack of 50 Glass to the player
+  

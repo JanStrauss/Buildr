@@ -2,6 +2,8 @@ package me.simplex.buildr;
 
 import java.util.HashMap;
 
+import me.simplex.buildr.util.Buildr_WoolConv;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -9,6 +11,7 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class Buildr_Commands {
 	Buildr plugin;
@@ -138,5 +141,54 @@ public class Buildr_Commands {
 		else {
 			sender.sendMessage("Nothing to undo");
 		}
+	}
+	/**
+	 * 
+	 * @param sender
+	 * @param material
+	 * @param amount
+	 */
+	public void cmd_give(CommandSender sender, String material, int amount, String player) {
+		Material give_mat = null;
+		try {
+			give_mat = Material.getMaterial(Integer.parseInt(material));
+		} catch (NumberFormatException e) {
+			give_mat = Material.matchMaterial(material);
+		}
+		if (give_mat == null) {
+			sender.sendMessage(ChatColor.RED+"No such Item found");
+			return;
+		}
+		if (amount ==-1 || amount == 0) {
+			amount = 64;
+		}
+		Player giveto = ((Player)sender);
+		if (player !=null) {
+			giveto = sender.getServer().getPlayer(player);
+		}
+		if (giveto == null) {
+			sender.sendMessage(ChatColor.RED+"Player not found");
+			return;
+		}
+		if (give_mat.getId() == 0) {
+			sender.sendMessage(ChatColor.RED+"You can't give air");
+			return;
+		}
+		giveto.getInventory().addItem(new ItemStack(give_mat,amount));
+		sender.sendMessage("Gave "+giveto.getName()+" a stack of "+amount+" "+give_mat.toString()+"(ID: "+give_mat.getId()+")");
+	}
+	
+	protected void cmd_wool(CommandSender sender, String args) {
+		args.toUpperCase();
+		Buildr_WoolConv woolcolor;
+		try {
+			woolcolor = Enum.valueOf(Buildr_WoolConv.class, args);
+		} catch (IllegalArgumentException e) {
+			sender.sendMessage("No such color");
+			return;
+		}
+		((Player)sender).getInventory().addItem(woolcolor.giveStack());
+		String ret = "Gave yourself a stack of "+woolcolor.toString().toLowerCase()+" wool";
+		sender.sendMessage(ret);
 	}
 }

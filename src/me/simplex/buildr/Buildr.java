@@ -188,6 +188,9 @@ public class Buildr extends JavaPlugin {
 		// AIRFLOOR
 		else if (command.getName().equalsIgnoreCase("airfloor")) {
 			if (checkPermission((Player)sender, "buildr.cmd.airfloor")) {
+				if (args.length==0) {
+					return false;
+				}
 				try {
 					int material=0,height=0,size=0;
 					if (args.length > 3 && args.length < 2) {
@@ -217,9 +220,66 @@ public class Buildr extends JavaPlugin {
 			return true;
 		}
 		
+		//UNDO
 		else if (command.getName().equalsIgnoreCase("undo")) {
 			if (checkPermission((Player)sender, "buildr.cmd.undo")) {
 				cmdHandler.cmd_undo(sender);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
+		//GIVE
+		else if (command.getName().equalsIgnoreCase("give")) {
+			if (checkPermission((Player)sender, "buildr.cmd.give")) {
+				if (args.length==0) {
+					return false;
+				}
+				if (args.length==1) {
+					cmdHandler.cmd_give(sender,args[0],-1,null);
+				}
+				else if (args.length==2) {
+					int amount = -1;
+					try {
+						amount = Integer.parseInt(args[1]);
+						if (amount >64) {
+							amount = 64;
+						}
+					} catch (NumberFormatException e) {
+						sender.sendMessage(ChatColor.RED+"wrong format");
+						return true;
+					}
+					cmdHandler.cmd_give(sender,args[0],amount,null);
+				}
+				else if(args.length==3) {
+					int amount = -1;
+					try {
+						amount = Integer.parseInt(args[2]);
+						if (amount >64) {
+							amount = 64;
+						}
+					} catch (NumberFormatException e) {
+						sender.sendMessage(ChatColor.RED+"wrong format");
+						return true;
+					}
+					cmdHandler.cmd_give(sender,args[1],amount,args[0]);
+				}
+				
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		//WOOL
+		else if (command.getName().equalsIgnoreCase("wool")) {
+			if (checkPermission((Player)sender, "buildr.cmd.wool")) {
+				if (args.length!=1) {
+					return false;
+				}
+				cmdHandler.cmd_wool(sender, args[0]);
 			}
 			else {
 				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
@@ -296,7 +356,7 @@ public class Buildr extends JavaPlugin {
 		getWorldbuildmode().add(world);
 		world.setStorm(false);
 		world.setThundering(false);
-		world.setWeatherDuration(0);
+		//world.setWeatherDuration(0);
 		world.setTime(0);
 	}
 	public void leaveGlobalbuildmode(World world) {

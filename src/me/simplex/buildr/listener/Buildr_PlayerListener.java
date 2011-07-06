@@ -20,7 +20,7 @@ public class Buildr_PlayerListener extends PlayerListener {
 	public Buildr_PlayerListener(Buildr plugin) {
 		super();
 		this.plugin = plugin;
-		this.converter = new Buildr_BlockToDropConv();
+		this.converter = new Buildr_BlockToDropConv(plugin);
 	}
 
 @Override

@@ -17,6 +17,7 @@ public void onWeatherChange(WeatherChangeEvent event) {
 	if (plugin.checkWorldBuildMode(event.getWorld())) {
 		if (event.toWeatherState()) {
 			event.setCancelled(true);
+			event.getWorld().setStorm(false);
 		}
 	}
 }
