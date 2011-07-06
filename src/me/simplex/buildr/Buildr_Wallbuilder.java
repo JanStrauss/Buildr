@@ -159,7 +159,11 @@ public class Buildr_Wallbuilder {
 	}
 	
 	private int calcDistance(int coordinate1, int coordinate2){
-		return Math.abs(coordinate1-coordinate2);
+		int distance = Math.abs(coordinate1-coordinate2);
+		if (distance >100) {
+			distance = 100;
+		}
+		return distance;
 	}
 	
 	private Buildr_WallType checkWallType(){

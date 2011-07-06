@@ -13,6 +13,7 @@ import me.simplex.buildr.util.Buildr_UnDoStack;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -304,6 +305,51 @@ public class Buildr extends JavaPlugin {
 			return true;
 		}
 		
+		//Wall
+		else if (command.getName().equalsIgnoreCase("clearinv")) {
+			if (checkPermission((Player)sender, "buildr.cmd.wall")) {
+				if (args.length >0 && args.length <3) {
+					Material material;
+					int id;
+					try {
+						id = Integer.parseInt(args[0]);
+					} catch (NumberFormatException e) {
+						sender.sendMessage(ChatColor.RED+"wrong format");
+						return true;
+					}
+					if (Material.getMaterial(id).isBlock()) {
+						material = Material.getMaterial(id);
+					}
+					else {
+						sender.sendMessage(ChatColor.RED+"unvalid blocktype");
+						return true;
+					}
+					if (args.length==1) {
+							cmdHandler.cmd_wall(sender, material, false);
+					}
+					else if (args.length==2) {
+						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
+							cmdHandler.cmd_wall(sender, material, true);
+						}
+						else {
+							return false;
+						}
+					}
+					else {
+						return false;
+					}
+				}
+				else {
+					return false;
+				}
+
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
 		//ELSE
 		else {
 			return false;
@@ -354,6 +400,23 @@ public class Buildr extends JavaPlugin {
 		return false;
 	}
 	
+	public Buildr_Wallbuilder giveWallbuilder(Player player){
+		for (Buildr_Wallbuilder wallbuilder : startedWalls) {
+			if (wallbuilder.getWallcreater() == player) {
+				return wallbuilder;
+			}
+		}
+		return null;
+	}
+	
+	public void removeStartedWall(Player player){
+		for (Buildr_Wallbuilder wallbuilder : startedWalls) {
+			if (wallbuilder.getWallcreater() == player) {
+				startedWalls.remove(wallbuilder);
+			}
+		}
+	}
+	
 	public boolean checkPlayerItemInHandIsPickaxe(Player player){
 		if (player.getItemInHand().getType() == Material.DIAMOND_PICKAXE ||
 			player.getItemInHand().getType() == Material.IRON_PICKAXE ||
@@ -366,7 +429,40 @@ public class Buildr extends JavaPlugin {
 		}
 	}
 	
+	public boolean checkPlayerItemInHandIsStick(Player player) {
+		if (player.getItemInHand().getType() == Material.STICK){
+				return true;
+			}
+			else {
+				return false;
+			}
+	}
 	
+	public void playerClickedWallBlock(Player player, Block clickedBlock) {
+		if (!checkPlayerHasStartedWall(player)) {
+			return;
+		}
+		Buildr_Wallbuilder wallbuilder = giveWallbuilder(player);
+		if (!wallbuilder.isCoordinate1placed()) {
+			wallbuilder.addCoordinate1(clickedBlock);
+			player.sendMessage("Got positon 1 of your wall at ["+ChatColor.BLUE+clickedBlock.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getY()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getZ()+ChatColor.WHITE+"]");
+			player.sendMessage("Now rightclick on block 2 (again with a stick) to continue");
+		}
+		else {
+		player.sendMessage("Got positon 2 of your wall at ["+ChatColor.BLUE+clickedBlock.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getY()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getZ()+ChatColor.WHITE+"]");
+			if (wallbuilder.checkCoordinates(clickedBlock)) {
+				player.sendMessage("Positions OK, build wall..");
+				HashMap<Block, Material> undo = wallbuilder.startBuild();
+				getUndoList().addToStack(undo, player);
+				player.sendMessage("done! Placed "+undo.size()+" blocks");
+				removeStartedWall(player);
+			}
+			else {
+				removeStartedWall(player);
+				player.sendMessage(ChatColor.RED+"ERROR: "+ChatColor.WHITE+"Atleast one dimension of the blocks must be the same. Wallbuild stopped.");
+			}
+		}
+	}
 	
 	public void enterBuildmode(Player player) {
 		getPlayerbuildmode().add(player);
@@ -421,6 +517,10 @@ public class Buildr extends JavaPlugin {
 	public ArrayList<Buildr_Wallbuilder> getStartedWalls() {
 		return startedWalls;
 	}
+
+
+
+
 	
 
 }

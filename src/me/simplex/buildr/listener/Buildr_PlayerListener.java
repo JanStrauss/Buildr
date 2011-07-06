@@ -38,6 +38,9 @@ public class Buildr_PlayerListener extends PlayerListener {
 			event.getClickedBlock().setType(Material.AIR);
 			event.setCancelled(true);
 		}
+		else if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsStick(event.getPlayer())) {
+			plugin.playerClickedWallBlock(event.getPlayer(),event.getClickedBlock());
+		}
 	}
 
 	@Override

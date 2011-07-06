@@ -22,8 +22,8 @@ commands:
     description: Starts the wall building function
     aliases: [bw]
     usage: |
-           /<command> 
-           Example: type /<command> then mark corner 1 & corner 2
+           /<command> <material #> <a|air|aironly>
+           Example: /<command> 20 a will start the wall building function which only place glass over air
   airfloor:
     description: places a block (area) of material x y blocks above the player
     aliases: [af,airf]
@@ -50,7 +50,7 @@ commands:
     description: gives a Stack of items to the player
     aliases: [gv,g]
     usage: |
-           /<command> <player> <itemid #> <amount #>
+           /<command> <player> <itemid #|itemname> <amount #>
            Example: /<command> 20 50 gives a stack of 50 Glass to the player
   clearinv:
     description: clears the inventory of the player
