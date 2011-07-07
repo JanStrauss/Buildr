@@ -4,7 +4,7 @@ version: 0.1
 website: http://www.over9000.eu
 author: simplex
 description: >
-             Plugin that makes building alot easier, faster and more comfortable.
+             Collection of tools for faster & more comfortable building
 commands:
   globalbuild:
     description: Toggles the Global Buildmode
@@ -54,6 +54,12 @@ commands:
   clearinv:
     description: clears the inventory of the player
     aliases: [clrinv,ci,clearinventory]
+    usage: |
+           /<command> 
+           Example: /<command>
+  location:
+    description: returns the 
+    aliases: [loc,gps]
     usage: |
            /<command> 
            Example: /<command>

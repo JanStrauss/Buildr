@@ -60,9 +60,6 @@ public class Buildr extends JavaPlugin {
 	public void onDisable() {
 		log("Shutdown..");
 		timeHandler.setAlive(false);
-		for (Player player : playerbuildmode) {
-			leaveBuildmode(player);
-		}
 		log("Buildr v"+version+" stopped.");
 	}
 
@@ -112,7 +109,16 @@ public class Buildr extends JavaPlugin {
 		}
 		
 			setupPermissions();
-
+			
+		// check for InventoryStateFile
+		if (invManager.checkInventoryStateFile()) {
+			log("loading InventoyStateFile..");
+			Player[] backupBuilders = invManager.loadInventoryStateFile();
+			for (Player backupBuilder : backupBuilders) {
+				playerbuildmode.add(backupBuilder);
+			}
+			log("found "+backupBuilders.length+" builder(s) to treat on login");
+		}
 
 		//register Listener
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this); // Godmode: no dmg
@@ -122,14 +128,13 @@ public class Buildr extends JavaPlugin {
 		pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Event.Priority.Normal, this); // No Pickups
 		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Event.Priority.Normal, this); // Always Sun
 		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Event.Priority.Normal, this); // Unlimited Stacks
-		pm.registerEvent(Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this); // Inv reset
-		pm.registerEvent(Type.PLAYER_KICK, playerListener, Event.Priority.Normal, this); // Inv reset
+		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
 		
 		log("Listener registered");
 
 
 		 
-		// TimeThread
+		// TimeThread 
 		timeHandler = new Buildr_TimeThread(this);
 		thread = new Thread(timeHandler,prefix+"Time Handler");
 		thread.start();
@@ -493,6 +498,12 @@ public class Buildr extends JavaPlugin {
 		getPlayerbuildmode().add(player);
 		if (getConfigValue("BUILDMODE_INVENTORY")) {
 			invManager.switchInventory(player);
+			if (playerbuildmode.isEmpty()) {
+				invManager.updateInventoryStateFile(null);
+			}
+			else {
+				invManager.updateInventoryStateFile((Player[])playerbuildmode.toArray());
+			}
 		}
 		
 	}
@@ -501,6 +512,12 @@ public class Buildr extends JavaPlugin {
 		getPlayerbuildmode().remove(player);
 		if (getConfigValue("BUILDMODE_INVENTORY")) {
 			invManager.switchInventory(player);
+			if (playerbuildmode.isEmpty()) {
+				invManager.updateInventoryStateFile(null);
+			}
+			else {
+				invManager.updateInventoryStateFile((Player[])playerbuildmode.toArray());
+			}
 		}
 	}
 	

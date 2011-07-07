@@ -52,7 +52,7 @@ public class Buildr_InventoryManager {
 		Buildr_ItemStackSaveContainer[] FileContainer =null;
 
 		try {
-			objctInStrm = new ObjectInputStream(new FileInputStream(plugin.getPluginDirectory()+File.separator+"inv_backups"+File.separator+player.getName()+".inv"));
+			objctInStrm = new ObjectInputStream(new FileInputStream(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+player.getName()+".inv"));
 			FileContainer = (Buildr_ItemStackSaveContainer[])objctInStrm.readObject();
 			objctInStrm.close();
 		} catch (FileNotFoundException e) {
@@ -83,7 +83,7 @@ public class Buildr_InventoryManager {
 		}
 		
 		try {
-			ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(plugin.getPluginDirectory()+File.separator+"inv_backups"+File.separator+player.getName()+".inv"));
+			ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+player.getName()+".inv"));
 			objctOutStrm.writeObject(FileContainer);
 			objctOutStrm.flush();
 			objctOutStrm.close();
@@ -93,11 +93,11 @@ public class Buildr_InventoryManager {
 	}
 	
 	public boolean startupCheck(){
-		return new File(plugin.getPluginDirectory()+File.separator+"inv_backups").mkdir();
+		return new File(plugin.getPluginDirectory()+File.separator+"inv_data").mkdir();
 	}
 	
 	private void checkBackupFile(Player player) {
-		if (new File(plugin.getPluginDirectory()+File.separator+"inv_backups"+File.separator+player.getName()+".inv").exists()) {
+		if (new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+player.getName()+".inv").exists()) {
 			plugin.log("InvBackup for "+player.getName()+" found");
 			return;
 		}
@@ -121,6 +121,49 @@ public class Buildr_InventoryManager {
 		newinv[10] = new ItemStack(67, 64); //Cobblestonestairs
 		
 		saveBackupInventory(player, newinv);
+	}
+	
+	public void updateInventoryStateFile(Player[] builders){
+		System.out.println("StateFile update. size:"+builders.length);
+		
+		if (builders == null) {
+			deleteInventoryStateFile();
+			return;
+		}
+		
+		try {
+			ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat"));
+			objctOutStrm.writeObject(builders);
+			objctOutStrm.flush();
+			objctOutStrm.close();
+		} catch (Exception e) {
+			plugin.log("Failed to write to InventoryStateFile");
+			e.printStackTrace();
+		}
+	}
+	
+	public Player[] loadInventoryStateFile(){
+		Player[] toHandle = null;
+		try {
+			ObjectInputStream objctInStrm = new ObjectInputStream(new FileInputStream(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat"));
+			toHandle = (Player[])objctInStrm.readObject();
+			objctInStrm.close();
+		} catch (ClassNotFoundException e) {
+			// TODO: handle exception
+		}catch (Exception e) {
+			plugin.log("Failed to load InventoryStateFile");
+			e.printStackTrace();
+		}
+		return toHandle;
+	}
+	
+	public boolean checkInventoryStateFile(){
+		return new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat").exists();
+	}
+	
+	public void deleteInventoryStateFile(){
+		File inventoryState = new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat");
+		inventoryState.delete();
 	}
 	
 }
