@@ -52,12 +52,11 @@ public class Buildr_PlayerListener extends PlayerListener {
 		}
 	}
 	
-	
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		plugin.checkPlayerIsToProcess(event.getPlayer());
 			if (plugin.checkPlayerBuildMode(event.getPlayer())) {
-				plugin.log(event.getPlayer().getName()+"removed from buildmode");
+				plugin.log("Treated "+event.getPlayer().getName()+". Inventory restored.");
 				plugin.leaveBuildmode(event.getPlayer());
 			}
 	}

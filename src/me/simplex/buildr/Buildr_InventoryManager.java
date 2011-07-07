@@ -72,25 +72,7 @@ public class Buildr_InventoryManager {
 	}
 	
 	private void saveBackupInventory(Player player,ItemStack[] inv){
-		Buildr_ItemStackSaveContainer[] FileContainer =new Buildr_ItemStackSaveContainer[inv.length];
-		for (int i = 0; i < inv.length; i++) {
-			if (inv[i]!= null) {
-				byte savedata = 0;
-				if (inv[i].getData() != null) {
-					savedata = inv[i].getData().getData();
-				}
-				FileContainer[i] = new Buildr_ItemStackSaveContainer(inv[i].getTypeId(), inv[i].getAmount(), inv[i].getDurability(), savedata);
-			}
-		}
-		
-		try {
-			ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+player.getName()+".inv"));
-			objctOutStrm.writeObject(FileContainer);
-			objctOutStrm.flush();
-			objctOutStrm.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		new Thread(new PlayerInventorySaver(player, inv, plugin)).start();
 	}
 	
 	public boolean startupCheck(){
@@ -136,9 +118,6 @@ public class Buildr_InventoryManager {
 			ObjectInputStream objctInStrm = new ObjectInputStream(new FileInputStream(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat"));
 			toHandleName = (ArrayList<String>)objctInStrm.readObject();
 			objctInStrm.close();
-
-		} catch (ClassNotFoundException e) {
-			// TODO: handle exception
 		}catch (Exception e) {
 			plugin.log("Failed to load InventoryStateFile");
 			e.printStackTrace();
@@ -186,5 +165,42 @@ public class Buildr_InventoryManager {
 			}
 			
 		}
+	}
+	
+	private class PlayerInventorySaver implements Runnable{
+		Player player;
+		ItemStack[] inventory;
+		Buildr plugin;
+		
+		public PlayerInventorySaver(Player player, ItemStack[] inventory, Buildr plugin) {
+			this.player = player;
+			this.inventory = inventory;
+			this.plugin = plugin;
+		}
+
+		@Override
+		public void run() {
+			Buildr_ItemStackSaveContainer[] FileContainer =new Buildr_ItemStackSaveContainer[inventory.length];
+			for (int i = 0; i < inventory.length; i++) {
+				if (inventory[i]!= null) {
+					byte savedata = 0;
+					if (inventory[i].getData() != null) {
+						savedata = inventory[i].getData().getData();
+					}
+					FileContainer[i] = new Buildr_ItemStackSaveContainer(inventory[i].getTypeId(), inventory[i].getAmount(), inventory[i].getDurability(), savedata);
+				}
+			}
+			
+			try {
+				ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+player.getName()+".inv"));
+				objctOutStrm.writeObject(FileContainer);
+				objctOutStrm.flush();
+				objctOutStrm.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+		}
+		
 	}
 }

@@ -116,7 +116,7 @@ public class Buildr extends JavaPlugin {
 		if (invManager.checkInventoryStateFile()) {
 			log("loading InventoyStateFile..");
 			toProcessPlayers.addAll(invManager.loadInventoryStateFile());
-			log("found "+playerBuildMode.size()+" builder(s) to treat on login");
+			log("found "+toProcessPlayers.size()+" builder(s) to treat on login");
 		}
 
 		//register Listener
