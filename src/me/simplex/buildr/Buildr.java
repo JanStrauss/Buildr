@@ -206,7 +206,16 @@ public class Buildr extends JavaPlugin {
 						}
 					}
 					height = Math.abs(Integer.parseInt(args[1]));
-					material = Math.abs(Integer.parseInt(args[0]));
+					try {
+						material = Math.abs(Integer.parseInt(args[0]));
+					} catch (NumberFormatException e) {
+						try {
+							material = Material.matchMaterial(args[0]).getId();
+						} catch (NullPointerException e2) {
+							sender.sendMessage(ChatColor.RED+"wrong format");
+							return true;
+						}
+					}
 					if (Material.getMaterial(material)== null) {
 						sender.sendMessage("Invalid Material");
 						return true;
@@ -315,8 +324,13 @@ public class Buildr extends JavaPlugin {
 					try {
 						id = Integer.parseInt(args[0]);
 					} catch (NumberFormatException e) {
-						sender.sendMessage(ChatColor.RED+"wrong format");
-						return true;
+						try {
+							id = Material.matchMaterial(args[0]).getId();
+						} catch (NullPointerException e2) {
+							sender.sendMessage(ChatColor.RED+"wrong format");
+							return true;
+						}
+
 					}
 					if (Material.getMaterial(id).isBlock()) {
 						material = Material.getMaterial(id);

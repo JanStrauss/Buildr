@@ -76,7 +76,5 @@ public class Buildr_UnDoStack {
 		public Player getPlayer(){
 			return player;
 		}
-
-
 	}
 }
