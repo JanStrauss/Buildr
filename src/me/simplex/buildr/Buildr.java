@@ -51,7 +51,6 @@ public class Buildr extends JavaPlugin {
 	  private PluginManager pm;
 	  
 	  //logic
-	  private HashMap<String, Object> settings;
 	  private ArrayList<World> worldbuildmode;
 	  private ArrayList<Player> playerbuildmode;
 	  private ArrayList<Buildr_Wallbuilder> startedWalls;
@@ -66,6 +65,10 @@ public class Buildr extends JavaPlugin {
 	public void onEnable() {
 		//init
 		pm = getServer().getPluginManager();
+		
+		pluginDirectory =  "plugins/Buildr";
+		version 		= getDescription().getVersion();
+		prefix 			= "[Buildr] ";
 		 
 		cmdHandler 		= new Buildr_Commands(this);
 		invManager 		= new Buildr_InventoryManager(this);
@@ -76,10 +79,6 @@ public class Buildr extends JavaPlugin {
 		playerListener 	= new Buildr_PlayerListener(this);
 		weatherListener = new Buildr_WeatherListener(this);
 		blockListener 	= new Buildr_BlockListener(this);
-		 
-		pluginDirectory =  "plugins/Buildr";
-		version 		= getDescription().getVersion();
-		prefix 			= "[Buildr] ";
 		 
 		worldbuildmode 	=  new ArrayList<World>();
 		playerbuildmode = new ArrayList<Player>();
@@ -96,14 +95,13 @@ public class Buildr extends JavaPlugin {
 			cfgManager.createSettings();
 			log("created Buildr Configfile settings.cfg");
 		}
-		this.settings = cfgManager.loadSettings();
+		cfgManager.loadSettings();
 		log("loaded settings.cfg");
-		if ((Boolean)settings.get("SPAM_ON_STARTUP")) {
-			//TODO:
-			log("printing detailed config:");
-			log("...");
-			log("...");
-			log("...");
+
+		if (getConfigValue("GENERAL_DISPLAY_SETTINGS_ON_LOAD")) {
+			for (String cfg : cfgManager.getSettings().keySet()) {
+				log("KEY: "+cfg+" VALUE: "+getConfigValue(cfg));
+			}
 		}
 		if (invManager.startupCheck()) {
 			log("created Inventory directory");
@@ -120,18 +118,16 @@ public class Buildr extends JavaPlugin {
 		pm.registerEvent(Type.PLAYER_QUIT, playerListener, Event.Priority.Normal, this); // Inv reset
 		pm.registerEvent(Type.PLAYER_KICK, playerListener, Event.Priority.Normal, this); // Inv reset
 		
-		if ((Boolean)settings.get("SPAM_ON_STARTUP")) {
-			log("Listener registered");
-		}
+		log("Listener registered");
+
 
 		 
 		// TimeThread
 		timeHandler = new Buildr_TimeThread(this);
 		thread = new Thread(timeHandler,prefix+"Time Handler");
 		thread.start();
-		if ((Boolean)settings.get("SPAM_ON_STARTUP")) {
-			log("started TimeThread");
-		}
+
+		log("started TimeThread");
 		log("Buildr v"+version+" loaded");
 	}
 	
@@ -484,12 +480,17 @@ public class Buildr extends JavaPlugin {
 	
 	public void enterBuildmode(Player player) {
 		getPlayerbuildmode().add(player);
-		invManager.switchInventory(player);
+		if (getConfigValue("BUILDMODE_INVENTORY")) {
+			invManager.switchInventory(player);
+		}
+		
 	}
 	
 	public void leaveBuildmode(Player player) {
 		getPlayerbuildmode().remove(player);
-		invManager.switchInventory(player);
+		if (getConfigValue("BUILDMODE_INVENTORY")) {
+			invManager.switchInventory(player);
+		}
 	}
 	
 	public void enterGlobalbuildmode(World world) {
@@ -508,10 +509,11 @@ public class Buildr extends JavaPlugin {
 	/**
 	 * @return the settings HashMap of Buildr
 	 */
-	public HashMap<String, Object> getSettings() {
-		return settings;
-	}
 
+	public boolean getConfigValue(String key){
+		return cfgManager.getConfigValue(key);
+	}
+	
 	public ArrayList<World> getWorldbuildmode() {
 		return worldbuildmode;
 	}

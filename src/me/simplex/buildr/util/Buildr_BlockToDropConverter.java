@@ -83,7 +83,7 @@ public class Buildr_BlockToDropConverter {
 	}
 	
 	private void checkStairsDropSettings(int type, ArrayList<ItemStack> ret){
-		if ((Boolean) plugin.getSettings().get("STAIRS_DROP_STAIRS")) {
+		if (plugin.getConfigValue("BUILDMODE_STAIRMODE")) {
 			ret.add(new ItemStack(type,1));
 			return;
 		}
