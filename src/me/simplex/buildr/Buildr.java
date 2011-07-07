@@ -58,7 +58,13 @@ public class Buildr extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		log("Shutdown..");
 		timeHandler.setAlive(false);
+		for (Player player : playerbuildmode) {
+			playerbuildmode.remove(player);
+			leaveBuildmode(player);
+		}
+		log("Buildr v"+version+" stopped.");
 	}
 
 	@Override
@@ -86,8 +92,7 @@ public class Buildr extends JavaPlugin {
 		 
 		//load settings
 		log("Buildr v"+version+" loading..");
-		setupPermissions();
-		
+			
 		if (cfgManager.checkDirectory()) {
 			log("created Buildr directory");
 		}
@@ -106,6 +111,9 @@ public class Buildr extends JavaPlugin {
 		if (invManager.startupCheck()) {
 			log("created Inventory directory");
 		}
+		
+			setupPermissions();
+
 
 		//register Listener
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this); // Godmode: no dmg
@@ -380,6 +388,10 @@ public class Buildr extends JavaPlugin {
 	        log("Permission system not detected, defaulting to OP");
 	        return;
 	    }
+		if (!getConfigValue("GENERAL_USE_PERMISSIONS")) {
+	        log("Permission system disabled, using OP");
+	        return;
+		}
 	    
 	    permissionHandler = ((Permissions) permissionsPlugin).getHandler();
 	    log("Found and will use plugin "+((Permissions)permissionsPlugin).getDescription().getFullName());
@@ -495,10 +507,16 @@ public class Buildr extends JavaPlugin {
 	
 	public void enterGlobalbuildmode(World world) {
 		getWorldbuildmode().add(world);
-		world.setStorm(false);
-		world.setThundering(false);
-		//world.setWeatherDuration(0);
-		world.setTime(0);
+		
+		if (getConfigValue("GLOBALBUILD_WEATHER")) {
+			world.setStorm(false);
+			world.setThundering(false);
+		}
+
+		if (getConfigValue("GLOBALBUILD_TIME")) {
+			world.setTime(0);
+		}
+
 	}
 	public void leaveGlobalbuildmode(World world) {
 		getWorldbuildmode().remove(world);

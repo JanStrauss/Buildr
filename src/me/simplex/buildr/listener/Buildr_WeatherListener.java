@@ -15,10 +15,13 @@ public Buildr_WeatherListener(Buildr buildr) {
 @Override
 public void onWeatherChange(WeatherChangeEvent event) {
 	if (plugin.checkWorldBuildMode(event.getWorld())) {
-		if (event.toWeatherState()) {
-			event.setCancelled(true);
-			event.getWorld().setStorm(false);
+		if (plugin.getConfigValue("GLOBALBUILD_WEATHER")) {
+			if (event.toWeatherState()) {
+				event.setCancelled(true);
+				event.getWorld().setStorm(false);
+			}
 		}
+
 	}
 }
 }

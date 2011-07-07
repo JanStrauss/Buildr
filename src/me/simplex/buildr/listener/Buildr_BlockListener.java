@@ -15,13 +15,10 @@ public class Buildr_BlockListener extends BlockListener {
 	
 	@Override
 	public void onBlockPlace(BlockPlaceEvent event) {
-		//System.out.println("Block Place");
-		if (plugin.checkPlayerBuildMode(event.getPlayer())) {
-			event.getPlayer().setItemInHand(new ItemStack(event.getItemInHand().getType(), 64));
-			//System.out.println("itemchanged");
+		if (plugin.getConfigValue("BUILDMODE_UNLIMITED_ITEMSTACK")) {
+			if (plugin.checkPlayerBuildMode(event.getPlayer())) {
+				event.getPlayer().setItemInHand(new ItemStack(event.getItemInHand().getType(), 64));
+			}
 		}
-
 	}
-
-
 }

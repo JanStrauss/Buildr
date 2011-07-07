@@ -8,6 +8,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerListener;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -26,17 +27,18 @@ public class Buildr_PlayerListener extends PlayerListener {
 @Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsPickaxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
-
-			// Check for Drops
-			if (!(plugin.checkWorldBuildMode(event.getClickedBlock().getWorld()))) {
-				for (ItemStack stk : converter.convert(event.getClickedBlock())) {
-					if (stk != null) {
-						event.getClickedBlock().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(), stk);
+			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK")) {
+				// Check for Drops
+				if (!(plugin.checkWorldBuildMode(event.getClickedBlock().getWorld()))) {
+					for (ItemStack stk : converter.convert(event.getClickedBlock())) {
+						if (stk != null) {
+							event.getClickedBlock().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(), stk);
+						}
 					}
 				}
+				event.getClickedBlock().setType(Material.AIR);
+				event.setCancelled(true);
 			}
-			event.getClickedBlock().setType(Material.AIR);
-			event.setCancelled(true);
 		}
 		else if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsStick(event.getPlayer())) {
 			plugin.playerClickedWallBlock(event.getPlayer(),event.getClickedBlock());
@@ -45,10 +47,11 @@ public class Buildr_PlayerListener extends PlayerListener {
 
 	@Override
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
-		if (plugin.checkPlayerBuildMode(event.getPlayer())) {
-			event.setCancelled(true);
+		if (plugin.getConfigValue("BUILDMODE_DISABLEPICKUP")) {
+			if (plugin.checkPlayerBuildMode(event.getPlayer())) {
+				event.setCancelled(true);
+			}
 		}
-		//System.out.println("pickup: "+event.getItem().getItemStack().getTypeId()+"cancelled: "+event.isCancelled());
 	}
 	
 	@Override
@@ -64,6 +67,15 @@ public class Buildr_PlayerListener extends PlayerListener {
 		if (plugin.checkPlayerBuildMode(event.getPlayer())) {
 			plugin.leaveBuildmode(event.getPlayer());
 			plugin.log("removed "+event.getPlayer().getName()+" from builders");
+		}
+	}
+	
+	@Override
+	public void onPlayerLogin(PlayerLoginEvent event) {
+		if (plugin.getConfigValue("BUILDMODE_ENABLED")) {
+			if (plugin.checkPlayerBuildMode(event.getPlayer())) {
+				plugin.leaveBuildmode(event.getPlayer());
+			}
 		}
 	}
 }

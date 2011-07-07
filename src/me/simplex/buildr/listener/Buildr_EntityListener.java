@@ -19,8 +19,10 @@ public class Buildr_EntityListener extends EntityListener {
 @Override
 public void onEntityDamage(EntityDamageEvent event) {
 	if (event.getEntity() instanceof Player) {
-		if (plugin.checkPlayerBuildMode((Player)event.getEntity())) {
-			event.setCancelled(true);
+		if (plugin.getConfigValue("BUILDMODE_GODMODE")) {
+			if (plugin.checkPlayerBuildMode((Player)event.getEntity())) {
+				event.setCancelled(true);
+			}
 		}
 	}
 }
@@ -28,8 +30,10 @@ public void onEntityDamage(EntityDamageEvent event) {
 //Globalbuildmode: No Drops
 @Override
 	public void onItemSpawn(ItemSpawnEvent event) {
-		if (plugin.checkWorldBuildMode(event.getLocation().getWorld())) {
-			event.setCancelled(true);
+		if (plugin.getConfigValue("GLOBALBUILD_NODROPS")) {
+			if (plugin.checkWorldBuildMode(event.getLocation().getWorld())) {
+				event.setCancelled(true);
+			}
 		}
 	}
 
@@ -37,8 +41,10 @@ public void onEntityDamage(EntityDamageEvent event) {
 @Override
 	public void onEntityTarget(EntityTargetEvent event) {
 		if (event.getTarget() instanceof Player) {
-			if (plugin.checkPlayerBuildMode((Player)event.getTarget())) {
-				event.setCancelled(true);
+			if (plugin.getConfigValue("BUILDMODE_GODMODE")) {
+				if (plugin.checkPlayerBuildMode((Player)event.getTarget())) {
+					event.setCancelled(true);
+				}
 			}
 		}
 	}

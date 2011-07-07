@@ -29,6 +29,9 @@ public class Buildr_Commands {
 	 * @param sender
 	 */
 	protected void cmd_globalbuild(CommandSender sender,World world){
+		if (!plugin.getConfigValue("GLOBALBUILD_ENABLE")) {
+			return;
+		}
 		if (plugin.getWorldbuildmode().contains(world)) {
 			plugin.leaveGlobalbuildmode(world);
 			sender.sendMessage("Globalbuildmode disabled");
@@ -52,6 +55,9 @@ public class Buildr_Commands {
 	 * @param sender
 	 */
 	protected void cmd_build(CommandSender sender){
+		if (!plugin.getConfigValue("BUILDMODE_ENABLE")) {
+			return;
+		}
 		if (plugin.getPlayerbuildmode().contains((Player)sender)) {
 			
 			sender.sendMessage(ChatColor.BLUE+"Buildmode disabled");
@@ -69,6 +75,9 @@ public class Buildr_Commands {
 	 * @param sender
 	 */
 	protected void cmd_top(CommandSender sender) {
+		if (!plugin.getConfigValue("FEATURE_TOP")) {
+			return;
+		}
 		Player player = (Player)sender;
 		if (player.teleport(new Location(player.getWorld(), player.getLocation().getX(), player.getWorld().getHighestBlockYAt(player.getLocation()), player.getLocation().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()))) 
 		{
@@ -87,6 +96,9 @@ public class Buildr_Commands {
 	 * @param size
 	 */
 	protected void cmd_airfloor(CommandSender sender, int material, int height, int size){
+		if (!plugin.getConfigValue("FEATURE_AIRFLOOR")) {
+			return;
+		}
 		Player player = (Player)sender;
 		int blockheight = player.getLocation().getBlockY()+height-1;
 		Location location = new Location(player.getWorld(), player.getLocation().getBlockX(), blockheight, player.getLocation().getBlockZ());
@@ -128,7 +140,10 @@ public class Buildr_Commands {
 	 * 
 	 * @param sender
 	 */
-	protected void cmd_undo(CommandSender sender){
+	protected void cmd_undo(CommandSender sender){		
+		if (!plugin.getConfigValue("FEATURE_AIRFLOOR") && !plugin.getConfigValue("FEATURE_WALLBUILDER")) {
+		return;
+		}
 		Player player = (Player)sender;
 		HashMap<Block, Material> undos = plugin.getUndoList().getAndDeleteFromStack(player);
 		if (undos != null) {
@@ -149,6 +164,9 @@ public class Buildr_Commands {
 	 * @param amount
 	 */
 	protected void cmd_give(CommandSender sender, String material, int amount, String player) {
+		if (!plugin.getConfigValue("FEATURE_GIVE")) {
+			return;
+		}
 		Material give_mat = null;
 		try {
 			give_mat = Material.getMaterial(Integer.parseInt(material));
@@ -183,6 +201,9 @@ public class Buildr_Commands {
 	 * @param args
 	 */
 	protected void cmd_wool(CommandSender sender, String args) {
+		if (!plugin.getConfigValue("FEATURE_WOOL")) {
+			return;
+		}
 		String upcase= args.toUpperCase();
 		Buildr_WoolType woolcolor;
 		try {
@@ -202,6 +223,9 @@ public class Buildr_Commands {
 	 * @param aironly
 	 */
 	protected void cmd_wall(CommandSender sender, Material material, boolean aironly) {
+		if (!plugin.getConfigValue("FEATURE_WALLBUILDER")) {
+			return;
+		}
 		if (plugin.checkPlayerHasStartedWall((Player)sender)) {
 			plugin.removeStartedWall((Player)sender);
 			sender.sendMessage(ChatColor.YELLOW+"previous started Wall dismissed.");
@@ -217,6 +241,9 @@ public class Buildr_Commands {
 	 * @param sender
 	 */
 	protected void cmd_clrInv(CommandSender sender) {
+		if (!plugin.getConfigValue("FEATURE_CLEAR_INVENTORY")) {
+			return;
+		}
 		((Player)sender).getInventory().clear();
 		sender.sendMessage("Inventory cleared");
 	}

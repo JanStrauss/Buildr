@@ -67,8 +67,8 @@ public class Buildr_ConfigurationManager {
 			writer.newLine();
 			writer.write("##### General settings: ####################################");writer.newLine();
 			writer.newLine();
-			writer.write("# Print the settings while Buildr loads");writer.newLine();
-			writer.write("GENERAL_DISPLAY_SETTINGS_ON_LOAD=true");writer.newLine();
+			writer.write("# Print the settings while Buildr loads");writer.newLine();//done
+			writer.write("GENERAL_DISPLAY_SETTINGS_ON_LOAD=false");writer.newLine(); 
 			writer.newLine();
 			writer.write("# Enable Permissions, if false Buildr checks for OP (will also check for OP if no PermissionsPlugin was found)");writer.newLine();
 			writer.write("GENERAL_USE_PERMISSIONS=true");writer.newLine();
@@ -77,66 +77,66 @@ public class Buildr_ConfigurationManager {
 			
 			writer.write("##### Globalbuildmode settings: ############################");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable the Globalbuildmode");writer.newLine();
-			writer.write("GLOBALBUILD_ENABLE=true");writer.newLine();
+			writer.write("# Enable the Globalbuildmode");writer.newLine(); //done
+			writer.write("GLOBALBUILD_ENABLE=true");writer.newLine(); 
 			writer.newLine();
-			writer.write("# Enable weathercheck (always sun)");writer.newLine();
+			writer.write("# Enable weathercheck (always sun)");writer.newLine(); //done
 			writer.write("GLOBALBUILD_WEATHER=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable timecheck (always day)");writer.newLine();
+			writer.write("# Enable timecheck (always day)");writer.newLine(); //done
 			writer.write("GLOBALBUILD_TIME=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable Dropblocker");writer.newLine();
+			writer.write("# Enable Dropblocker");writer.newLine(); //done
 			writer.write("GLOBALBUILD_NODROPS=true");writer.newLine();
 			writer.newLine();
 			writer.newLine();
 			
 			writer.write("##### Buildmode settings: ##################################");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable the buildmode");writer.newLine();
-			writer.write("BUILDMODE_ENABLE=true");writer.newLine();
+			writer.write("# Enable the buildmode");writer.newLine(); //done
+			writer.write("BUILDMODE_ENABLE=true");writer.newLine(); 
 			writer.newLine();
-			writer.write("# Enable godmode while in buildmode");writer.newLine();
+			writer.write("# Enable godmode while in buildmode");writer.newLine(); //done
 			writer.write("BUILDMODE_GODMODE=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable the buildmode inventory");writer.newLine();
+			writer.write("# Enable the buildmode inventory");writer.newLine(); //done
 			writer.write("BUILDMODE_INVENTORY=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable Instantblockbreak holding a Pickaxe");writer.newLine();
+			writer.write("# Enable Instant block break with a Pickaxe");writer.newLine(); //done
 			writer.write("BUILDMODE_INSTANT_BLOCK_BREAK=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Disable item pickup");writer.newLine();
+			writer.write("# Disable item pickup");writer.newLine(); //done
 			writer.write("BUILDMODE_DISABLEPICKUP=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable the unlimited itemstacks");writer.newLine();
+			writer.write("# Enable the unlimited itemstacks");writer.newLine(); //done
 			writer.write("BUILDMODE_UNLIMITED_ITEMSTACK=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable the treecutter");writer.newLine();
+			writer.write("# Enable the treecutter (Axe)");writer.newLine(); //TODO
 			writer.write("BUILDMODE_TREECUTTER=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Let stairs drop stairs if destoyed with instantblockbreak on");writer.newLine();
+			writer.write("# Let stairs drop stairs if destoyed with instantblockbreak on");writer.newLine(); //done
 			writer.write("BUILDMODE_STAIRMODE=true");writer.newLine();
 			writer.newLine();
 			writer.newLine();
 			
 			writer.write("##### Feature settings: ####################################");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable the airfloor command");writer.newLine();
+			writer.write("# Enable the airfloor command");writer.newLine(); //done
 			writer.write("FEATURE_AIRFLOOR=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable the wall command");writer.newLine();
+			writer.write("# Enable the wall command");writer.newLine(); //done
 			writer.write("FEATURE_WALLBUILDER=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable the top command");writer.newLine();
+			writer.write("# Enable the top command");writer.newLine(); //done
 			writer.write("FEATURE_TOP=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable the give command");writer.newLine();
+			writer.write("# Enable the give command");writer.newLine(); //done
 			writer.write("FEATURE_GIVE=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable the wool command");writer.newLine();
+			writer.write("# Enable the wool command");writer.newLine(); //done
 			writer.write("FEATURE_WOOL=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable the clearinventory command");writer.newLine();
+			writer.write("# Enable the clearinventory command");writer.newLine(); //done
 			writer.write("FEATURE_CLEAR_INVENTORY=true");writer.newLine();
 			writer.newLine();
 			writer.newLine();
