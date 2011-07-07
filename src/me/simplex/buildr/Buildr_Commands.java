@@ -32,7 +32,7 @@ public class Buildr_Commands {
 		if (!plugin.getConfigValue("GLOBALBUILD_ENABLE")) {
 			return;
 		}
-		if (plugin.getWorldbuildmode().contains(world)) {
+		if (plugin.getWorldBuildMode().contains(world)) {
 			plugin.leaveGlobalbuildmode(world);
 			sender.sendMessage("Globalbuildmode disabled");
 			for (Player inhab : world.getPlayers()) {
@@ -58,7 +58,7 @@ public class Buildr_Commands {
 		if (!plugin.getConfigValue("BUILDMODE_ENABLE")) {
 			return;
 		}
-		if (plugin.getPlayerbuildmode().contains((Player)sender)) {
+		if (plugin.getPlayerBuildMode().contains((Player)sender)) {
 			
 			sender.sendMessage(ChatColor.BLUE+"Buildmode disabled");
 			plugin.leaveBuildmode((Player)sender);

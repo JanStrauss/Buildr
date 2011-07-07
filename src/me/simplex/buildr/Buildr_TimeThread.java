@@ -17,7 +17,7 @@ public class Buildr_TimeThread implements Runnable {
 	@Override
 	public void run() {
 		while(isAlive()){
-		for (World world : plugin.getWorldbuildmode()) {
+		for (World world : plugin.getWorldBuildMode()) {
 			if (plugin.getConfigValue("GLOBALBUILD_TIME")) {
 				if (world.getTime()>=10000) {
 					world.setTime(0);

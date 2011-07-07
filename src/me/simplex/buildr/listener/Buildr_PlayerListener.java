@@ -55,7 +55,7 @@ public class Buildr_PlayerListener extends PlayerListener {
 	
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
-			if (plugin.checkPlayerBuildMode(event.getPlayer())) {
+			if (plugin.checkPlayerBuildMode(event.getPlayer()) || plugin.checkPlayerIsToProcess(event.getPlayer())) {
 				plugin.log(event.getPlayer().getName()+"removed from buildmode");
 				plugin.leaveBuildmode(event.getPlayer());
 			}

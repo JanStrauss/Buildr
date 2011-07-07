@@ -51,8 +51,9 @@ public class Buildr extends JavaPlugin {
 	  private PluginManager pm;
 	  
 	  //logic
-	  private ArrayList<World> worldbuildmode;
-	  private ArrayList<Player> playerbuildmode;
+	  private ArrayList<World> worldBuildMode;
+	  private ArrayList<Player> PlayerBuildMode;
+	  private ArrayList<String> toProcessPlayers;
 	  private ArrayList<Buildr_Wallbuilder> startedWalls;
 
 
@@ -68,23 +69,24 @@ public class Buildr extends JavaPlugin {
 		//init
 		pm = getServer().getPluginManager();
 		
-		pluginDirectory =  "plugins/Buildr";
-		version 		= getDescription().getVersion();
-		prefix 			= "[Buildr] ";
+		pluginDirectory 	=  "plugins/Buildr";
+		version 			= getDescription().getVersion();
+		prefix 				= "[Buildr] ";
 		 
-		cmdHandler 		= new Buildr_Commands(this);
-		invManager 		= new Buildr_InventoryManager(this);
-		cfgManager 		= new Buildr_ConfigurationManager(this);
-		unDoStack 		= new Buildr_UnDoStack();
+		cmdHandler 			= new Buildr_Commands(this);
+		invManager 			= new Buildr_InventoryManager(this);
+		cfgManager 			= new Buildr_ConfigurationManager(this);
+		unDoStack 			= new Buildr_UnDoStack();
 		 
-		entityListener 	= new Buildr_EntityListener(this);
-		playerListener 	= new Buildr_PlayerListener(this);
-		weatherListener = new Buildr_WeatherListener(this);
-		blockListener 	= new Buildr_BlockListener(this);
+		entityListener 		= new Buildr_EntityListener(this);
+		playerListener 		= new Buildr_PlayerListener(this);
+		weatherListener 	= new Buildr_WeatherListener(this);
+		blockListener 		= new Buildr_BlockListener(this);
 		 
-		worldbuildmode 	=  new ArrayList<World>();
-		playerbuildmode = new ArrayList<Player>();
-		startedWalls 	= new ArrayList<Buildr_Wallbuilder>();
+		worldBuildMode 		= new ArrayList<World>();
+		PlayerBuildMode 	= new ArrayList<Player>();
+		toProcessPlayers 	= new ArrayList<String>();
+		startedWalls 		= new ArrayList<Buildr_Wallbuilder>();
 		 
 		//load settings
 		log("Buildr v"+version+" loading..");
@@ -113,11 +115,8 @@ public class Buildr extends JavaPlugin {
 		// check for InventoryStateFile
 		if (invManager.checkInventoryStateFile()) {
 			log("loading InventoyStateFile..");
-			Player[] backupBuilders = invManager.loadInventoryStateFile();
-			for (Player backupBuilder : backupBuilders) {
-				playerbuildmode.add(backupBuilder);
-			}
-			log("found "+backupBuilders.length+" builder(s) to treat on login");
+			toProcessPlayers.addAll(invManager.loadInventoryStateFile());
+			log("found "+PlayerBuildMode.size()+" builder(s) to treat on login");
 		}
 
 		//register Listener
@@ -415,11 +414,22 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	public boolean checkWorldBuildMode(World world){
-		return worldbuildmode.contains(world);
+		return worldBuildMode.contains(world);
 	}
 	public boolean checkPlayerBuildMode(Player player){
-		return playerbuildmode.contains(player);
+		return PlayerBuildMode.contains(player);
 	}
+	
+	public boolean checkPlayerIsToProcess(Player player){
+		for (String name : toProcessPlayers) {
+			if (name.equals(player.getName())) {
+				toProcessPlayers.remove(name);
+				return true;
+			}
+		}
+		return false;
+	}
+	
 	public boolean checkPlayerHasStartedWall(Player player){
 		for (Buildr_Wallbuilder wallbuilder : startedWalls) {
 			if (wallbuilder.getWallcreater() == player) {
@@ -495,34 +505,29 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	public void enterBuildmode(Player player) {
-		getPlayerbuildmode().add(player);
+		getPlayerBuildMode().add(player);
 		if (getConfigValue("BUILDMODE_INVENTORY")) {
 			invManager.switchInventory(player);
-			if (playerbuildmode.isEmpty()) {
-				invManager.updateInventoryStateFile(null);
-			}
-			else {
-				invManager.updateInventoryStateFile((Player[])playerbuildmode.toArray());
-			}
+			invManager.updateInventoryStateFile(PlayerBuildMode);
 		}
 		
 	}
 	
 	public void leaveBuildmode(Player player) {
-		getPlayerbuildmode().remove(player);
+		getPlayerBuildMode().remove(player);
 		if (getConfigValue("BUILDMODE_INVENTORY")) {
 			invManager.switchInventory(player);
-			if (playerbuildmode.isEmpty()) {
+			if (PlayerBuildMode.isEmpty()) {
 				invManager.updateInventoryStateFile(null);
 			}
 			else {
-				invManager.updateInventoryStateFile((Player[])playerbuildmode.toArray());
+				invManager.updateInventoryStateFile(PlayerBuildMode);
 			}
 		}
 	}
 	
 	public void enterGlobalbuildmode(World world) {
-		getWorldbuildmode().add(world);
+		getWorldBuildMode().add(world);
 		
 		if (getConfigValue("GLOBALBUILD_WEATHER")) {
 			world.setStorm(false);
@@ -535,7 +540,7 @@ public class Buildr extends JavaPlugin {
 
 	}
 	public void leaveGlobalbuildmode(World world) {
-		getWorldbuildmode().remove(world);
+		getWorldBuildMode().remove(world);
 	}
 	
 	//get+set 
@@ -548,13 +553,13 @@ public class Buildr extends JavaPlugin {
 		return cfgManager.getConfigValue(key);
 	}
 	
-	public ArrayList<World> getWorldbuildmode() {
-		return worldbuildmode;
+	public ArrayList<World> getWorldBuildMode() {
+		return worldBuildMode;
 	}
 
 
-	public ArrayList<Player> getPlayerbuildmode() {
-		return playerbuildmode;
+	public ArrayList<Player> getPlayerBuildMode() {
+		return PlayerBuildMode;
 	}
 
 	public String getPluginDirectory() {
