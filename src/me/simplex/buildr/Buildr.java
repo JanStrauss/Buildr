@@ -61,7 +61,6 @@ public class Buildr extends JavaPlugin {
 		log("Shutdown..");
 		timeHandler.setAlive(false);
 		for (Player player : playerbuildmode) {
-			playerbuildmode.remove(player);
 			leaveBuildmode(player);
 		}
 		log("Buildr v"+version+" stopped.");
