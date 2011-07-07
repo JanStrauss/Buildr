@@ -52,7 +52,7 @@ public class Buildr extends JavaPlugin {
 	  
 	  //logic
 	  private ArrayList<World> worldBuildMode;
-	  private ArrayList<Player> PlayerBuildMode;
+	  private ArrayList<Player> playerBuildMode;
 	  private ArrayList<String> toProcessPlayers;
 	  private ArrayList<Buildr_Wallbuilder> startedWalls;
 
@@ -84,7 +84,7 @@ public class Buildr extends JavaPlugin {
 		blockListener 		= new Buildr_BlockListener(this);
 		 
 		worldBuildMode 		= new ArrayList<World>();
-		PlayerBuildMode 	= new ArrayList<Player>();
+		playerBuildMode 	= new ArrayList<Player>();
 		toProcessPlayers 	= new ArrayList<String>();
 		startedWalls 		= new ArrayList<Buildr_Wallbuilder>();
 		 
@@ -116,7 +116,7 @@ public class Buildr extends JavaPlugin {
 		if (invManager.checkInventoryStateFile()) {
 			log("loading InventoyStateFile..");
 			toProcessPlayers.addAll(invManager.loadInventoryStateFile());
-			log("found "+PlayerBuildMode.size()+" builder(s) to treat on login");
+			log("found "+playerBuildMode.size()+" builder(s) to treat on login");
 		}
 
 		//register Listener
@@ -417,17 +417,19 @@ public class Buildr extends JavaPlugin {
 		return worldBuildMode.contains(world);
 	}
 	public boolean checkPlayerBuildMode(Player player){
-		return PlayerBuildMode.contains(player);
+		return playerBuildMode.contains(player);
 	}
 	
-	public boolean checkPlayerIsToProcess(Player player){
+	public void checkPlayerIsToProcess(Player player){
 		for (String name : toProcessPlayers) {
 			if (name.equals(player.getName())) {
 				toProcessPlayers.remove(name);
-				return true;
+				if (!playerBuildMode.contains(player)) {
+					playerBuildMode.add(player);
+				}
+				return;
 			}
 		}
-		return false;
 	}
 	
 	public boolean checkPlayerHasStartedWall(Player player){
@@ -508,7 +510,7 @@ public class Buildr extends JavaPlugin {
 		getPlayerBuildMode().add(player);
 		if (getConfigValue("BUILDMODE_INVENTORY")) {
 			invManager.switchInventory(player);
-			invManager.updateInventoryStateFile(PlayerBuildMode);
+			invManager.updateInventoryStateFile(playerBuildMode);
 		}
 		
 	}
@@ -517,11 +519,11 @@ public class Buildr extends JavaPlugin {
 		getPlayerBuildMode().remove(player);
 		if (getConfigValue("BUILDMODE_INVENTORY")) {
 			invManager.switchInventory(player);
-			if (PlayerBuildMode.isEmpty()) {
+			if (playerBuildMode.isEmpty()) {
 				invManager.updateInventoryStateFile(null);
 			}
 			else {
-				invManager.updateInventoryStateFile(PlayerBuildMode);
+				invManager.updateInventoryStateFile(playerBuildMode);
 			}
 		}
 	}
@@ -559,7 +561,7 @@ public class Buildr extends JavaPlugin {
 
 
 	public ArrayList<Player> getPlayerBuildMode() {
-		return PlayerBuildMode;
+		return playerBuildMode;
 	}
 
 	public String getPluginDirectory() {

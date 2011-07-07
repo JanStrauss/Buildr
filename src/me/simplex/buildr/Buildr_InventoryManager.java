@@ -126,27 +126,7 @@ public class Buildr_InventoryManager {
 	}
 	
 	public void updateInventoryStateFile(ArrayList<Player> builders){
-		ArrayList<String> playernames= new ArrayList<String>();
-		for (Player player : builders) {
-			playernames.add(player.getName());
-		}
-
-		System.out.println("StateFile update. size:"+builders.size());
-		
-		if (playernames == null) {
-			deleteInventoryStateFile();
-			return;
-		}
-		
-		try {
-			ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat"));
-			objctOutStrm.writeObject(playernames);
-			objctOutStrm.flush();
-			objctOutStrm.close();
-		} catch (Exception e) {
-			plugin.log("Failed to write to InventoryStateFile");
-			e.printStackTrace();
-		}
+		new Thread(new StateFileUpdater(new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat"), builders)).start();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -170,9 +150,41 @@ public class Buildr_InventoryManager {
 		return new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat").exists();
 	}
 	
-	public void deleteInventoryStateFile(){
-		File inventoryState = new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat");
-		inventoryState.delete();
-	}
+
 	
+	private class StateFileUpdater implements Runnable{
+		private File statefile;
+		private ArrayList<Player> builders;
+
+		
+		public StateFileUpdater(File statefile, ArrayList<Player> builders) {
+			this.statefile = statefile;
+			this.builders = builders;
+		}
+
+		@Override
+		public void run() {
+			if (builders== null) {
+				statefile.delete();
+				return;
+			}
+			ArrayList<String> playernames= new ArrayList<String>();
+			for (Player player : builders) {
+				playernames.add(player.getName());
+			}
+			
+			System.out.println("StateFile update. size:"+builders.size());
+			
+			try {
+				ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(statefile));
+				objctOutStrm.writeObject(playernames);
+				objctOutStrm.flush();
+				objctOutStrm.close();
+			} catch (Exception e) {
+				plugin.log("Failed to write to InventoryStateFile");
+				e.printStackTrace();
+			}
+			
+		}
+	}
 }
