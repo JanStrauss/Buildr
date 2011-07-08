@@ -141,6 +141,12 @@ public class Buildr_ConfigurationManager {
 			writer.newLine();
 			writer.newLine();
 			
+			writer.write("##### Treecutter settings: ####################################");writer.newLine();
+			writer.newLine();
+			writer.write("# Remove leaves on treecut, might show some unwanted results if the leaves of 2 trees are connected.");writer.newLine(); //done
+			writer.write("TREECUTTER_CUT_LEAVES=false");writer.newLine();
+			writer.newLine();
+			
 			writer.close();
 			stream.close();
 			

@@ -1,14 +1,16 @@
-package me.simplex.buildr;
+package me.simplex.buildr.runnable;
+
+import me.simplex.buildr.Buildr;
 
 import org.bukkit.World;
 
-public class Buildr_TimeThread implements Runnable {
+public class Buildr_TimeChecker implements Runnable {
 	Buildr plugin;
 	boolean alive;
 
 
 
-	public Buildr_TimeThread(Buildr plugin) {
+	public Buildr_TimeChecker(Buildr plugin) {
 		this.plugin = plugin;
 		this.alive=true;
 	}

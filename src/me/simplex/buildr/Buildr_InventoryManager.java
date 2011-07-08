@@ -3,12 +3,12 @@ package me.simplex.buildr;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 
+import me.simplex.buildr.runnable.Buildr_PlayerInventorySaver;
+import me.simplex.buildr.runnable.Buildr_StateFileUpdater;
 import me.simplex.buildr.util.Buildr_ItemStackSaveContainer;
 
 import org.bukkit.entity.Player;
@@ -72,7 +72,7 @@ public class Buildr_InventoryManager {
 	}
 	
 	private void saveBackupInventory(Player player,ItemStack[] inv){
-		new Thread(new PlayerInventorySaver(player, inv, plugin)).start();
+		new Thread(new Buildr_PlayerInventorySaver(player, inv, plugin)).start();
 	}
 	
 	public boolean startupCheck(){
@@ -108,7 +108,7 @@ public class Buildr_InventoryManager {
 	}
 	
 	public void updateInventoryStateFile(ArrayList<Player> builders){
-		new Thread(new StateFileUpdater(new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat"), builders)).start();
+		new Thread(new Buildr_StateFileUpdater(new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat"), builders,plugin)).start();
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -127,80 +127,5 @@ public class Buildr_InventoryManager {
 	
 	public boolean checkInventoryStateFile(){
 		return new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat").exists();
-	}
-	
-
-	
-	private class StateFileUpdater implements Runnable{
-		private File statefile;
-		private ArrayList<Player> builders;
-
-		
-		public StateFileUpdater(File statefile, ArrayList<Player> builders) {
-			this.statefile = statefile;
-			this.builders = builders;
-		}
-
-		@Override
-		public void run() {
-			if (builders== null) {
-				statefile.delete();
-				return;
-			}
-			ArrayList<String> playernames= new ArrayList<String>();
-			for (Player player : builders) {
-				playernames.add(player.getName());
-			}
-			
-			System.out.println("StateFile update. size:"+builders.size());
-			
-			try {
-				ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(statefile));
-				objctOutStrm.writeObject(playernames);
-				objctOutStrm.flush();
-				objctOutStrm.close();
-			} catch (Exception e) {
-				plugin.log("Failed to write to InventoryStateFile");
-				e.printStackTrace();
-			}
-			
-		}
-	}
-	
-	private class PlayerInventorySaver implements Runnable{
-		Player player;
-		ItemStack[] inventory;
-		Buildr plugin;
-		
-		public PlayerInventorySaver(Player player, ItemStack[] inventory, Buildr plugin) {
-			this.player = player;
-			this.inventory = inventory;
-			this.plugin = plugin;
-		}
-
-		@Override
-		public void run() {
-			Buildr_ItemStackSaveContainer[] FileContainer =new Buildr_ItemStackSaveContainer[inventory.length];
-			for (int i = 0; i < inventory.length; i++) {
-				if (inventory[i]!= null) {
-					byte savedata = 0;
-					if (inventory[i].getData() != null) {
-						savedata = inventory[i].getData().getData();
-					}
-					FileContainer[i] = new Buildr_ItemStackSaveContainer(inventory[i].getTypeId(), inventory[i].getAmount(), inventory[i].getDurability(), savedata);
-				}
-			}
-			
-			try {
-				ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+player.getName()+".inv"));
-				objctOutStrm.writeObject(FileContainer);
-				objctOutStrm.flush();
-				objctOutStrm.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			
-		}
-		
 	}
 }

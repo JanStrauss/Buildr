@@ -41,6 +41,12 @@ public class Buildr_PlayerListener extends PlayerListener {
 		else if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsStick(event.getPlayer())) {
 			plugin.playerClickedWallBlock(event.getPlayer(),event.getClickedBlock());
 		}
+		else if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsAxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
+			if (!plugin.checkPermission(event.getPlayer(), "Buildr.treecutter")) {
+				event.getPlayer().sendMessage("");
+				return;
+			}
+		}
 	}
 
 	@Override

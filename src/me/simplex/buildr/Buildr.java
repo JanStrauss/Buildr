@@ -8,6 +8,7 @@ import me.simplex.buildr.listener.Buildr_BlockListener;
 import me.simplex.buildr.listener.Buildr_EntityListener;
 import me.simplex.buildr.listener.Buildr_PlayerListener;
 import me.simplex.buildr.listener.Buildr_WeatherListener;
+import me.simplex.buildr.runnable.Buildr_TimeChecker;
 import me.simplex.buildr.util.Buildr_UnDoStack;
 
 import org.bukkit.ChatColor;
@@ -46,7 +47,7 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_UnDoStack unDoStack;
 
 	  private Thread thread;
-	  private Buildr_TimeThread timeHandler;
+	  private Buildr_TimeChecker timeHandler;
 	  private String pluginDirectory;
 	  private PluginManager pm;
 	  
@@ -134,7 +135,7 @@ public class Buildr extends JavaPlugin {
 
 		 
 		// TimeThread 
-		timeHandler = new Buildr_TimeThread(this);
+		timeHandler = new Buildr_TimeChecker(this);
 		thread = new Thread(timeHandler,prefix+"Time Handler");
 		thread.start();
 
@@ -466,9 +467,17 @@ public class Buildr extends JavaPlugin {
 			player.getItemInHand().getType() == Material.WOOD_PICKAXE) {
 			return true;
 		}
-		else {
-			return false;
+		return false;
+	}
+
+	public boolean checkPlayerItemInHandIsAxe(Player player) {
+		if (player.getItemInHand().getType() == Material.DIAMOND_AXE ||
+				player.getItemInHand().getType() == Material.IRON_AXE ||
+				player.getItemInHand().getType() == Material.STONE_AXE ||
+				player.getItemInHand().getType() == Material.WOOD_AXE) {
+				return true;
 		}
+		return false;
 	}
 	
 	public boolean checkPlayerItemInHandIsStick(Player player) {
@@ -578,10 +587,4 @@ public class Buildr extends JavaPlugin {
 	public ArrayList<Buildr_Wallbuilder> getStartedWalls() {
 		return startedWalls;
 	}
-
-
-
-
-	
-
 }
