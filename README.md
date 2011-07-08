@@ -14,12 +14,12 @@ FEATURES:
 *	/location command
 *	/undo command for  treecutter, wallbuilder & airfloor
 
-####Global build mode####:
+####Global build mode:####
 *	Weather is always Sun
 *	Time:  Won't get night while in globalbuild mode
 *	No Drops from breaking Blocks
 
-####User build mode####:
+####User build mode:####
 *	Second inventory while in Buildmode
 *	Instant Block Break
 *	Godmode
