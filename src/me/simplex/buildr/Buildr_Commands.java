@@ -261,4 +261,26 @@ public class Buildr_Commands {
 		sender.sendMessage("Coordinates of the block beneath you: "+pos);
 		
 	}
+
+	public void cmd_allowbuild(CommandSender sender) {
+		if (!plugin.getConfigValue("BUILDMODE_REQUIRE_ALLOW")) {
+			return;
+		}
+		World world = ((Player)sender).getWorld();
+		if (plugin.checkWorldHasBuildmodeUnlocked(world)) {
+			plugin.getWorldBuildmodeAllowed().remove(world);
+			for (Player player : world.getPlayers()) {
+				if (plugin.checkPlayerBuildMode(player)) {
+					plugin.leaveBuildmode(player);
+				}
+				player.sendMessage(((Player)sender).getName()+" locked the Buildmode in this world");
+			}
+		}
+		else {
+			plugin.getWorldBuildmodeAllowed().add(world);
+			for (Player player : world.getPlayers()) {
+				player.sendMessage(((Player)sender).getName()+" unlocked the Buildmode in this world");
+			}
+		}
+	}
 }

@@ -2,7 +2,10 @@ Buildr - Toolbox for creative players/servers
 ======
 
 Buildr is a collection of useful tools to make building/creating stuff easier and faster.
-The key features of Buildr are the two buildmodes. The Globalbuildmode that offers Worldbased enhancements to building, while the Userbuildmode gives a single player some handy tools.
+The key features of Buildr are the two buildmodes. 
+
+The Globalbuildmode that offers Worldbased enhancements to building, while the Userbuildmode gives a single player some handy tools.
+While the modes are disabled you can play minecraft without 
 
 Most of the tools are nothing new and can most likely be found in other plugins and because of this you can disable every tool if you already use a plugin that offers this functionality in the detailed configuration file. 
 
@@ -69,66 +72,64 @@ allows the user to undo his latest actions performed with the treecutter, wallbu
 COMMANDS:
 ---------
 ``` YML
+commands:
   globalbuild:
-    description: Toggles the Global Buildmode
+    description: Toggles the Global Buildmode for the world you're in
     aliases: [gb,gbm]
     usage: |
            /<command>
            Example: /<command>
-
   build:
     description: Toggles the User Buildmode
     aliases: [ub,gbm,userbuild]
     usage: |
            /<command>
            Example: /<command>
-
+  allowbuild:
+    description: Unlocks/Locks the activation of the buildmode in the world you're in. Kicks all users out of buildmode on lock. Only has a Effect if BUILDMODE_BUILDMODE_REQUIRE_ALLOW is true
+    aliases: [ab,abm,allowbm]
+    usage: |
+           /<command>
+           Example: /<command>
   wall:
     description: Starts the wall building function
     aliases: [bw]
     usage: |
-           /<command> <material name|id> {a|air|aironly}
-
+           /<command> <material #> {a|air|aironly}
   airfloor:
     description: places a block (area) of material x y blocks above the player
     aliases: [af,airf]
     usage: |
-           /<command> <material name|id> <height #> <size>
+           /<command> <material #> <height #>
            Example: /<command> 4 20 3
-
   wool:
     description: gives a Stack of wool in the specified color to the player
     usage: |
            /<command> <color>
            Example: /<command> black
-
   top:
     description: ports the player to the highest block at its current position
     usage: |
            /<command> 
            Example: /<command> 
-
   undo:
-    description: Undoes the lastest action the player used (airfloor, wall, treecutter)
+    description: Undoes the lastest action the player used (airfloor, wall)
     aliases: [bu,buildrundo]
     usage: |
            /<command> 
            Example: /<command> 
-
   give:
     description: gives a Stack of items to the player
     aliases: [gv,g]
     usage: |
            /<command> <player> <itemid #|itemname> <amount #>
-           Example: /<command> 20 50 gives a stack of 50 Glass to yourself
-
+           Example: /<command> 20 50 gives a stack of 50 Glass to the player
   clearinv:
     description: clears the inventory of the player
     aliases: [clrinv,ci,clearinventory]
     usage: |
            /<command> 
            Example: /<command>
-
   location:
     description: returns the 
     aliases: [loc,gps]
@@ -143,6 +144,8 @@ PERMISSIONS:
 `buildr.cmd.build` - /build command
 
 `buildr.cmd.globalbuild` - /globalbuild command
+
+`buildr.cmd.allow` - /allowbuild command
 
 `buildr.cmd.wall` - /wall command
 

@@ -53,6 +53,7 @@ public class Buildr extends JavaPlugin {
 	  
 	  //logic
 	  private ArrayList<World> worldBuildMode;
+	  private ArrayList<World> worldBuildAllowed;
 	  private ArrayList<Player> playerBuildMode;
 	  private ArrayList<String> toProcessPlayers;
 	  private ArrayList<Buildr_Wallbuilder> startedWalls;
@@ -85,6 +86,7 @@ public class Buildr extends JavaPlugin {
 		blockListener 		= new Buildr_BlockListener(this);
 		 
 		worldBuildMode 		= new ArrayList<World>();
+		worldBuildAllowed 	= new ArrayList<World>();
 		playerBuildMode 	= new ArrayList<Player>();
 		toProcessPlayers 	= new ArrayList<String>();
 		startedWalls 		= new ArrayList<Buildr_Wallbuilder>();
@@ -121,15 +123,16 @@ public class Buildr extends JavaPlugin {
 		}
 
 		//register Listener
-		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this); // Godmode: no dmg
-		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Event.Priority.Normal, this); // Godmode: no aggro
-		pm.registerEvent(Type.ITEM_SPAWN, entityListener, Event.Priority.Normal, this); // No Blockdrops
-		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Event.Priority.Normal, this); // Instant Blockbreak
-		pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Event.Priority.Normal, this); // No Pickups
-		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Event.Priority.Normal, this); // Always Sun
-		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Event.Priority.Normal, this); // Unlimited Stacks
+		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this); 
+		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Event.Priority.Normal, this); 
+		pm.registerEvent(Type.ITEM_SPAWN, entityListener, Event.Priority.Normal, this); 
+		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Event.Priority.Normal, this);
+		pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Event.Priority.Normal, this); 
+		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Event.Priority.Normal, this); 
+		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Event.Priority.Normal, this);
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
-		
+		pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Event.Priority.Normal, this);
+		pm.registerEvent(Type.PLAYER_PORTAL, playerListener, Event.Priority.Normal, this);
 		log("Listener registered");
 
 
@@ -404,6 +407,19 @@ public class Buildr extends JavaPlugin {
 			}
 			return true;
 		}
+		//ALLOWBUILD
+		else if (command.getName().equalsIgnoreCase("allowbuild")) {
+			if (checkPermission((Player)sender, "buildr.cmd.allowbuild")) {
+				if (args.length!=0) {
+					return false;
+				}
+				cmdHandler.cmd_allowbuild(sender);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
 		
 		//ELSE
 		else {
@@ -466,6 +482,15 @@ public class Buildr extends JavaPlugin {
 	public boolean checkPlayerHasStartedWall(Player player){
 		for (Buildr_Wallbuilder wallbuilder : startedWalls) {
 			if (wallbuilder.getWallcreater() == player) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean checkWorldHasBuildmodeUnlocked(World world){
+		for (World allowed : worldBuildAllowed) {
+			if (allowed.equals(world)) {
 				return true;
 			}
 		}
@@ -546,7 +571,15 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	public void enterBuildmode(Player player) {
+			if (getConfigValue("BUILDMODE_REQUIRE_ALLOW")) {
+				if (!worldBuildAllowed.contains(player.getWorld())) {
+					player.sendMessage("The buildmode is currently locked in the world you're in");
+					return;
+				}
+			}
+
 		getPlayerBuildMode().add(player);
+
 		if (getConfigValue("BUILDMODE_INVENTORY")) {
 			invManager.switchInventory(player);
 			invManager.updateInventoryStateFile(playerBuildMode);
@@ -596,6 +629,10 @@ public class Buildr extends JavaPlugin {
 	
 	public ArrayList<World> getWorldBuildMode() {
 		return worldBuildMode;
+	}
+	
+	public ArrayList<World> getWorldBuildmodeAllowed() {
+		return worldBuildAllowed;
 	}
 
 

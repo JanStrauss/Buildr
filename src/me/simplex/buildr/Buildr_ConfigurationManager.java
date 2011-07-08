@@ -96,6 +96,9 @@ public class Buildr_ConfigurationManager {
 			writer.write("# Enable the buildmode");writer.newLine(); //done
 			writer.write("BUILDMODE_ENABLE=true");writer.newLine(); 
 			writer.newLine();
+			writer.write("# If set, users are only able to activate the buildmode if the mode is allowed in the world they are in");writer.newLine(); //done
+			writer.write("BUILDMODE_REQUIRE_ALLOW=false");writer.newLine(); 
+			writer.newLine();
 			writer.write("# Enable godmode while in buildmode");writer.newLine(); //done
 			writer.write("BUILDMODE_GODMODE=true");writer.newLine();
 			writer.newLine();

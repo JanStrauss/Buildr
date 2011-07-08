@@ -7,7 +7,7 @@ description: >
              Collection of tools for faster & more comfortable building
 commands:
   globalbuild:
-    description: Toggles the Global Buildmode
+    description: Toggles the Global Buildmode for the world you're in
     aliases: [gb,gbm]
     usage: |
            /<command>
@@ -15,6 +15,12 @@ commands:
   build:
     description: Toggles the User Buildmode
     aliases: [ub,gbm,userbuild]
+    usage: |
+           /<command>
+           Example: /<command>
+  allowbuild:
+    description: Unlocks/Locks the activation of the buildmode in the world you're in. Kicks all users out of buildmode on lock. Only has a Effect if BUILDMODE_BUILDMODE_REQUIRE_ALLOW is true
+    aliases: [ab,abm,allowbm]
     usage: |
            /<command>
            Example: /<command>
