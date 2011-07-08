@@ -1,6 +1,7 @@
 package me.simplex.buildr.listener;
 
 import me.simplex.buildr.Buildr;
+import me.simplex.buildr.runnable.Buildr_TreeFeller;
 import me.simplex.buildr.util.Buildr_BlockToDropConverter;
 
 import org.bukkit.Material;
@@ -42,9 +43,10 @@ public class Buildr_PlayerListener extends PlayerListener {
 			plugin.playerClickedWallBlock(event.getPlayer(),event.getClickedBlock());
 		}
 		else if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsAxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
-			if (!plugin.checkPermission(event.getPlayer(), "Buildr.treecutter")) {
-				event.getPlayer().sendMessage("");
-				return;
+			if (plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
+				if (plugin.checkPermission(event.getPlayer(), "buildr.treecutter")) {
+					new Thread(new Buildr_TreeFeller(event.getClickedBlock(), plugin, event.getPlayer())).start();
+				}
 			}
 		}
 	}

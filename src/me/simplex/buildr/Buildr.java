@@ -374,6 +374,19 @@ public class Buildr extends JavaPlugin {
 			}
 			return true;
 		}
+		//LOCATION
+		else if (command.getName().equalsIgnoreCase("location")) {
+			if (checkPermission((Player)sender, "buildr.cmd.location")) {
+				if (args.length!=0) {
+					return false;
+				}
+				cmdHandler.cmd_location(sender);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
 		
 		//ELSE
 		else {

@@ -139,6 +139,9 @@ public class Buildr_ConfigurationManager {
 			writer.write("# Enable the clearinventory command");writer.newLine(); //done
 			writer.write("FEATURE_CLEAR_INVENTORY=true");writer.newLine();
 			writer.newLine();
+			writer.write("# Enable the location command");writer.newLine(); //done
+			writer.write("FEATURE_LOCATION=true");writer.newLine();
+			writer.newLine();
 			writer.newLine();
 			
 			writer.write("##### Treecutter settings: ####################################");writer.newLine();

@@ -247,4 +247,18 @@ public class Buildr_Commands {
 		((Player)sender).getInventory().clear();
 		sender.sendMessage("Inventory cleared");
 	}
+
+	/**
+	 * 
+	 * @param sender
+	 */
+	public void cmd_location(CommandSender sender) {
+		if (!plugin.getConfigValue("FEATURE_LOCATION")) {
+			return;
+		}
+		Block block = ((Player)sender).getLocation().getBlock();
+		String pos = "["+ChatColor.BLUE+block.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+(block.getY()-1)+ChatColor.WHITE+", "+ChatColor.BLUE+block.getZ()+ChatColor.WHITE+"]";
+		sender.sendMessage("Coordinates of the block beneath you: "+pos);
+		
+	}
 }
