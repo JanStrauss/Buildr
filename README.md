@@ -1,5 +1,5 @@
 Buildr - Toolbox for creative players/servers
-======
+=============================================
 
 Buildr is a collection of useful tools to make building/creating stuff easier and faster.
 The key features of Buildr are the two buildmodes. 
@@ -10,6 +10,7 @@ While the modes are disabled you can play minecraft without
 Most of the tools are nothing new and can most likely be found in other plugins and because of this you can disable every tool if you already use a plugin that offers this functionality in the detailed configuration file. 
 
 Builder supports permissions and has a fallback to OP if no permission plugin was found.
+
 
 Global build mode:
 ------------------
@@ -25,6 +26,7 @@ Also blocks won't drop items in this world so the floor isn't flooded with usele
 User build mode:
 ----------------
 While a user is in buildmode the gets a special build inventory so he doesn't have to bother about which items to drop form his normal inventory to get space for all the different blocks to build with. Also blocks will break (almost) instantly if the player uses a Pickaxe (any of them), the inventory won't get flooded by useless items (pickups disabled), players won't get damaged, blocks are unlimited (stacksize is always 64). Last but not least cutting down trees is quite a pain, but while in buildmode players can fell a tree with just one click of an axe.
+You can Lock or Unlock the buildmode for a world or generally lock/unlock it, just have a closer look at the config/permissions.
 
 ####tl;dr:
 
