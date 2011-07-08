@@ -9,7 +9,6 @@ import me.simplex.buildr.listener.Buildr_EntityListener;
 import me.simplex.buildr.listener.Buildr_PlayerListener;
 import me.simplex.buildr.listener.Buildr_WeatherListener;
 import me.simplex.buildr.runnable.Buildr_TimeChecker;
-import me.simplex.buildr.util.Buildr_UnDoStack;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -44,7 +43,7 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_Commands cmdHandler;
 	  private Buildr_InventoryManager invManager;
 	  private Buildr_ConfigurationManager cfgManager;
-	  private Buildr_UnDoStack unDoStack;
+	  private Buildr_UnDoHandler unDoStack;
 
 	  private Thread thread;
 	  private Buildr_TimeChecker timeHandler;
@@ -78,7 +77,7 @@ public class Buildr extends JavaPlugin {
 		cmdHandler 			= new Buildr_Commands(this);
 		invManager 			= new Buildr_InventoryManager(this);
 		cfgManager 			= new Buildr_ConfigurationManager(this);
-		unDoStack 			= new Buildr_UnDoStack();
+		unDoStack 			= new Buildr_UnDoHandler();
 		 
 		entityListener 		= new Buildr_EntityListener(this);
 		playerListener 		= new Buildr_PlayerListener(this);
@@ -651,7 +650,7 @@ public class Buildr extends JavaPlugin {
 		return pluginDirectory;
 	}
 
-	public Buildr_UnDoStack getUndoList() {
+	public Buildr_UnDoHandler getUndoList() {
 		return unDoStack;
 	}
 

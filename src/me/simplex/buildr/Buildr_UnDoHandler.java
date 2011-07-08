@@ -1,18 +1,19 @@
-package me.simplex.buildr.util;
+package me.simplex.buildr;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Stack;
+
+import me.simplex.buildr.util.Buildr_UndoStack;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_UnDoStack {
+public class Buildr_UnDoHandler {
 	private ArrayList<Buildr_StackItem> playerUndos;
 
 	
-	public Buildr_UnDoStack() {
+	public Buildr_UnDoHandler() {
 		playerUndos = new ArrayList<Buildr_StackItem>();
 	}
 
@@ -23,9 +24,6 @@ public class Buildr_UnDoStack {
 		else {
 			newStack(player,blocks);
 		}
-		if (giveStack(player).size() >20) {
-			giveStack(player).removeElementAt(giveStack(player).size()-1);
-		}
 	}
 	
 	private void newStack(Player player, HashMap<Block, Material> blocks) {
@@ -34,8 +32,8 @@ public class Buildr_UnDoStack {
 
 	public HashMap<Block, Material> getAndDeleteFromStack(Player player){
 		if (checkPlayerUndoStackExist(player)) {
-			if (!giveStack(player).empty()) {
-				return giveStack(player).pop();
+			if (!giveStack(player).isEmpty()) {
+				return giveStack(player).poll();
 			}
 		}
 		return null;
@@ -50,7 +48,7 @@ public class Buildr_UnDoStack {
 		return false;
 	}
 	
-	private Stack<HashMap<Block, Material>> giveStack(Player player){
+	private Buildr_UndoStack giveStack(Player player){
 		for (Buildr_StackItem undos : playerUndos) {
 			if (undos.getPlayer() == player) {
 				return undos.getOrig_blocks();
@@ -60,16 +58,16 @@ public class Buildr_UnDoStack {
 	}
 	
 	private class Buildr_StackItem{
-		Stack<HashMap<Block, Material>> orig_blocks;
+		Buildr_UndoStack orig_blocks;
 		Player player;
 		
 		public Buildr_StackItem(Player player, HashMap<Block, Material> blocks) {
-			this.orig_blocks = new Stack<HashMap<Block, Material>>();
-			this.orig_blocks.add(blocks);
+			this.orig_blocks = new Buildr_UndoStack(20);
+			this.orig_blocks.push(blocks);
 			this.player = player;
 		}
 
-		public Stack<HashMap<Block, Material>> getOrig_blocks() {
+		public Buildr_UndoStack getOrig_blocks() {
 			return orig_blocks;
 		}
 		
