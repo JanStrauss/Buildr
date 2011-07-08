@@ -20,7 +20,7 @@ public class Buildr_PlayerListener extends PlayerListener {
 	public Buildr_PlayerListener(Buildr plugin) {
 		super();
 		this.plugin = plugin;
-		this.converter = new Buildr_BlockToDropConverter(plugin);
+		this.converter = new Buildr_BlockToDropConverter();
 	}
 
 @Override
@@ -45,7 +45,7 @@ public class Buildr_PlayerListener extends PlayerListener {
 		else if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsAxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
 			if (event.getClickedBlock().getType() == Material.LOG) {
 				if (plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
-					if (plugin.checkPermission(event.getPlayer(), "buildr.treecutter")) {
+					if (plugin.checkPermission(event.getPlayer(), "buildr.feature.treecutter")) {
 						new Thread(new Buildr_TreeFeller(event.getClickedBlock(), plugin, event.getPlayer())).start();
 					}
 				}

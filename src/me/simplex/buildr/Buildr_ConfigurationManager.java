@@ -114,9 +114,6 @@ public class Buildr_ConfigurationManager {
 			writer.write("# Enable the treecutter (Axe)");writer.newLine(); //TODO
 			writer.write("BUILDMODE_TREECUTTER=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Let stairs drop stairs if destoyed with instantblockbreak on");writer.newLine(); //done
-			writer.write("BUILDMODE_STAIRMODE=true");writer.newLine();
-			writer.newLine();
 			writer.newLine();
 			
 			writer.write("##### Feature settings: ####################################");writer.newLine();

@@ -151,6 +151,9 @@ public class Buildr extends JavaPlugin {
 		
 		//GLOBALBUILD
 		if (command.getName().equalsIgnoreCase("globalbuild")) {
+			if (args.length != 0) {
+				return false;
+			}
 			if (checkPermission((Player)sender, "buildr.cmd.globalbuild")) {
 				World world;
 				if (args.length > 0) {
@@ -176,6 +179,9 @@ public class Buildr extends JavaPlugin {
 		
 		//BUILD
 		else if (command.getName().equalsIgnoreCase("build")) {
+			if (args.length != 0) {
+				return false;
+			}
 			if (checkPermission((Player)sender, "buildr.cmd.build")) {
 				cmdHandler.cmd_build(sender);
 			}
@@ -187,6 +193,9 @@ public class Buildr extends JavaPlugin {
 		
 		//TOP
 		else if (command.getName().equalsIgnoreCase("top")) {
+			if (args.length != 0) {
+				return false;
+			}
 			if (checkPermission((Player)sender, "buildr.cmd.top")) {
 				cmdHandler.cmd_top(sender);
 			}
@@ -242,6 +251,9 @@ public class Buildr extends JavaPlugin {
 		
 		//UNDO
 		else if (command.getName().equalsIgnoreCase("undo")) {
+			if (args.length != 0) {
+				return false;
+			}
 			if (checkPermission((Player)sender, "buildr.cmd.undo")) {
 				cmdHandler.cmd_undo(sender);
 			}
@@ -254,10 +266,10 @@ public class Buildr extends JavaPlugin {
 		//GIVE
 		else if (command.getName().equalsIgnoreCase("give")) {
 			if (checkPermission((Player)sender, "buildr.cmd.give")) {
-				if (args.length==0) {
+				if (args.length == 0 ||args.length > 3) {
 					return false;
 				}
-				if (args.length==1) {
+				if (args.length == 1) {
 					cmdHandler.cmd_give(sender,args[0],-1,null);
 				}
 				else if (args.length==2) {
@@ -273,7 +285,7 @@ public class Buildr extends JavaPlugin {
 					}
 					cmdHandler.cmd_give(sender,args[0],amount,null);
 				}
-				else if(args.length==3) {
+				else if(args.length == 3) {
 					int amount = -1;
 					try {
 						amount = Integer.parseInt(args[2]);
@@ -310,6 +322,9 @@ public class Buildr extends JavaPlugin {
 		
 		//ClearInv
 		else if (command.getName().equalsIgnoreCase("clearinv")) {
+			if (args.length != 0) {
+				return false;
+			}
 			if (checkPermission((Player)sender, "buildr.cmd.clearinv")) {
 				if (args.length!=0) {
 					return false;
@@ -324,7 +339,9 @@ public class Buildr extends JavaPlugin {
 		
 		//Wall
 		else if (command.getName().equalsIgnoreCase("wall")) {
-			System.out.println(args.length);
+			if (args.length < 1 || args.length > 2) {
+				return false;
+			}
 			if (checkPermission((Player)sender, "buildr.cmd.wall")) {
 				if (args.length >=1 && args.length <=2) {
 					Material material;

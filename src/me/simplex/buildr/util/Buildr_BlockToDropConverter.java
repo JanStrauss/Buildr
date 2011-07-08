@@ -3,17 +3,13 @@ package me.simplex.buildr.util;
 import java.util.ArrayList;
 import java.util.Random;
 
-import me.simplex.buildr.Buildr;
-
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
 public class Buildr_BlockToDropConverter {
 	private Random rnd = new Random();
-	private Buildr plugin;
 	
-	public Buildr_BlockToDropConverter(Buildr plugin) {
-		this.plugin = plugin;
+	public Buildr_BlockToDropConverter() {
 	}
 	/**
 	 * Fakes natural drops for a given block
@@ -46,7 +42,7 @@ public class Buildr_BlockToDropConverter {
 			case 47: ; break;
 			case 51: ; break;
 			case 52: ; break;
-			case 53: checkStairsDropSettings(block.getTypeId(), ret); break; //Woodenstairs
+			case 53: ret.add(new ItemStack(5,1)); break;
 			case 55: ret.add(new ItemStack(331,1)); break;
 			case 56: ret.add(new ItemStack(264,1)); break;
 			case 59: ret.add(new ItemStack(295,1)); break;
@@ -54,7 +50,7 @@ public class Buildr_BlockToDropConverter {
 			case 62: ret.add(new ItemStack(61,1)); break;
 			case 63: ret.add(new ItemStack(323,1)); break;
 			case 64: ret.add(new ItemStack(324,1)); break;
-			case 67: checkStairsDropSettings(block.getTypeId(), ret); break; //Cobblestonestairs
+			case 67: ret.add(new ItemStack(4,1)); break;
 			case 68: ret.add(new ItemStack(323,1)); break;
 			case 71: ret.add(new ItemStack(330,1)); break;
 			case 73: ret.add(new ItemStack(331,genRndMinMax(4, 6))); break;
@@ -80,18 +76,5 @@ public class Buildr_BlockToDropConverter {
 	}
 	private int genRndMinMax(int min,int max){
 		return rnd.nextInt(max)+min;
-	}
-	
-	private void checkStairsDropSettings(int type, ArrayList<ItemStack> ret){
-		if (plugin.getConfigValue("BUILDMODE_STAIRMODE")) {
-			ret.add(new ItemStack(type,1));
-			return;
-		}
-		if (type == 67) {
-			ret.add(new ItemStack(4,1));
-		}
-		else {
-			ret.add(new ItemStack(5,1));
-		}
 	}
 }
