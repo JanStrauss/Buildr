@@ -42,14 +42,17 @@ public class Buildr_PlayerListener extends PlayerListener {
 				event.setCancelled(true);
 			}
 		}
+		
 		else if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsStick(event.getPlayer())) {
 			plugin.playerClickedWallBlock(event.getPlayer(),event.getClickedBlock());
 		}
+		
 		else if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsAxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
-			if (event.getClickedBlock().getType() == Material.LOG) {
+			if (event.getClickedBlock().getType() == Material.LOG || plugin.checkTreecuterFireOnLeaves(event.getClickedBlock())) {
 				if (plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
 					if (plugin.checkPermission(event.getPlayer(), "buildr.feature.treecutter")) {
 						new Thread(new Buildr_TreeFeller(event.getClickedBlock(), plugin, event.getPlayer())).start();
+						event.setCancelled(true);
 					}
 				}
 			}

@@ -497,6 +497,13 @@ public class Buildr extends JavaPlugin {
 		return false;
 	}
 	
+	public boolean checkTreecuterFireOnLeaves(Block block) {
+		if (block.getType()== Material.LEAVES && getConfigValue("TREECUTTER_ACTIVATE_ON_LEAVES")) {
+			return true;
+		}
+		return false;
+	}
+	
 	public Buildr_Wallbuilder giveWallbuilder(Player player){
 		for (Buildr_Wallbuilder wallbuilder : startedWalls) {
 			if (wallbuilder.getWallcreater() == player) {

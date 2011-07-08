@@ -149,6 +149,10 @@ public class Buildr_ConfigurationManager {
 			writer.write("# Remove leaves on treecut, will cut more than one tree at once if their leaves are connected");writer.newLine(); //done
 			writer.write("TREECUTTER_CUT_LEAVES=true");writer.newLine();
 			writer.newLine();
+			writer.write("# if set, a tree can be felt if you hit its leaves, else you can only fell it by hitting log");writer.newLine(); //done
+			writer.write("TREECUTTER_ACTIVATE_ON_LEAVES=true");writer.newLine();
+			writer.newLine();
+			writer.newLine();
 			
 			writer.close();
 			stream.close();

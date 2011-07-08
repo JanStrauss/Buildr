@@ -50,8 +50,15 @@ public class Buildr_TreeFeller implements Runnable {
 				blk.setType(Material.AIR);
 			}
 		}
-		plugin.getUndoList().addToStack(undo, player);
 		player.sendMessage("Felt Tree. Blocks changed: "+undo.size());
+		try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		plugin.getUndoList().addToStack(undo, player);
+
 	}
 	
 	private void checkBlock(Block base){
