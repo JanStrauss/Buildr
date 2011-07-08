@@ -35,9 +35,9 @@ While a user is in buildmode the gets a special build inventory so he doesn't ha
 OTHER FEATURES:
 ---------------
 
-####Wallbuilder
-create Walls easily with just 2 clicks and a command
-usage: after you typed in the command you have to rightclick the two blocks between the wall should be build. the line described by the 2 blocks must be parallel to at least one axis 
+#### /wall command
+create Walls (or floors/ceilings) easily with just 2 clicks and this command
+usage: after you typed in the command you have to rightclick on the two blocks between the wall should be build while holding a stick. the line described by the 2 blocks must be parallel to at least one axis 
 
 ####/wool command
 gives you a stack of wool in the specified color
@@ -45,11 +45,16 @@ gives you a stack of wool in the specified color
 ####/top command
 Ports the user to the highest Block at its current position
 
-####Airfloor
-place a block/blocks in x height over the user
+#### /airfloor command
+this command allows you to place one block or even a floor direct above yourself.
+usage: /airfloor <material (name or id)> <height (the block beneath you would be 0)> <size (square side length)>
 
 ####/give command
-gives items directly to a player
+gives items directly to a player or yourself. 
+`/give 4` would give yourself a stack of 64 Cobblestone;
+`/give stone 20` would give yourself a stack of 20 Stone;
+`/give noob 20 40` would give noob a stack of 40 Glass;
+
 
 ####/clearinv command
 wipes the inventory 
@@ -58,7 +63,7 @@ wipes the inventory
 gives the location of the block beneath the player
 
 ####/undo command
-allows the user to undo the lastest (20) actions of the treecutter, wallbuilder and airfloor tools
+allows the user to undo his latest actions performed with the treecutter, wallbuilder or airfloor tool.
 
 	
 COMMANDS:
