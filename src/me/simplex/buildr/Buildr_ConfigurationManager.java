@@ -146,8 +146,8 @@ public class Buildr_ConfigurationManager {
 			
 			writer.write("##### Treecutter settings: ####################################");writer.newLine();
 			writer.newLine();
-			writer.write("# Remove leaves on treecut, might show some unwanted results if the leaves of 2 trees are connected.");writer.newLine(); //done
-			writer.write("TREECUTTER_CUT_LEAVES=false");writer.newLine();
+			writer.write("# Remove leaves on treecut, will cut more than one tree at once if their leaves are connected");writer.newLine(); //done
+			writer.write("TREECUTTER_CUT_LEAVES=true");writer.newLine();
 			writer.newLine();
 			
 			writer.close();

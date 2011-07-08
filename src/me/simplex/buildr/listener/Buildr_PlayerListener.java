@@ -43,9 +43,11 @@ public class Buildr_PlayerListener extends PlayerListener {
 			plugin.playerClickedWallBlock(event.getPlayer(),event.getClickedBlock());
 		}
 		else if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsAxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
-			if (plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
-				if (plugin.checkPermission(event.getPlayer(), "buildr.treecutter")) {
-					new Thread(new Buildr_TreeFeller(event.getClickedBlock(), plugin, event.getPlayer())).start();
+			if (event.getClickedBlock().getType() == Material.LOG) {
+				if (plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
+					if (plugin.checkPermission(event.getPlayer(), "buildr.treecutter")) {
+						new Thread(new Buildr_TreeFeller(event.getClickedBlock(), plugin, event.getPlayer())).start();
+					}
 				}
 			}
 		}
