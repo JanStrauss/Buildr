@@ -22,7 +22,6 @@ public class Buildr_TreeFeller implements Runnable {
 	private Buildr plugin;
 	private Player player;
 	
-
 	public Buildr_TreeFeller(Block baseblock,  Buildr plugin, Player player) {
 		this.baseblock = baseblock;
 		this.plugin = plugin;
