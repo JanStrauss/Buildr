@@ -5,10 +5,10 @@ import me.simplex.buildr.Buildr;
 import org.bukkit.event.weather.WeatherChangeEvent;
 import org.bukkit.event.weather.WeatherListener;
 
-public class Buildr_WeatherListener extends WeatherListener {
+public class Buildr_Listener_Weather extends WeatherListener {
 	private Buildr plugin;
 	
-public Buildr_WeatherListener(Buildr buildr) {
+public Buildr_Listener_Weather(Buildr buildr) {
 		this.plugin = buildr;
 	}
 

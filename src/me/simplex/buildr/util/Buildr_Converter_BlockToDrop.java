@@ -6,10 +6,10 @@ import java.util.Random;
 import org.bukkit.block.Block;
 import org.bukkit.inventory.ItemStack;
 
-public class Buildr_BlockToDropConverter {
+public class Buildr_Converter_BlockToDrop {
 	private Random rnd = new Random();
 	
-	public Buildr_BlockToDropConverter() {
+	public Buildr_Converter_BlockToDrop() {
 	}
 	/**
 	 * Fakes natural drops for a given block

@@ -8,10 +8,10 @@ import org.bukkit.event.entity.EntityListener;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 
-public class Buildr_EntityListener extends EntityListener {
+public class Buildr_Listener_Entity extends EntityListener {
 	private Buildr plugin;
 	
-	public Buildr_EntityListener(Buildr plugin) {
+	public Buildr_Listener_Entity(Buildr plugin) {
 		this.plugin = plugin;
 	}
 	

@@ -6,10 +6,10 @@ import org.bukkit.event.block.BlockListener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class Buildr_BlockListener extends BlockListener {
+public class Buildr_Listener_Block extends BlockListener {
 	Buildr plugin;
 	
-	public Buildr_BlockListener(Buildr buildr) {
+	public Buildr_Listener_Block(Buildr buildr) {
 		this.plugin = buildr;
 	}
 	

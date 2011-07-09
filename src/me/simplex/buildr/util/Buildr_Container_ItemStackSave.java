@@ -2,7 +2,7 @@ package me.simplex.buildr.util;
 
 import java.io.Serializable;
 
-public class Buildr_ItemStackSaveContainer implements Serializable {
+public class Buildr_Container_ItemStackSave implements Serializable {
 	private static final long serialVersionUID = -2718242945604220137L;
 	private int type;
     private int amount = 0;
@@ -11,7 +11,7 @@ public class Buildr_ItemStackSaveContainer implements Serializable {
     private byte material_data = 0;
     
     
-	public Buildr_ItemStackSaveContainer(int type, int amount,short durability, byte materialData) {
+	public Buildr_Container_ItemStackSave(int type, int amount,short durability, byte materialData) {
 		this.type = type;
 		this.amount = amount;
 		this.durability = durability;

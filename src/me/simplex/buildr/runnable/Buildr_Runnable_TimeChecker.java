@@ -4,13 +4,13 @@ import me.simplex.buildr.Buildr;
 
 import org.bukkit.World;
 
-public class Buildr_TimeChecker implements Runnable {
+public class Buildr_Runnable_TimeChecker implements Runnable {
 	Buildr plugin;
 	boolean alive;
 
 
 
-	public Buildr_TimeChecker(Buildr plugin) {
+	public Buildr_Runnable_TimeChecker(Buildr plugin) {
 		this.plugin = plugin;
 		this.alive=true;
 	}

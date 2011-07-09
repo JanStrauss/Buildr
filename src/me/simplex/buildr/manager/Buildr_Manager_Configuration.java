@@ -1,4 +1,4 @@
-package me.simplex.buildr;
+package me.simplex.buildr.manager;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -9,12 +9,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 
-public class Buildr_ConfigurationManager {
+import me.simplex.buildr.Buildr;
+
+public class Buildr_Manager_Configuration {
 	private Buildr plugin;
 	private File configfile;
 	private HashMap<String, Boolean> settings;
 	
-	public Buildr_ConfigurationManager(Buildr buildr){
+	public Buildr_Manager_Configuration(Buildr buildr){
 		this.plugin = buildr;
 		this.configfile = new File(plugin.getPluginDirectory()+File.separator+"settings.properties");
 		this.settings = new HashMap<String, Boolean>();

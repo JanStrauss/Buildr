@@ -1,22 +1,23 @@
-package me.simplex.buildr;
+package me.simplex.buildr.manager;
 
-import me.simplex.buildr.runnable.Buildr_Wallbuilder;
-import me.simplex.buildr.util.Buildr_WallType;
+import me.simplex.buildr.Buildr;
+import me.simplex.buildr.runnable.Buildr_Runnable_Wallbuilder;
+import me.simplex.buildr.util.Buildr_Type_Wall;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_WallManager {
+public class Buildr_Manager_Wallbuilder {
 	private Player wallcreater;
 	private Block position1,position2;
-	private Buildr_WallType type;
+	private Buildr_Type_Wall type;
 	private Material material;
 	private boolean aironly;
 	private boolean coordinate1placed = false;
 	private Buildr plugin;
 	
-	public Buildr_WallManager(Player player, Material material, boolean aironly, Buildr plugin) {
+	public Buildr_Manager_Wallbuilder(Player player, Material material, boolean aironly, Buildr plugin) {
 		this.wallcreater=player;
 		this.material = material;
 		this.aironly = aironly;
@@ -30,7 +31,7 @@ public class Buildr_WallManager {
 	
 	public boolean checkCoordinates(Block position2){
 		this.position2=position2;
-		Buildr_WallType wallType = checkWallType();
+		Buildr_Type_Wall wallType = checkWallType();
 		if (wallType==null) {
 			return false;
 		}
@@ -40,15 +41,15 @@ public class Buildr_WallManager {
 		}
 	}
 	
-	private Buildr_WallType checkWallType(){
+	private Buildr_Type_Wall checkWallType(){
 		if (position1.getX() == position2.getX()) {
-			return Buildr_WallType.WALL_X;
+			return Buildr_Type_Wall.WALL_X;
 		}
 		if (position1.getY() == position2.getY()) {
-			return Buildr_WallType.WALL_Y;
+			return Buildr_Type_Wall.WALL_Y;
 		}
 		if (position1.getZ() == position2.getZ()) {
-			return Buildr_WallType.WALL_Z;
+			return Buildr_Type_Wall.WALL_Z;
 		}
 		else {
 			return null;
@@ -56,7 +57,7 @@ public class Buildr_WallManager {
 	}
 	
 	public void startBuild(){
-		new Thread(new Buildr_Wallbuilder(position1,position2,type,material,aironly,plugin,wallcreater)).start();
+		new Thread(new Buildr_Runnable_Wallbuilder(position1,position2,type,material,aironly,plugin,wallcreater)).start();
 	}
 	
 	/**

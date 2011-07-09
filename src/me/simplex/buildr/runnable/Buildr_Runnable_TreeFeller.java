@@ -4,26 +4,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import me.simplex.buildr.Buildr;
-import me.simplex.buildr.util.Buildr_UndoBlockContainer;
+import me.simplex.buildr.util.Buildr_Container_UndoBlock;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-public class Buildr_TreeFeller implements Runnable {
+public class Buildr_Runnable_TreeFeller implements Runnable {
 	
 	private ArrayList<Block> logs;
 	private ArrayList<Block> leaves;
 	private ArrayList<Block> checked;
 	
-	private HashMap<Block, Buildr_UndoBlockContainer> undo;
+	private HashMap<Block, Buildr_Container_UndoBlock> undo;
 	
 	private Block baseblock;
 	private Buildr plugin;
 	private Player player;
 	
-	public Buildr_TreeFeller(Block baseblock,  Buildr plugin, Player player) {
+	public Buildr_Runnable_TreeFeller(Block baseblock,  Buildr plugin, Player player) {
 		this.baseblock = baseblock;
 		this.plugin = plugin;
 		this.player = player;
@@ -32,7 +32,7 @@ public class Buildr_TreeFeller implements Runnable {
 		this.leaves = new ArrayList<Block>();
 		this.checked = new ArrayList<Block>();
 		
-		this.undo = new HashMap<Block, Buildr_UndoBlockContainer>();
+		this.undo = new HashMap<Block, Buildr_Container_UndoBlock>();
 	}
 
 	@Override
@@ -40,12 +40,12 @@ public class Buildr_TreeFeller implements Runnable {
 		checkBlock(baseblock);
 		
 		for (Block blk : logs) {
-			undo.put(blk, new Buildr_UndoBlockContainer(blk.getType(), blk.getData()));
+			undo.put(blk, new Buildr_Container_UndoBlock(blk.getType(), blk.getData()));
 			blk.setType(Material.AIR);
 		}
 		if (plugin.getConfigValue("TREECUTTER_CUT_LEAVES")) {
 			for (Block blk : leaves) {
-				undo.put(blk,  new Buildr_UndoBlockContainer(blk.getType(), blk.getData()));
+				undo.put(blk,  new Buildr_Container_UndoBlock(blk.getType(), blk.getData()));
 				blk.setType(Material.AIR);
 			}
 		}

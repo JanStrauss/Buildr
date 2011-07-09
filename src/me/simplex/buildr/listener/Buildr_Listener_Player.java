@@ -1,8 +1,8 @@
 package me.simplex.buildr.listener;
 
 import me.simplex.buildr.Buildr;
-import me.simplex.buildr.runnable.Buildr_TreeFeller;
-import me.simplex.buildr.util.Buildr_BlockToDropConverter;
+import me.simplex.buildr.runnable.Buildr_Runnable_TreeFeller;
+import me.simplex.buildr.util.Buildr_Converter_BlockToDrop;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -15,15 +15,15 @@ import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class Buildr_PlayerListener extends PlayerListener {
+public class Buildr_Listener_Player extends PlayerListener {
 	
 	private Buildr plugin;
-	private Buildr_BlockToDropConverter converter;
+	private Buildr_Converter_BlockToDrop converter;
 	
-	public Buildr_PlayerListener(Buildr plugin) {
+	public Buildr_Listener_Player(Buildr plugin) {
 		super();
 		this.plugin = plugin;
-		this.converter = new Buildr_BlockToDropConverter();
+		this.converter = new Buildr_Converter_BlockToDrop();
 	}
 
 @Override
@@ -51,7 +51,7 @@ public class Buildr_PlayerListener extends PlayerListener {
 			if (event.getClickedBlock().getType() == Material.LOG || plugin.checkTreecuterFireOnLeaves(event.getClickedBlock())) {
 				if (plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
 					if (plugin.checkPermission(event.getPlayer(), "buildr.feature.treecutter")) {
-						new Thread(new Buildr_TreeFeller(event.getClickedBlock(), plugin, event.getPlayer())).start();
+						new Thread(new Buildr_Runnable_TreeFeller(event.getClickedBlock(), plugin, event.getPlayer())).start();
 						event.setCancelled(true);
 					}
 				}

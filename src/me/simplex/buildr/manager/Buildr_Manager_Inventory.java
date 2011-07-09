@@ -1,4 +1,4 @@
-package me.simplex.buildr;
+package me.simplex.buildr.manager;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,17 +7,18 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
-import me.simplex.buildr.runnable.Buildr_PlayerInventorySaver;
-import me.simplex.buildr.runnable.Buildr_StateFileUpdater;
-import me.simplex.buildr.util.Buildr_ItemStackSaveContainer;
+import me.simplex.buildr.Buildr;
+import me.simplex.buildr.runnable.Buildr_Runnable_PlayerInventorySaver;
+import me.simplex.buildr.runnable.Buildr_Runnable_StateFileUpdater;
+import me.simplex.buildr.util.Buildr_Container_ItemStackSave;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class Buildr_InventoryManager {
+public class Buildr_Manager_Inventory {
 	Buildr plugin;
 
-	public Buildr_InventoryManager(Buildr plugin) {
+	public Buildr_Manager_Inventory(Buildr plugin) {
 		this.plugin = plugin;
 	}
 	
@@ -50,11 +51,11 @@ public class Buildr_InventoryManager {
 
 	private ItemStack[] loadBackupInventory(Player player){
 		ObjectInputStream objctInStrm;
-		Buildr_ItemStackSaveContainer[] FileContainer =null;
+		Buildr_Container_ItemStackSave[] FileContainer =null;
 
 		try {
 			objctInStrm = new ObjectInputStream(new FileInputStream(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+player.getName()+".inv"));
-			FileContainer = (Buildr_ItemStackSaveContainer[])objctInStrm.readObject();
+			FileContainer = (Buildr_Container_ItemStackSave[])objctInStrm.readObject();
 			objctInStrm.close();
 		} catch (FileNotFoundException e) {
 		} catch (IOException e) {
@@ -72,7 +73,7 @@ public class Buildr_InventoryManager {
 	}
 	
 	private void saveBackupInventory(Player player,ItemStack[] inv){
-		new Thread(new Buildr_PlayerInventorySaver(player, inv, plugin)).start();
+		new Thread(new Buildr_Runnable_PlayerInventorySaver(player, inv, plugin)).start();
 	}
 	
 	public boolean startupCheck(){
@@ -108,7 +109,7 @@ public class Buildr_InventoryManager {
 	}
 	
 	public void updateInventoryStateFile(ArrayList<Player> builders){
-		new Thread(new Buildr_StateFileUpdater(new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat"), builders,plugin)).start();
+		new Thread(new Buildr_Runnable_StateFileUpdater(new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat"), builders,plugin)).start();
 	}
 	
 	@SuppressWarnings("unchecked")

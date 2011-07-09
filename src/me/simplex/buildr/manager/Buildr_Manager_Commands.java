@@ -1,9 +1,10 @@
-package me.simplex.buildr;
+package me.simplex.buildr.manager;
 
 import java.util.HashMap;
 
-import me.simplex.buildr.util.Buildr_UndoBlockContainer;
-import me.simplex.buildr.util.Buildr_WoolType;
+import me.simplex.buildr.Buildr;
+import me.simplex.buildr.util.Buildr_Container_UndoBlock;
+import me.simplex.buildr.util.Buildr_Type_Wool;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -14,14 +15,14 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class Buildr_Commands {
+public class Buildr_Manager_Commands {
 	Buildr plugin;
 	
 	/**
 	 * 
 	 * @param plugin
 	 */
-	public Buildr_Commands(Buildr plugin) {
+	public Buildr_Manager_Commands(Buildr plugin) {
 		this.plugin = plugin;
 	}
 	
@@ -29,7 +30,7 @@ public class Buildr_Commands {
 	 * 
 	 * @param sender
 	 */
-	protected void cmd_globalbuild(CommandSender sender,World world){
+	public void cmd_globalbuild(CommandSender sender,World world){
 		if (!plugin.getConfigValue("GLOBALBUILD_ENABLE")) {
 			return;
 		}
@@ -55,7 +56,7 @@ public class Buildr_Commands {
 	 * 
 	 * @param sender
 	 */
-	protected void cmd_build(CommandSender sender){
+	public void cmd_build(CommandSender sender){
 		if (!plugin.getConfigValue("BUILDMODE_ENABLE")) {
 			return;
 		}
@@ -75,7 +76,7 @@ public class Buildr_Commands {
 	 * 
 	 * @param sender
 	 */
-	protected void cmd_top(CommandSender sender) {
+	public void cmd_top(CommandSender sender) {
 		if (!plugin.getConfigValue("FEATURE_TOP")) {
 			return;
 		}
@@ -96,20 +97,20 @@ public class Buildr_Commands {
 	 * @param height
 	 * @param size
 	 */
-	protected void cmd_airfloor(CommandSender sender, int material, int height, int size){
+	public void cmd_airfloor(CommandSender sender, int material, int height, int size){
 		if (!plugin.getConfigValue("FEATURE_AIRFLOOR")) {
 			return;
 		}
 		Player player = (Player)sender;
 		int blockheight = player.getLocation().getBlockY()+height-1;
 		Location location = new Location(player.getWorld(), player.getLocation().getBlockX(), blockheight, player.getLocation().getBlockZ());
-		HashMap<Block, Buildr_UndoBlockContainer> UnDoList = new HashMap<Block, Buildr_UndoBlockContainer>();		
+		HashMap<Block, Buildr_Container_UndoBlock> UnDoList = new HashMap<Block, Buildr_Container_UndoBlock>();		
 		if (blockheight > 128) {
 			blockheight = 128;
 		}
 		if (size == 0 || size == 1) {
 			Block block = player.getWorld().getBlockAt(location);
-			UnDoList.put(block,new Buildr_UndoBlockContainer(block.getType(), block.getData()));
+			UnDoList.put(block,new Buildr_Container_UndoBlock(block.getType(), block.getData()));
 			block.setTypeId(material);
 		}
 		else {
@@ -127,7 +128,7 @@ public class Buildr_Commands {
 			for (int i = 0; i < size; i++) { //x
 				for (int j = 0; j < size; j++) {//z
 					Block block = player.getWorld().getBlockAt(x, blockheight, z);
-					UnDoList.put(block, new Buildr_UndoBlockContainer(block.getType(), block.getData()));
+					UnDoList.put(block, new Buildr_Container_UndoBlock(block.getType(), block.getData()));
 					player.getWorld().getBlockAt(x, blockheight, z).setTypeId(material);
 					z++;
 				}
@@ -143,12 +144,12 @@ public class Buildr_Commands {
 	 * 
 	 * @param sender
 	 */
-	protected void cmd_undo(CommandSender sender){		
+	public void cmd_undo(CommandSender sender){		
 		if (!plugin.getConfigValue("FEATURE_AIRFLOOR") && !plugin.getConfigValue("FEATURE_WALLBUILDER")) {
 		return;
 		}
 		Player player = (Player)sender;
-		HashMap<Block, Buildr_UndoBlockContainer> undos = plugin.getUndoList().getAndDeleteFromStack(player);
+		HashMap<Block, Buildr_Container_UndoBlock> undos = plugin.getUndoList().getAndDeleteFromStack(player);
 		if (undos != null) {
 			for (Block block : undos.keySet()) {
 				block.setType(undos.get(block).getMaterial());
@@ -167,7 +168,7 @@ public class Buildr_Commands {
 	 * @param material
 	 * @param amount
 	 */
-	protected void cmd_give(CommandSender sender, String material, int amount, String player) {
+	public void cmd_give(CommandSender sender, String material, int amount, String player) {
 		if (!plugin.getConfigValue("FEATURE_GIVE")) {
 			return;
 		}
@@ -204,14 +205,14 @@ public class Buildr_Commands {
 	 * @param sender
 	 * @param args
 	 */
-	protected void cmd_wool(CommandSender sender, String args) {
+	public void cmd_wool(CommandSender sender, String args) {
 		if (!plugin.getConfigValue("FEATURE_WOOL")) {
 			return;
 		}
 		String upcase= args.toUpperCase();
-		Buildr_WoolType woolcolor;
+		Buildr_Type_Wool woolcolor;
 		try {
-			woolcolor = Enum.valueOf(Buildr_WoolType.class, upcase);
+			woolcolor = Enum.valueOf(Buildr_Type_Wool.class, upcase);
 		} catch (IllegalArgumentException e) {
 			sender.sendMessage("No such color");
 			return;
@@ -226,7 +227,7 @@ public class Buildr_Commands {
 	 * @param material
 	 * @param aironly
 	 */
-	protected void cmd_wall(CommandSender sender, Material material, boolean aironly) {
+	public void cmd_wall(CommandSender sender, Material material, boolean aironly) {
 		if (!plugin.getConfigValue("FEATURE_WALLBUILDER")) {
 			return;
 		}
@@ -234,7 +235,7 @@ public class Buildr_Commands {
 			plugin.removeStartedWall((Player)sender);
 			sender.sendMessage(ChatColor.YELLOW+"previous started Wall dismissed.");
 		}
-		plugin.getStartedWalls().add(new Buildr_WallManager((Player)sender, material, aironly, plugin));
+		plugin.getStartedWalls().add(new Buildr_Manager_Wallbuilder((Player)sender, material, aironly, plugin));
 		String buildinfo ="Started new Wall. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on block 1 while holding a stick to continue");
@@ -244,7 +245,7 @@ public class Buildr_Commands {
 	 * 
 	 * @param sender
 	 */
-	protected void cmd_clrInv(CommandSender sender) {
+	public void cmd_clrInv(CommandSender sender) {
 		if (!plugin.getConfigValue("FEATURE_CLEAR_INVENTORY")) {
 			return;
 		}

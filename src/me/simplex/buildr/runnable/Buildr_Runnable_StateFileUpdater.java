@@ -9,13 +9,13 @@ import me.simplex.buildr.Buildr;
 
 import org.bukkit.entity.Player;
 
-public class Buildr_StateFileUpdater implements Runnable{
+public class Buildr_Runnable_StateFileUpdater implements Runnable{
 	private File statefile;
 	private ArrayList<Player> builders;
 	private Buildr plugin;
 
 	
-	public Buildr_StateFileUpdater(File statefile, ArrayList<Player> builders, Buildr plugin) {
+	public Buildr_Runnable_StateFileUpdater(File statefile, ArrayList<Player> builders, Buildr plugin) {
 		this.statefile = statefile;
 		this.builders = builders;
 		this.plugin = plugin;

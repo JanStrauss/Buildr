@@ -3,11 +3,16 @@ package me.simplex.buildr;
 import java.util.ArrayList;
 import java.util.logging.Logger;
 
-import me.simplex.buildr.listener.Buildr_BlockListener;
-import me.simplex.buildr.listener.Buildr_EntityListener;
-import me.simplex.buildr.listener.Buildr_PlayerListener;
-import me.simplex.buildr.listener.Buildr_WeatherListener;
-import me.simplex.buildr.runnable.Buildr_TimeChecker;
+import me.simplex.buildr.listener.Buildr_Listener_Block;
+import me.simplex.buildr.listener.Buildr_Listener_Entity;
+import me.simplex.buildr.listener.Buildr_Listener_Player;
+import me.simplex.buildr.listener.Buildr_Listener_Weather;
+import me.simplex.buildr.manager.Buildr_Manager_Commands;
+import me.simplex.buildr.manager.Buildr_Manager_Configuration;
+import me.simplex.buildr.manager.Buildr_Manager_Inventory;
+import me.simplex.buildr.manager.Buildr_Manager_UndoStack;
+import me.simplex.buildr.manager.Buildr_Manager_Wallbuilder;
+import me.simplex.buildr.runnable.Buildr_Runnable_TimeChecker;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -34,18 +39,18 @@ public class Buildr extends JavaPlugin {
 	  private String prefix;
 	  private String version;
 	  
-	  private Buildr_EntityListener entityListener;
-	  private Buildr_PlayerListener playerListener;
-	  private Buildr_WeatherListener weatherListener;
-	  private Buildr_BlockListener blockListener;
+	  private Buildr_Listener_Entity entityListener;
+	  private Buildr_Listener_Player playerListener;
+	  private Buildr_Listener_Weather weatherListener;
+	  private Buildr_Listener_Block blockListener;
 	  
-	  private Buildr_Commands cmdHandler;
-	  private Buildr_InventoryManager invManager;
-	  private Buildr_ConfigurationManager cfgManager;
-	  private Buildr_UndoHandler unDoStack;
+	  private Buildr_Manager_Commands cmdHandler;
+	  private Buildr_Manager_Inventory invManager;
+	  private Buildr_Manager_Configuration cfgManager;
+	  private Buildr_Manager_UndoStack unDoStack;
 
 	  private Thread thread;
-	  private Buildr_TimeChecker timeHandler;
+	  private Buildr_Runnable_TimeChecker timeHandler;
 	  private String pluginDirectory;
 	  private PluginManager pm;
 	  
@@ -54,7 +59,7 @@ public class Buildr extends JavaPlugin {
 	  private ArrayList<World> worldBuildAllowed;
 	  private ArrayList<Player> playerBuildMode;
 	  private ArrayList<String> toProcessPlayers;
-	  private ArrayList<Buildr_WallManager> startedWalls;
+	  private ArrayList<Buildr_Manager_Wallbuilder> startedWalls;
 
 
 	@Override
@@ -73,21 +78,21 @@ public class Buildr extends JavaPlugin {
 		version 			= getDescription().getVersion();
 		prefix 				= "[Buildr] ";
 		 
-		cmdHandler 			= new Buildr_Commands(this);
-		invManager 			= new Buildr_InventoryManager(this);
-		cfgManager 			= new Buildr_ConfigurationManager(this);
-		unDoStack 			= new Buildr_UndoHandler();
+		cmdHandler 			= new Buildr_Manager_Commands(this);
+		invManager 			= new Buildr_Manager_Inventory(this);
+		cfgManager 			= new Buildr_Manager_Configuration(this);
+		unDoStack 			= new Buildr_Manager_UndoStack();
 		 
-		entityListener 		= new Buildr_EntityListener(this);
-		playerListener 		= new Buildr_PlayerListener(this);
-		weatherListener 	= new Buildr_WeatherListener(this);
-		blockListener 		= new Buildr_BlockListener(this);
+		entityListener 		= new Buildr_Listener_Entity(this);
+		playerListener 		= new Buildr_Listener_Player(this);
+		weatherListener 	= new Buildr_Listener_Weather(this);
+		blockListener 		= new Buildr_Listener_Block(this);
 		 
 		worldBuildMode 		= new ArrayList<World>();
 		worldBuildAllowed 	= new ArrayList<World>();
 		playerBuildMode 	= new ArrayList<Player>();
 		toProcessPlayers 	= new ArrayList<String>();
-		startedWalls 		= new ArrayList<Buildr_WallManager>();
+		startedWalls 		= new ArrayList<Buildr_Manager_Wallbuilder>();
 		 
 		//load settings
 		log("Buildr v"+version+" loading..");
@@ -136,7 +141,7 @@ public class Buildr extends JavaPlugin {
 
 		 
 		// TimeThread 
-		timeHandler = new Buildr_TimeChecker(this);
+		timeHandler = new Buildr_Runnable_TimeChecker(this);
 		thread = new Thread(timeHandler,prefix+"Time Handler");
 		thread.start();
 
@@ -478,7 +483,7 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	public boolean checkPlayerHasStartedWall(Player player){
-		for (Buildr_WallManager wallbuilder : startedWalls) {
+		for (Buildr_Manager_Wallbuilder wallbuilder : startedWalls) {
 			if (wallbuilder.getWallcreater() == player) {
 				return true;
 			}
@@ -502,8 +507,8 @@ public class Buildr extends JavaPlugin {
 		return false;
 	}
 	
-	public Buildr_WallManager giveWallbuilder(Player player){
-		for (Buildr_WallManager wallbuilder : startedWalls) {
+	public Buildr_Manager_Wallbuilder giveWallbuilder(Player player){
+		for (Buildr_Manager_Wallbuilder wallbuilder : startedWalls) {
 			if (wallbuilder.getWallcreater() == player) {
 				return wallbuilder;
 			}
@@ -512,7 +517,7 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	public void removeStartedWall(Player player){
-		for (Buildr_WallManager wallbuilder : startedWalls) {
+		for (Buildr_Manager_Wallbuilder wallbuilder : startedWalls) {
 			if (wallbuilder.getWallcreater() == player) {
 				startedWalls.remove(wallbuilder);
 				return;
@@ -553,7 +558,7 @@ public class Buildr extends JavaPlugin {
 		if (!checkPlayerHasStartedWall(player)) {
 			return;
 		}
-		Buildr_WallManager wallbuilder = giveWallbuilder(player);
+		Buildr_Manager_Wallbuilder wallbuilder = giveWallbuilder(player);
 		if (!wallbuilder.isCoordinate1placed()) {
 			wallbuilder.addCoordinate1(clickedBlock);
 			player.sendMessage("Got positon 1 of your wall at ["+ChatColor.BLUE+clickedBlock.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getY()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getZ()+ChatColor.WHITE+"]");
@@ -647,14 +652,14 @@ public class Buildr extends JavaPlugin {
 		return pluginDirectory;
 	}
 
-	public Buildr_UndoHandler getUndoList() {
+	public Buildr_Manager_UndoStack getUndoList() {
 		return unDoStack;
 	}
 
 	/**
 	 * @return the startedWalls
 	 */
-	public ArrayList<Buildr_WallManager> getStartedWalls() {
+	public ArrayList<Buildr_Manager_Wallbuilder> getStartedWalls() {
 		return startedWalls;
 	}
 }
