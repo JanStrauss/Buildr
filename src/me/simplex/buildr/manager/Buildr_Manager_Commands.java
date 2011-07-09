@@ -3,6 +3,7 @@ package me.simplex.buildr.manager;
 import java.util.HashMap;
 
 import me.simplex.buildr.Buildr;
+import me.simplex.buildr.runnable.Buildr_Runnable_Undo;
 import me.simplex.buildr.util.Buildr_Container_UndoBlock;
 import me.simplex.buildr.util.Buildr_Type_Wool;
 
@@ -418,23 +419,12 @@ public class Buildr_Manager_Commands {
 	 * @param sender
 	 */
 	public void cmd_undo(CommandSender sender){		
-		if (!plugin.getConfigValue("FEATURE_AIRFLOOR") && !plugin.getConfigValue("FEATURE_WALLBUILDER")) {
-		return;
+		if (!plugin.getConfigValue("FEATURE_AIRFLOOR") && !plugin.getConfigValue("FEATURE_WALLBUILDER") && !plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
+			return;
 		}
-		Player player = (Player)sender;
-		HashMap<Block, Buildr_Container_UndoBlock> undos = plugin.getUndoList().getAndDeleteFromStack(player);
-		if (undos != null) {
-			for (Block block : undos.keySet()) {
-				block.setType(undos.get(block).getMaterial());
-				block.setData(undos.get(block).getMaterialData());
-			}
-			plugin.log(player.getName()+" used /undo: "+undos.size()+" blocks affected");
-			sender.sendMessage(undos.size()+" blocks restored");
-		}
-		else {
-			sender.sendMessage("Nothing to undo");
-		}
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Undo((Player)sender, plugin));
 	}
+	
 	/**
 	 * 
 	 * @param sender

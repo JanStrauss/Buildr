@@ -45,21 +45,9 @@ public class Buildr_Runnable_TreeFeller implements Runnable {
 			plugin.log(player.getName()+" caused a StackOverflow with the Treecutter. Location: ["+player.getLocation().getBlockX()+","+player.getLocation().getBlockY()+","+player.getLocation().getBlockZ()+"]");
 			return;
 		}
-		for (Block blk : logs) {
-			undo.put(blk, new Buildr_Container_UndoBlock(blk.getType(), blk.getData()));
-			blk.setType(Material.AIR);
-		}
-		if (plugin.getConfigValue("TREECUTTER_CUT_LEAVES")) {
-			if (checkSize()) {	
-				for (Block blk : leaves) {
-					undo.put(blk,  new Buildr_Container_UndoBlock(blk.getType(), blk.getData()));
-					blk.setType(Material.AIR);
-				}
-			}
-			else {
-				player.sendMessage(ChatColor.YELLOW+"WARNING: Too many blocks, will only remove log");
-			}
-		}
+				
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RemoveIt());
+		
 		player.sendMessage("Felt Tree. Blocks changed: "+undo.size());
 		plugin.getUndoList().addToStack(undo, player);
 		plugin.log(player.getName()+" felt a tree: "+undo.size()+" blocks affected");
@@ -167,9 +155,30 @@ public class Buildr_Runnable_TreeFeller implements Runnable {
 	}
 
 	private boolean checkSize(){
-		if (logs.size()+leaves.size()>1250) {
+		if (logs.size()+leaves.size()>2000) {
 			return false;
 		}
 		return true;
+	}
+	
+	private class RemoveIt implements Runnable {
+		public void run() {
+			for (Block blk : logs) {
+				undo.put(blk, new Buildr_Container_UndoBlock(blk.getType(), blk.getData()));
+				blk.setType(Material.AIR);
+			}
+			if (plugin.getConfigValue("TREECUTTER_CUT_LEAVES")) {
+				if (checkSize()) {	
+					for (Block blk : leaves) {
+						undo.put(blk,  new Buildr_Container_UndoBlock(blk.getType(), blk.getData()));
+						blk.setType(Material.AIR);
+					}
+				}
+				else {
+					player.sendMessage(ChatColor.YELLOW+"WARNING: Too many blocks, will only remove log");
+				}
+			}
+		}
+		
 	}
 }

@@ -120,13 +120,12 @@ public class Buildr_Manager_Inventory {
 			player.sendMessage("No buildmode inventory found, creating new default..");
 			saveBackupInventory(player, newinv, path).join();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 	
 	public void updateInventoryStateFile(ArrayList<Player> builders){
-		new Thread(new Buildr_Runnable_StateFileUpdater(new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat"), builders,plugin)).start();
+		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Buildr_Runnable_StateFileUpdater(new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat"), builders,plugin));
 	}
 	
 	@SuppressWarnings("unchecked")
