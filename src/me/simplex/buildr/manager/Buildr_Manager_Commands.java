@@ -11,6 +11,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -25,11 +26,283 @@ public class Buildr_Manager_Commands {
 	public Buildr_Manager_Commands(Buildr plugin) {
 		this.plugin = plugin;
 	}
+
+	public boolean handleCommand(CommandSender sender, Command command, String[] args){
+		//GLOBALBUILD
+		if (command.getName().equalsIgnoreCase("globalbuild")) {
+			if (args.length != 0) {
+				return false;
+			}
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.globalbuild")) {
+				World world;
+				if (args.length > 0) {
+					world = plugin.getServer().getWorld(args[0]);
+				}
+				else {
+					world = ((Player)sender).getWorld();
+				}
+				if (world != null) {
+					this.cmd_globalbuild(sender, world);
+				}
+				else {
+					sender.sendMessage(ChatColor.RED+"There is no world with this name");
+				}
+				return true;
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+				return true;
+			}
+			
+		}
+		
+		//BUILD
+		else if (command.getName().equalsIgnoreCase("build")) {
+			if (args.length != 0) {
+				return false;
+			}
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.build")) {
+				this.cmd_build(sender);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
+		//TOP
+		else if (command.getName().equalsIgnoreCase("top")) {
+			if (args.length != 0) {
+				return false;
+			}
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.top")) {
+				this.cmd_top(sender);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
+		// AIRFLOOR
+		else if (command.getName().equalsIgnoreCase("airfloor")) {
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.airfloor")) {
+				if (args.length==0) {
+					return false;
+				}
+				try {
+					int material=0,height=0,size=0;
+					if (args.length > 3 && args.length < 2) {
+						return false;
+					}
+					if (args.length == 3) {
+						size = Math.abs(Integer.parseInt(args[2]));
+						if (size > 100) {
+							size = 100;
+						}
+					}
+					height = Math.abs(Integer.parseInt(args[1]));
+					try {
+						material = Math.abs(Integer.parseInt(args[0]));
+					} catch (NumberFormatException e) {
+						try {
+							material = Material.matchMaterial(args[0]).getId();
+						} catch (NullPointerException e2) {
+							sender.sendMessage(ChatColor.RED+"wrong format");
+							return true;
+						}
+					}
+					if (Material.getMaterial(material)== null) {
+						sender.sendMessage("Invalid Material");
+						return true;
+					}
+					this.cmd_airfloor(sender, material, height, size);
+					} 
+				catch (NumberFormatException e) {
+					sender.sendMessage("Wrong format, usage: /airfloor <material> <height> <size>");
+				}
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
+		//UNDO
+		else if (command.getName().equalsIgnoreCase("undo")) {
+			if (args.length != 0) {
+				return false;
+			}
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.undo")) {
+				this.cmd_undo(sender);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
+		//GIVE
+		else if (command.getName().equalsIgnoreCase("give")) {
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.give")) {
+				if (args.length == 0 ||args.length > 3) {
+					return false;
+				}
+				if (args.length == 1) {
+					this.cmd_give(sender,args[0],-1,null);
+				}
+				else if (args.length==2) {
+					int amount = -1;
+					try {
+						amount = Integer.parseInt(args[1]);
+						if (amount >64) {
+							amount = 64;
+						}
+					} catch (NumberFormatException e) {
+						sender.sendMessage(ChatColor.RED+"wrong format");
+						return true;
+					}
+					this.cmd_give(sender,args[0],amount,null);
+				}
+				else if(args.length == 3) {
+					int amount = -1;
+					try {
+						amount = Integer.parseInt(args[2]);
+						if (amount >64) {
+							amount = 64;
+						}
+					} catch (NumberFormatException e) {
+						sender.sendMessage(ChatColor.RED+"wrong format");
+						return true;
+					}
+					this.cmd_give(sender,args[1],amount,args[0]);
+				}
+				
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
+		//WOOL
+		else if (command.getName().equalsIgnoreCase("wool")) {
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.wool")) {
+				if (args.length!=1) {
+					return false;
+				}
+				this.cmd_wool(sender, args[0]);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
+		//ClearInv
+		else if (command.getName().equalsIgnoreCase("clearinv")) {
+			if (args.length != 0) {
+				return false;
+			}
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.clearinv")) {
+				if (args.length!=0) {
+					return false;
+				}
+				this.cmd_clrInv(sender);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
+		//Wall
+		else if (command.getName().equalsIgnoreCase("wall")) {
+			if (args.length < 1 || args.length > 2) {
+				return false;
+			}
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.wall")) {
+				if (args.length >=1 && args.length <=2) {
+					Material material;
+					int id;
+					try {
+						id = Integer.parseInt(args[0]);
+					} catch (NumberFormatException e) {
+						try {
+							id = Material.matchMaterial(args[0]).getId();
+						} catch (NullPointerException e2) {
+							sender.sendMessage(ChatColor.RED+"wrong format");
+							return true;
+						}
+
+					}
+					if (Material.getMaterial(id).isBlock()) {
+						material = Material.getMaterial(id);
+					}
+					else {
+						sender.sendMessage(ChatColor.RED+"unvalid blocktype");
+						return true;
+					}
+					if (args.length==1) {
+							this.cmd_wall(sender, material, false);
+							return true;
+					}
+					else if (args.length==2) {
+						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
+							this.cmd_wall(sender, material, true);
+							return true;
+						}
+						else {
+							return false;
+						}
+					}
+					else {
+						return false;
+					}
+				}
+				else {
+					return false;
+				}
+
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		//LOCATION
+		else if (command.getName().equalsIgnoreCase("location")) {
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.location")) {
+				if (args.length!=0) {
+					return false;
+				}
+				this.cmd_location(sender);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		//ALLOWBUILD
+		else if (command.getName().equalsIgnoreCase("allowbuild")) {
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.allowbuild")) {
+				if (args.length!=0) {
+					return false;
+				}
+				this.cmd_allowbuild(sender);
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
+		//ELSE
+		else {
+			return false;
+		}
+	}
 	
-	/**
-	 * 
-	 * @param sender
-	 */
 	public void cmd_globalbuild(CommandSender sender,World world){
 		if (!plugin.getConfigValue("GLOBALBUILD_ENABLE")) {
 			return;
