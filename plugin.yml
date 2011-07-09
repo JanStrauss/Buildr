@@ -14,7 +14,7 @@ commands:
            Example: /<command>
   build:
     description: Toggles the User Buildmode
-    aliases: [ub,gbm,userbuild]
+    aliases: [ub,bm]
     usage: |
            /<command>
            Example: /<command>

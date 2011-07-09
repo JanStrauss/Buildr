@@ -1,6 +1,7 @@
 package me.simplex.buildr;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.logging.Logger;
 
 import me.simplex.buildr.listener.Buildr_Listener_Block;
@@ -59,6 +60,8 @@ public class Buildr extends JavaPlugin {
 	  private ArrayList<Player> playerBuildMode;
 	  private ArrayList<String> toProcessPlayers;
 	  private ArrayList<Buildr_Manager_Wallbuilder> startedWalls;
+	  
+	  private LinkedList<Player> playerCuttingTree;
 
 
 	@Override
@@ -92,6 +95,7 @@ public class Buildr extends JavaPlugin {
 		playerBuildMode 	= new ArrayList<Player>();
 		toProcessPlayers 	= new ArrayList<String>();
 		startedWalls 		= new ArrayList<Buildr_Manager_Wallbuilder>();
+		playerCuttingTree 	= new LinkedList<Player>();
 		 
 		//load settings
 		importantLog("Buildr v"+version+" loading..");
@@ -385,6 +389,10 @@ public class Buildr extends JavaPlugin {
 
 	public Buildr_Manager_UndoStack getUndoList() {
 		return unDoStack;
+	}
+	
+	public LinkedList<Player> getPlayerCuttingTree() {
+		return playerCuttingTree;
 	}
 
 	/**

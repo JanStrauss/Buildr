@@ -49,6 +49,7 @@ public class Buildr_Runnable_TreeFeller_Perform implements Runnable {
 			
 		player.sendMessage("Felt Tree. Blocks changed: "+undo.size());
 		plugin.getUndoList().addToStack(undo, player);
+		plugin.getPlayerCuttingTree().remove(player);
 		plugin.log(player.getName()+" felt a tree: "+undo.size()+" blocks affected");
 	}
 	

@@ -51,8 +51,11 @@ public class Buildr_Listener_Player extends PlayerListener {
 			if (event.getClickedBlock().getType() == Material.LOG || plugin.checkTreecuterFireOnLeaves(event.getClickedBlock())) {
 				if (plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
 					if (plugin.checkPermission(event.getPlayer(), "buildr.feature.treecutter")) {
-						plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Buildr_Runnable_TreeFeller_Collect(event.getClickedBlock(), plugin, event.getPlayer()));
-						event.setCancelled(true);
+						if (!plugin.getPlayerCuttingTree().contains(event.getPlayer())) {
+							plugin.getPlayerCuttingTree().add(event.getPlayer());
+							plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Buildr_Runnable_TreeFeller_Collect(event.getClickedBlock(), plugin, event.getPlayer()));
+							event.setCancelled(true);
+						}
 					}
 				}
 			}
