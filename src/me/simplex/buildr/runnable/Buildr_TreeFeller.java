@@ -34,8 +34,6 @@ public class Buildr_TreeFeller implements Runnable {
 		this.undo = new HashMap<Block, Material>();
 	}
 
-
-
 	@Override
 	public void run() {
 		checkBlock(baseblock);
@@ -51,14 +49,7 @@ public class Buildr_TreeFeller implements Runnable {
 			}
 		}
 		player.sendMessage("Felt Tree. Blocks changed: "+undo.size());
-		try {
-			Thread.sleep(10);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		plugin.getUndoList().addToStack(undo, player);
-
 	}
 	
 	private void checkBlock(Block base){

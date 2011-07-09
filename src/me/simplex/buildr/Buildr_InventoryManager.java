@@ -81,11 +81,11 @@ public class Buildr_InventoryManager {
 	
 	private void checkBackupFile(Player player) {
 		if (new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+player.getName()+".inv").exists()) {
-			plugin.log("InvBackup for "+player.getName()+" found");
+			//plugin.log("InvBackup for "+player.getName()+" found");
 			return;
 		}
 		createNewBuildInv(player);
-		plugin.log("InvBackup for "+player.getName()+" created");
+		//plugin.log("InvBackup for "+player.getName()+" created");
 	}
 
 	private void createNewBuildInv(Player player) {
