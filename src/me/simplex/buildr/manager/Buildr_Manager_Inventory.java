@@ -8,7 +8,7 @@ import java.io.ObjectInputStream;
 import java.util.ArrayList;
 
 import me.simplex.buildr.Buildr;
-import me.simplex.buildr.runnable.Buildr_Runnable_PlayerInventorySaver;
+import me.simplex.buildr.runnable.Buildr_Runnable_InventorySaver;
 import me.simplex.buildr.runnable.Buildr_Runnable_StateFileUpdater;
 import me.simplex.buildr.util.Buildr_Container_ItemStackSave;
 
@@ -23,11 +23,13 @@ public class Buildr_Manager_Inventory {
 	}
 	
 	public void switchInventory(Player player){
+		String path = plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+player.getName()+".inv";
 		checkBackupFile(player);
-		ItemStack[] currInv = loadCurrentInventory(player);
-		ItemStack[] newInv = loadBackupInventory(player);
 		
-		saveBackupInventory(player, currInv);
+		ItemStack[] currInv = loadCurrentInventory(player);
+		ItemStack[] newInv = loadBackupInventory(player, path);
+		
+		saveBackupInventory(player, currInv, path);
 			
 		changeCurrentInventory(player, newInv);
 		
@@ -49,21 +51,27 @@ public class Buildr_Manager_Inventory {
 	 * @return fullinv with Armor
 	 */
 
-	private ItemStack[] loadBackupInventory(Player player){
+	private ItemStack[] loadBackupInventory(Player player, String path){
 		ObjectInputStream objctInStrm;
 		Buildr_Container_ItemStackSave[] FileContainer =null;
 
 		try {
-			objctInStrm = new ObjectInputStream(new FileInputStream(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+player.getName()+".inv"));
+			objctInStrm = new ObjectInputStream(new FileInputStream(path));
 			FileContainer = (Buildr_Container_ItemStackSave[])objctInStrm.readObject();
 			objctInStrm.close();
 		} catch (FileNotFoundException e) {
+			System.out.println("####################################################################");
+			System.out.println("FileNotFound");
 		} catch (IOException e) {
+			System.out.println("####################################################################");
+			System.out.println("IOExc");
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
+			System.out.println("####################################################################");
+			System.out.println("ClassNotFound");
 			e.printStackTrace();
 		}
-		ItemStack[] inventory= new ItemStack[FileContainer.length];
+		ItemStack[] inventory = new ItemStack[FileContainer.length];
 		for (int i = 0; i < FileContainer.length; i++) {
 			if (FileContainer[i]!=null) {
 				inventory[i] = new ItemStack(FileContainer[i].getType(), FileContainer[i].getAmount(), FileContainer[i].getDurability(), FileContainer[i].getMaterial_data());
@@ -72,8 +80,10 @@ public class Buildr_Manager_Inventory {
 		return inventory;
 	}
 	
-	private void saveBackupInventory(Player player,ItemStack[] inv){
-		new Thread(new Buildr_Runnable_PlayerInventorySaver(player, inv, plugin)).start();
+	private Thread saveBackupInventory(Player player,ItemStack[] inv, String path){
+		Thread thread = new Thread(new Buildr_Runnable_InventorySaver(player, inv, path));
+		thread.start();
+		return thread;
 	}
 	
 	public boolean startupCheck(){
@@ -105,7 +115,14 @@ public class Buildr_Manager_Inventory {
 		newinv[9]  = new ItemStack(53, 64); //Woodenstairs
 		newinv[10] = new ItemStack(67, 64); //Cobblestonestairs
 		
-		saveBackupInventory(player, newinv);
+		String path = plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+player.getName()+".inv";
+		try {
+			player.sendMessage("No buildmode inventory found, creating new default..");
+			saveBackupInventory(player, newinv, path).join();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void updateInventoryStateFile(ArrayList<Player> builders){

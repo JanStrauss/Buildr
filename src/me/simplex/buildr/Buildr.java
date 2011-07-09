@@ -125,6 +125,7 @@ public class Buildr extends JavaPlugin {
 			log("found "+toProcessPlayers.size()+" builder(s) to treat on login");
 		}
 
+		
 		//register Listener
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this); 
 		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Event.Priority.Normal, this); 
