@@ -30,16 +30,17 @@ public class Buildr_Runnable_Wallbuilder implements Runnable {
 
 	@Override
 	public void run() {
-		HashMap<Block, Buildr_Container_UndoBlock> undoItem= null;
+		HashMap<Block, Buildr_Container_UndoBlock> undoBlocks= null;
 		switch (type) {
-		case WALL_X: undoItem = buildWallX(); break;
-		case WALL_Y: undoItem = buildWallY(); break;
-		case WALL_Z: undoItem = buildWallZ(); break;
+		case WALL_X: undoBlocks = buildWallX(); break;
+		case WALL_Y: undoBlocks = buildWallY(); break;
+		case WALL_Z: undoBlocks = buildWallZ(); break;
 		default:
 			break;
 		}
-		plugin.getUndoList().addToStack(undoItem, player);
-		player.sendMessage("done! Placed "+undoItem.size()+" blocks");
+		plugin.getUndoList().addToStack(undoBlocks, player);
+		player.sendMessage("done! Placed "+undoBlocks.size()+" blocks");
+		plugin.log(player.getName()+" builded a wall: "+undoBlocks.size()+" blocks affected");
 	}
 	
 	private HashMap<Block, Buildr_Container_UndoBlock> buildWallX(){

@@ -6,6 +6,7 @@ import java.util.HashMap;
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.util.Buildr_Container_UndoBlock;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -37,20 +38,31 @@ public class Buildr_Runnable_TreeFeller implements Runnable {
 
 	@Override
 	public void run() {
-		checkBlock(baseblock);
-		
+		try {
+			checkBlock(baseblock);
+		} catch (StackOverflowError e) {
+			player.sendMessage(ChatColor.RED+"ERROR: Too many blocks, you can't fell that tree. Try to split it.");
+			plugin.log(player.getName()+" caused a StackOverflow with the Treecutter. Location: ["+player.getLocation().getBlockX()+","+player.getLocation().getBlockY()+","+player.getLocation().getBlockZ()+"]");
+			return;
+		}
 		for (Block blk : logs) {
 			undo.put(blk, new Buildr_Container_UndoBlock(blk.getType(), blk.getData()));
 			blk.setType(Material.AIR);
 		}
 		if (plugin.getConfigValue("TREECUTTER_CUT_LEAVES")) {
-			for (Block blk : leaves) {
-				undo.put(blk,  new Buildr_Container_UndoBlock(blk.getType(), blk.getData()));
-				blk.setType(Material.AIR);
+			if (checkSize()) {	
+				for (Block blk : leaves) {
+					undo.put(blk,  new Buildr_Container_UndoBlock(blk.getType(), blk.getData()));
+					blk.setType(Material.AIR);
+				}
+			}
+			else {
+				player.sendMessage(ChatColor.YELLOW+"WARNING: Too many blocks, will only remove log");
 			}
 		}
 		player.sendMessage("Felt Tree. Blocks changed: "+undo.size());
 		plugin.getUndoList().addToStack(undo, player);
+		plugin.log(player.getName()+" felt a tree: "+undo.size()+" blocks affected");
 	}
 	
 	private void checkBlock(Block base){
@@ -154,4 +166,10 @@ public class Buildr_Runnable_TreeFeller implements Runnable {
 		return ret;
 	}
 
+	private boolean checkSize(){
+		if (logs.size()+leaves.size()>1250) {
+			return false;
+		}
+		return true;
+	}
 }

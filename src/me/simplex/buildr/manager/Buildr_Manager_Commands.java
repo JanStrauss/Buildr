@@ -428,7 +428,7 @@ public class Buildr_Manager_Commands {
 				block.setType(undos.get(block).getMaterial());
 				block.setData(undos.get(block).getMaterialData());
 			}
-			plugin.log(player.getName()+" used /bu: "+undos.size()+" blocks affected");
+			plugin.log(player.getName()+" used /undo: "+undos.size()+" blocks affected");
 			sender.sendMessage(undos.size()+" blocks restored");
 		}
 		else {
