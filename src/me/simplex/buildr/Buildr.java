@@ -42,7 +42,7 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_Commands cmdHandler;
 	  private Buildr_InventoryManager invManager;
 	  private Buildr_ConfigurationManager cfgManager;
-	  private Buildr_UnDoHandler unDoStack;
+	  private Buildr_UndoHandler unDoStack;
 
 	  private Thread thread;
 	  private Buildr_TimeChecker timeHandler;
@@ -76,7 +76,7 @@ public class Buildr extends JavaPlugin {
 		cmdHandler 			= new Buildr_Commands(this);
 		invManager 			= new Buildr_InventoryManager(this);
 		cfgManager 			= new Buildr_ConfigurationManager(this);
-		unDoStack 			= new Buildr_UnDoHandler();
+		unDoStack 			= new Buildr_UndoHandler();
 		 
 		entityListener 		= new Buildr_EntityListener(this);
 		playerListener 		= new Buildr_PlayerListener(this);
@@ -647,7 +647,7 @@ public class Buildr extends JavaPlugin {
 		return pluginDirectory;
 	}
 
-	public Buildr_UnDoHandler getUndoList() {
+	public Buildr_UndoHandler getUndoList() {
 		return unDoStack;
 	}
 

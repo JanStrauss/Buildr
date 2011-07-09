@@ -3,6 +3,7 @@ package me.simplex.buildr.runnable;
 import java.util.HashMap;
 
 import me.simplex.buildr.Buildr;
+import me.simplex.buildr.util.Buildr_UndoBlockContainer;
 import me.simplex.buildr.util.Buildr_WallType;
 
 import org.bukkit.Material;
@@ -17,10 +18,7 @@ public class Buildr_Wallbuilder implements Runnable {
 	private Buildr plugin;
 	private Player player;
 	
-	public Buildr_Wallbuilder(Block position1, Block position2,
-			Buildr_WallType type, Material material, boolean aironly,
-			Buildr plugin, Player player) {
-		super();
+	public Buildr_Wallbuilder(Block position1, Block position2,Buildr_WallType type, Material material, boolean aironly,Buildr plugin, Player player) {
 		this.position1 = position1;
 		this.position2 = position2;
 		this.type = type;
@@ -32,7 +30,7 @@ public class Buildr_Wallbuilder implements Runnable {
 
 	@Override
 	public void run() {
-		HashMap<Block, Material> undoItem= null;
+		HashMap<Block, Buildr_UndoBlockContainer> undoItem= null;
 		switch (type) {
 		case WALL_X: undoItem = buildWallX(); break;
 		case WALL_Y: undoItem = buildWallY(); break;
@@ -44,8 +42,8 @@ public class Buildr_Wallbuilder implements Runnable {
 		player.sendMessage("done! Placed "+undoItem.size()+" blocks");
 	}
 	
-	private HashMap<Block, Material> buildWallX(){
-		HashMap<Block, Material> undo = new HashMap<Block, Material>();
+	private HashMap<Block, Buildr_UndoBlockContainer> buildWallX(){
+		HashMap<Block, Buildr_UndoBlockContainer> undo = new HashMap<Block, Buildr_UndoBlockContainer>();
 		int fixed_X = position1.getX();
 		int starty = calcStartPoint(position1.getY(), position2.getY());
 		int startz = calcStartPoint(position1.getZ(), position2.getZ());
@@ -62,15 +60,14 @@ public class Buildr_Wallbuilder implements Runnable {
 				
 				if (aironly) {
 					if (actionBlock.getType().equals(Material.AIR)) {
-						undo.put(actionBlock, actionBlock.getType());
+						undo.put(actionBlock, new Buildr_UndoBlockContainer(actionBlock.getType(), actionBlock.getData()));
 						actionBlock.setType(material);
 					}
 				}
 				else {
-					undo.put(actionBlock, actionBlock.getType());
+					undo.put(actionBlock, new Buildr_UndoBlockContainer(actionBlock.getType(), actionBlock.getData()));
 					actionBlock.setType(material);
 				}
-
 				z++;
 			}
 			y++;
@@ -79,8 +76,8 @@ public class Buildr_Wallbuilder implements Runnable {
 		return undo;
 	}
 	
-	private HashMap<Block, Material> buildWallY(){
-		HashMap<Block, Material> undo = new HashMap<Block, Material>();
+	private HashMap<Block, Buildr_UndoBlockContainer> buildWallY(){
+		HashMap<Block, Buildr_UndoBlockContainer> undo = new HashMap<Block, Buildr_UndoBlockContainer>();
 		int fixed_Y = position1.getY();
 		int startx = calcStartPoint(position1.getX(), position2.getX());
 		int startz = calcStartPoint(position1.getZ(), position2.getZ());
@@ -97,12 +94,12 @@ public class Buildr_Wallbuilder implements Runnable {
 				
 				if (aironly) {
 					if (actionBlock.getType().equals(Material.AIR)) {
-						undo.put(actionBlock, actionBlock.getType());
+						undo.put(actionBlock, new Buildr_UndoBlockContainer(actionBlock.getType(), actionBlock.getData()));
 						actionBlock.setType(material);
 					}
 				}
 				else {
-					undo.put(actionBlock, actionBlock.getType());
+					undo.put(actionBlock, new Buildr_UndoBlockContainer(actionBlock.getType(), actionBlock.getData()));
 					actionBlock.setType(material);
 				}
 
@@ -114,8 +111,8 @@ public class Buildr_Wallbuilder implements Runnable {
 		return undo;
 	}
 	
-	private HashMap<Block, Material> buildWallZ(){
-		HashMap<Block, Material> undo = new HashMap<Block, Material>();
+	private HashMap<Block, Buildr_UndoBlockContainer> buildWallZ(){
+		HashMap<Block, Buildr_UndoBlockContainer> undo = new HashMap<Block, Buildr_UndoBlockContainer>();
 		int fixed_Z = position1.getZ();
 		int startx = calcStartPoint(position1.getX(), position2.getX());
 		int starty = calcStartPoint(position1.getY(), position2.getY());
@@ -132,12 +129,12 @@ public class Buildr_Wallbuilder implements Runnable {
 				
 				if (aironly) {
 					if (actionBlock.getType().equals(Material.AIR)) {
-						undo.put(actionBlock, actionBlock.getType());
+						undo.put(actionBlock, new Buildr_UndoBlockContainer(actionBlock.getType(), actionBlock.getData()));
 						actionBlock.setType(material);
 					}
 				}
 				else {
-					undo.put(actionBlock, actionBlock.getType());
+					undo.put(actionBlock, new Buildr_UndoBlockContainer(actionBlock.getType(), actionBlock.getData()));
 					actionBlock.setType(material);
 				}
 

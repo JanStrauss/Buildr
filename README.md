@@ -172,4 +172,13 @@ rest is not done yet... might add it on demand but the limitations in the config
 
 TODO:
 -----
-*	Better Wallbuilder, not just walls that are dimension parallel
+*	Non-parallel Wallbuilder
+*	Linebuilder
+*	Cuboidbuilder
+*	Spherebuilder
+*	Cylinderbuilder 
+*	and other stuff
+
+KNOWN ISSUES:
+-------------
+*	?

@@ -2,6 +2,7 @@ package me.simplex.buildr;
 
 import java.util.HashMap;
 
+import me.simplex.buildr.util.Buildr_UndoBlockContainer;
 import me.simplex.buildr.util.Buildr_WoolType;
 
 import org.bukkit.ChatColor;
@@ -102,13 +103,14 @@ public class Buildr_Commands {
 		Player player = (Player)sender;
 		int blockheight = player.getLocation().getBlockY()+height-1;
 		Location location = new Location(player.getWorld(), player.getLocation().getBlockX(), blockheight, player.getLocation().getBlockZ());
-		HashMap<Block, Material> UnDoList = new HashMap<Block, Material>();		
+		HashMap<Block, Buildr_UndoBlockContainer> UnDoList = new HashMap<Block, Buildr_UndoBlockContainer>();		
 		if (blockheight > 128) {
 			blockheight = 128;
 		}
 		if (size == 0 || size == 1) {
-			UnDoList.put(player.getWorld().getBlockAt(location),player.getWorld().getBlockAt(location).getType());
-			player.getWorld().getBlockAt(location).setTypeId(material);
+			Block block = player.getWorld().getBlockAt(location);
+			UnDoList.put(block,new Buildr_UndoBlockContainer(block.getType(), block.getData()));
+			block.setTypeId(material);
 		}
 		else {
 			int offset;
@@ -124,7 +126,8 @@ public class Buildr_Commands {
 			
 			for (int i = 0; i < size; i++) { //x
 				for (int j = 0; j < size; j++) {//z
-					UnDoList.put(player.getWorld().getBlockAt(x, blockheight, z), player.getWorld().getBlockAt(x, blockheight, z).getType());
+					Block block = player.getWorld().getBlockAt(x, blockheight, z);
+					UnDoList.put(block, new Buildr_UndoBlockContainer(block.getType(), block.getData()));
 					player.getWorld().getBlockAt(x, blockheight, z).setTypeId(material);
 					z++;
 				}
@@ -145,10 +148,11 @@ public class Buildr_Commands {
 		return;
 		}
 		Player player = (Player)sender;
-		HashMap<Block, Material> undos = plugin.getUndoList().getAndDeleteFromStack(player);
+		HashMap<Block, Buildr_UndoBlockContainer> undos = plugin.getUndoList().getAndDeleteFromStack(player);
 		if (undos != null) {
 			for (Block block : undos.keySet()) {
-				block.setType(undos.get(block));
+				block.setType(undos.get(block).getMaterial());
+				block.setData(undos.get(block).getMaterialData());
 			}
 			plugin.log(player.getName()+" used /bu: "+undos.size()+" blocks affected");
 			sender.sendMessage(undos.size()+" blocks restored");
