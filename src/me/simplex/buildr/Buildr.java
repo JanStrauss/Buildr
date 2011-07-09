@@ -1,7 +1,6 @@
 package me.simplex.buildr;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.logging.Logger;
 
 import me.simplex.buildr.listener.Buildr_BlockListener;
@@ -55,7 +54,7 @@ public class Buildr extends JavaPlugin {
 	  private ArrayList<World> worldBuildAllowed;
 	  private ArrayList<Player> playerBuildMode;
 	  private ArrayList<String> toProcessPlayers;
-	  private ArrayList<Buildr_Wallbuilder> startedWalls;
+	  private ArrayList<Buildr_WallManager> startedWalls;
 
 
 	@Override
@@ -88,7 +87,7 @@ public class Buildr extends JavaPlugin {
 		worldBuildAllowed 	= new ArrayList<World>();
 		playerBuildMode 	= new ArrayList<Player>();
 		toProcessPlayers 	= new ArrayList<String>();
-		startedWalls 		= new ArrayList<Buildr_Wallbuilder>();
+		startedWalls 		= new ArrayList<Buildr_WallManager>();
 		 
 		//load settings
 		log("Buildr v"+version+" loading..");
@@ -479,7 +478,7 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	public boolean checkPlayerHasStartedWall(Player player){
-		for (Buildr_Wallbuilder wallbuilder : startedWalls) {
+		for (Buildr_WallManager wallbuilder : startedWalls) {
 			if (wallbuilder.getWallcreater() == player) {
 				return true;
 			}
@@ -503,8 +502,8 @@ public class Buildr extends JavaPlugin {
 		return false;
 	}
 	
-	public Buildr_Wallbuilder giveWallbuilder(Player player){
-		for (Buildr_Wallbuilder wallbuilder : startedWalls) {
+	public Buildr_WallManager giveWallbuilder(Player player){
+		for (Buildr_WallManager wallbuilder : startedWalls) {
 			if (wallbuilder.getWallcreater() == player) {
 				return wallbuilder;
 			}
@@ -513,7 +512,7 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	public void removeStartedWall(Player player){
-		for (Buildr_Wallbuilder wallbuilder : startedWalls) {
+		for (Buildr_WallManager wallbuilder : startedWalls) {
 			if (wallbuilder.getWallcreater() == player) {
 				startedWalls.remove(wallbuilder);
 				return;
@@ -554,7 +553,7 @@ public class Buildr extends JavaPlugin {
 		if (!checkPlayerHasStartedWall(player)) {
 			return;
 		}
-		Buildr_Wallbuilder wallbuilder = giveWallbuilder(player);
+		Buildr_WallManager wallbuilder = giveWallbuilder(player);
 		if (!wallbuilder.isCoordinate1placed()) {
 			wallbuilder.addCoordinate1(clickedBlock);
 			player.sendMessage("Got positon 1 of your wall at ["+ChatColor.BLUE+clickedBlock.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getY()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getZ()+ChatColor.WHITE+"]");
@@ -564,9 +563,7 @@ public class Buildr extends JavaPlugin {
 		player.sendMessage("Got positon 2 of your wall at ["+ChatColor.BLUE+clickedBlock.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getY()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getZ()+ChatColor.WHITE+"]");
 			if (wallbuilder.checkCoordinates(clickedBlock)) {
 				player.sendMessage("Positions OK, build wall..");
-				HashMap<Block, Material> undo = wallbuilder.startBuild();
-				getUndoList().addToStack(undo, player);
-				player.sendMessage("done! Placed "+undo.size()+" blocks");
+				wallbuilder.startBuild();
 				removeStartedWall(player);
 			}
 			else {
@@ -657,7 +654,7 @@ public class Buildr extends JavaPlugin {
 	/**
 	 * @return the startedWalls
 	 */
-	public ArrayList<Buildr_Wallbuilder> getStartedWalls() {
+	public ArrayList<Buildr_WallManager> getStartedWalls() {
 		return startedWalls;
 	}
 }

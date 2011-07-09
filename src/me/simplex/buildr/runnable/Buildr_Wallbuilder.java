@@ -1,46 +1,38 @@
-package me.simplex.buildr;
+package me.simplex.buildr.runnable;
 
 import java.util.HashMap;
 
+import me.simplex.buildr.Buildr;
 import me.simplex.buildr.util.Buildr_WallType;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_Wallbuilder {
-	private Player wallcreater;
+public class Buildr_Wallbuilder implements Runnable {
 	private Block position1,position2;
 	private Buildr_WallType type;
 	private Material material;
 	private boolean aironly;
-	private boolean coordinate1placed = false;
+	private Buildr plugin;
+	private Player player;
 	
-	public Buildr_Wallbuilder(Player player, Material material, boolean aironly) {
-		this.wallcreater=player;
+	public Buildr_Wallbuilder(Block position1, Block position2,
+			Buildr_WallType type, Material material, boolean aironly,
+			Buildr plugin, Player player) {
+		super();
+		this.position1 = position1;
+		this.position2 = position2;
+		this.type = type;
 		this.material = material;
 		this.aironly = aironly;
+		this.plugin = plugin;
+		this.player = player;
 	}
-	
-	public void addCoordinate1(Block position1){
-		this.position1 = position1;
-		coordinate1placed = true;
-	}
-	
-	public boolean checkCoordinates(Block position2){
-		this.position2=position2;
-		Buildr_WallType wallType = checkWallType();
-		if (wallType==null) {
-			return false;
-		}
-		else {
-			this.type = wallType;
-			return true;
-		}
-	}
-	
-	public HashMap<Block, Material> startBuild(){
-		HashMap<Block, Material> undoItem=null;
+
+	@Override
+	public void run() {
+		HashMap<Block, Material> undoItem= null;
 		switch (type) {
 		case WALL_X: undoItem = buildWallX(); break;
 		case WALL_Y: undoItem = buildWallY(); break;
@@ -48,7 +40,8 @@ public class Buildr_Wallbuilder {
 		default:
 			break;
 		}
-		return undoItem;
+		plugin.getUndoList().addToStack(undoItem, player);
+		player.sendMessage("done! Placed "+undoItem.size()+" blocks");
 	}
 	
 	private HashMap<Block, Material> buildWallX(){
@@ -171,34 +164,5 @@ public class Buildr_Wallbuilder {
 			distance = 100;
 		}
 		return distance+1;
-	}
-	
-	private Buildr_WallType checkWallType(){
-		if (position1.getX() == position2.getX()) {
-			return Buildr_WallType.WALL_X;
-		}
-		if (position1.getY() == position2.getY()) {
-			return Buildr_WallType.WALL_Y;
-		}
-		if (position1.getZ() == position2.getZ()) {
-			return Buildr_WallType.WALL_Z;
-		}
-		else {
-			return null;
-		}
-	}
-
-	/**
-	 * @return the wallcreater
-	 */
-	public Player getWallcreater() {
-		return wallcreater;
-	}
-	/**
-	 * 
-	 * @return is coordinate1placed
-	 */
-	public boolean isCoordinate1placed(){
-		return coordinate1placed;
 	}
 }

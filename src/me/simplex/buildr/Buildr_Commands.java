@@ -230,7 +230,7 @@ public class Buildr_Commands {
 			plugin.removeStartedWall((Player)sender);
 			sender.sendMessage(ChatColor.YELLOW+"previous started Wall dismissed.");
 		}
-		plugin.getStartedWalls().add(new Buildr_Wallbuilder((Player)sender, material, aironly));
+		plugin.getStartedWalls().add(new Buildr_WallManager((Player)sender, material, aironly, plugin));
 		String buildinfo ="Started new Wall. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on block 1 while holding a stick to continue");
