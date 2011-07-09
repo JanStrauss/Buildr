@@ -1,10 +1,8 @@
 package me.simplex.buildr.runnable;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import me.simplex.buildr.Buildr;
-import me.simplex.buildr.util.Buildr_Container_UndoBlock;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,19 +10,17 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-public class Buildr_Runnable_TreeFeller implements Runnable {
+public class Buildr_Runnable_TreeFeller_Collector implements Runnable {
 	
 	private ArrayList<Block> logs;
 	private ArrayList<Block> leaves;
 	private ArrayList<Block> checked;
 	
-	private HashMap<Block, Buildr_Container_UndoBlock> undo;
-	
 	private Block baseblock;
 	private Buildr plugin;
 	private Player player;
 	
-	public Buildr_Runnable_TreeFeller(Block baseblock,  Buildr plugin, Player player) {
+	public Buildr_Runnable_TreeFeller_Collector(Block baseblock,  Buildr plugin, Player player) {
 		this.baseblock = baseblock;
 		this.plugin = plugin;
 		this.player = player;
@@ -32,8 +28,6 @@ public class Buildr_Runnable_TreeFeller implements Runnable {
 		this.logs = new ArrayList<Block>();
 		this.leaves = new ArrayList<Block>();
 		this.checked = new ArrayList<Block>();
-		
-		this.undo = new HashMap<Block, Buildr_Container_UndoBlock>();
 	}
 
 	@Override
@@ -45,12 +39,7 @@ public class Buildr_Runnable_TreeFeller implements Runnable {
 			plugin.log(player.getName()+" caused a StackOverflow with the Treecutter. Location: ["+player.getLocation().getBlockX()+","+player.getLocation().getBlockY()+","+player.getLocation().getBlockZ()+"]");
 			return;
 		}
-				
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new RemoveIt());
-		
-		player.sendMessage("Felt Tree. Blocks changed: "+undo.size());
-		plugin.getUndoList().addToStack(undo, player);
-		plugin.log(player.getName()+" felt a tree: "+undo.size()+" blocks affected");
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_TreeFeller_Perform(logs, leaves, plugin, player));
 	}
 	
 	private void checkBlock(Block base){
@@ -152,33 +141,5 @@ public class Buildr_Runnable_TreeFeller implements Runnable {
 		case  9: ret =  toProcess.getRelative(BlockFace.DOWN); break;
 		}
 		return ret;
-	}
-
-	private boolean checkSize(){
-		if (logs.size()+leaves.size()>2000) {
-			return false;
-		}
-		return true;
-	}
-	
-	private class RemoveIt implements Runnable {
-		public void run() {
-			for (Block blk : logs) {
-				undo.put(blk, new Buildr_Container_UndoBlock(blk.getType(), blk.getData()));
-				blk.setType(Material.AIR);
-			}
-			if (plugin.getConfigValue("TREECUTTER_CUT_LEAVES")) {
-				if (checkSize()) {	
-					for (Block blk : leaves) {
-						undo.put(blk,  new Buildr_Container_UndoBlock(blk.getType(), blk.getData()));
-						blk.setType(Material.AIR);
-					}
-				}
-				else {
-					player.sendMessage(ChatColor.YELLOW+"WARNING: Too many blocks, will only remove log");
-				}
-			}
-		}
-		
 	}
 }

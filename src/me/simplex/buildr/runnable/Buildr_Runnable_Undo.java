@@ -31,7 +31,5 @@ public Buildr_Runnable_Undo(Player player, Buildr plugin) {
 		else {
 			player.sendMessage("Nothing to undo");
 		}
-		
 	}
-
 }
