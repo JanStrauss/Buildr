@@ -19,23 +19,17 @@ public class Buildr_Runnable_TimeChecker implements Runnable {
 	@Override
 	public void run() {
 		while(isAlive()){
-		for (World world : plugin.getWorldBuildMode()) {
-			if (plugin.getConfigValue("GLOBALBUILD_TIME")) {
-				if (world.getTime()>=10000) {
-					world.setTime(0);
-					plugin.log("time reset");
+			for (World world : plugin.getWorldBuildMode()) {
+				if (plugin.getConfigValue("GLOBALBUILD_TIME")) {
+					if (world.getTime()>=10000) {
+						world.setTime(0);
+						plugin.log("time reset");
+					}
 				}
 			}
 		}
-		//plugin.log("Time checked");
-		try {
-			Thread.sleep(30000); //sleep 30sec
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		} 
-		}
-		plugin.log("stopped TimeThread.");
 	}
+	
 	public boolean isAlive() {
 		return alive;
 	}

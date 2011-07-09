@@ -1,7 +1,7 @@
 package me.simplex.buildr.listener;
 
 import me.simplex.buildr.Buildr;
-import me.simplex.buildr.runnable.Buildr_Runnable_TreeFeller_Collector;
+import me.simplex.buildr.runnable.Buildr_Runnable_TreeFeller_Collect;
 import me.simplex.buildr.util.Buildr_Converter_BlockToDrop;
 
 import org.bukkit.ChatColor;
@@ -51,7 +51,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 			if (event.getClickedBlock().getType() == Material.LOG || plugin.checkTreecuterFireOnLeaves(event.getClickedBlock())) {
 				if (plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
 					if (plugin.checkPermission(event.getPlayer(), "buildr.feature.treecutter")) {
-						plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Buildr_Runnable_TreeFeller_Collector(event.getClickedBlock(), plugin, event.getPlayer()));
+						plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Buildr_Runnable_TreeFeller_Collect(event.getClickedBlock(), plugin, event.getPlayer()));
 						event.setCancelled(true);
 					}
 				}

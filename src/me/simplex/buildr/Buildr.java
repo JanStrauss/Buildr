@@ -49,7 +49,6 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_Manager_Configuration cfgManager;
 	  private Buildr_Manager_UndoStack unDoStack;
 
-	  private Thread thread;
 	  private Buildr_Runnable_TimeChecker timeHandler;
 	  private String pluginDirectory;
 	  private PluginManager pm;
@@ -64,9 +63,9 @@ public class Buildr extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		log("Shutdown..");
+		importantLog("Shutdown..");
 		timeHandler.setAlive(false);
-		log("Buildr v"+version+" stopped.");
+		importantLog("Buildr v"+version+" stopped.");
 	}
 
 	@Override
@@ -95,34 +94,34 @@ public class Buildr extends JavaPlugin {
 		startedWalls 		= new ArrayList<Buildr_Manager_Wallbuilder>();
 		 
 		//load settings
-		log("Buildr v"+version+" loading..");
+		importantLog("Buildr v"+version+" loading..");
 			
 		if (cfgManager.checkDirectory()) {
-			log("created Buildr directory");
+			importantLog("created Buildr directory");
 		}
 		if (!cfgManager.checkConfigFile()) {
 			cfgManager.createSettings();
-			log("created Buildr Configfile settings.cfg");
+			importantLog("created Buildr Configfile settings.cfg");
 		}
 		cfgManager.loadSettings();
-		log("loaded settings.cfg");
+		importantLog("loaded settings.cfg");
 
 		if (getConfigValue("GENERAL_DISPLAY_SETTINGS_ON_LOAD")) {
 			for (String cfg : cfgManager.getSettings().keySet()) {
-				log("KEY: "+cfg+" VALUE: "+getConfigValue(cfg));
+				importantLog("KEY: "+cfg+" VALUE: "+getConfigValue(cfg));
 			}
 		}
 		if (invManager.startupCheck()) {
-			log("created Inventory directory");
+			importantLog("created Inventory directory");
 		}
 		
 			setupPermissions();
 			
 		// check for InventoryStateFile
 		if (invManager.checkInventoryStateFile()) {
-			log("loading InventoyStateFile..");
+			importantLog("loading InventoyStateFile..");
 			toProcessPlayers.addAll(invManager.loadInventoryStateFile());
-			log("found "+toProcessPlayers.size()+" builder(s) to treat on login");
+			importantLog("found "+toProcessPlayers.size()+" builder(s) to treat on login");
 		}
 
 		
@@ -137,17 +136,15 @@ public class Buildr extends JavaPlugin {
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
 		pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Event.Priority.Normal, this);
 		pm.registerEvent(Type.PLAYER_PORTAL, playerListener, Event.Priority.Normal, this);
-		log("Listener registered");
+		importantLog("Listener registered");
 
 
 		 
 		// TimeThread 
-		timeHandler = new Buildr_Runnable_TimeChecker(this);
-		thread = new Thread(timeHandler,prefix+"Time Handler");
-		thread.start();
+		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Buildr_Runnable_TimeChecker(this), (20*60)*30, (20*60)*30);
 
 		log("started TimeThread");
-		log("Buildr v"+version+" loaded");
+		importantLog("Buildr v"+version+" loaded");
 	}
 	
 	@Override
@@ -179,6 +176,12 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	public void log(String msg){
+		if (getConfigValue("GENERAL_DETAILED_LOG")) {
+			log.info(prefix+msg);
+		}
+	}
+	
+	private void importantLog(String msg){
 		log.info(prefix+msg);
 	}
 	

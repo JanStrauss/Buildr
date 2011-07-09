@@ -10,7 +10,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 
-public class Buildr_Runnable_TreeFeller_Collector implements Runnable {
+public class Buildr_Runnable_TreeFeller_Collect implements Runnable {
 	
 	private ArrayList<Block> logs;
 	private ArrayList<Block> leaves;
@@ -20,7 +20,7 @@ public class Buildr_Runnable_TreeFeller_Collector implements Runnable {
 	private Buildr plugin;
 	private Player player;
 	
-	public Buildr_Runnable_TreeFeller_Collector(Block baseblock,  Buildr plugin, Player player) {
+	public Buildr_Runnable_TreeFeller_Collect(Block baseblock,  Buildr plugin, Player player) {
 		this.baseblock = baseblock;
 		this.plugin = plugin;
 		this.player = player;

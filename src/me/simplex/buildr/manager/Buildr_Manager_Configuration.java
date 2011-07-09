@@ -75,6 +75,9 @@ public class Buildr_Manager_Configuration {
 			writer.write("# Enable Permissions, if false Buildr checks for OP (will also check for OP if no PermissionsPlugin was found)");writer.newLine();
 			writer.write("GENERAL_USE_PERMISSIONS=true");writer.newLine();
 			writer.newLine();
+			writer.write("# If set, will log quite alot in the server console (mostly debug)");writer.newLine();
+			writer.write("GENERAL_DETAILED_LOG=false");writer.newLine();
+			writer.newLine();
 			writer.newLine();
 			
 			writer.write("##### Globalbuildmode settings: ############################");writer.newLine();
