@@ -29,7 +29,6 @@ public class Buildr_Runnable_TreeFeller_Perform implements Runnable {
 		this.undo = new HashMap<Block, Buildr_Container_UndoBlock>();
 	}
 
-
 	public void run() {
 		for (Block blk : logs) {
 			undo.put(blk, new Buildr_Container_UndoBlock(blk.getType(), blk.getData()));

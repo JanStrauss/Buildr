@@ -18,7 +18,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class Buildr_Manager_Commands {
-	Buildr plugin;
+	private Buildr plugin;
+
 	
 	/**
 	 * 
@@ -414,6 +415,8 @@ public class Buildr_Manager_Commands {
 		plugin.getUndoList().addToStack(UnDoList, player);
 		plugin.log(player.getName()+" used /airfloor: "+UnDoList.size()+" blocks affected");
 	}
+	
+
 	/**
 	 * 
 	 * @param sender

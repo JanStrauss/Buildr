@@ -4,32 +4,20 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import org.bukkit.block.Block;
 
-public class Buildr_Stack_Undo {
-
+public class Buildr_Stack_Undo extends LinkedList<HashMap<Block, Buildr_Container_UndoBlock>> {
+	private static final long serialVersionUID = 2757868195679642194L;
 	private int maxSize;
-	private LinkedList<HashMap<Block, Buildr_Container_UndoBlock>> stack;
 
 	public Buildr_Stack_Undo(final int maxSize){
+		super();
 		this.maxSize = maxSize;
-		stack = new LinkedList<HashMap<Block, Buildr_Container_UndoBlock>>();
 	}
  
-	public HashMap<Block, Buildr_Container_UndoBlock> peek() {
-		return stack.peekFirst();
-	}
-  	
-  	public HashMap<Block, Buildr_Container_UndoBlock> poll() {
-  		return stack.pollFirst();
-  	}
-  	
+  	@Override
   	public void push(HashMap<Block, Buildr_Container_UndoBlock> item){
-  		stack.push(item);
-  		if (stack.size() > maxSize) {
-			stack.removeLast();
+  		push(item);
+  		if (size() > maxSize) {
+			removeLast();
 		}
   	}
-
-	public boolean isEmpty() {
-		return stack.isEmpty();
-	}
 }
