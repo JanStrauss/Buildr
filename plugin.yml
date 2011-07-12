@@ -26,7 +26,12 @@ commands:
            Example: /<command>
   wall:
     description: Starts the wall building function
-    aliases: [bw]
+    aliases: [wl]
+    usage: |
+           /<command> <material #> {a|air|aironly}
+  wallx:
+    description: Starts the wallx building function
+    aliases: [wlx]
     usage: |
            /<command> <material #> {a|air|aironly}
   airfloor:

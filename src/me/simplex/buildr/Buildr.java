@@ -12,8 +12,8 @@ import me.simplex.buildr.manager.Buildr_Manager_Commands;
 import me.simplex.buildr.manager.Buildr_Manager_Configuration;
 import me.simplex.buildr.manager.Buildr_Manager_Inventory;
 import me.simplex.buildr.manager.Buildr_Manager_UndoStack;
-import me.simplex.buildr.manager.Buildr_Manager_Wallbuilder;
 import me.simplex.buildr.runnable.Buildr_Runnable_TimeChecker;
+import me.simplex.buildr.util.Buildr_Interface_Building;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -59,7 +59,7 @@ public class Buildr extends JavaPlugin {
 	  private ArrayList<World> worldBuildAllowed;
 	  private ArrayList<Player> playerBuildMode;
 	  private ArrayList<String> toProcessPlayers;
-	  private ArrayList<Buildr_Manager_Wallbuilder> startedWalls;
+	  private ArrayList<Buildr_Interface_Building> startedBuildings;
 	  
 	  private LinkedList<Player> playerCuttingTree;
 
@@ -94,7 +94,7 @@ public class Buildr extends JavaPlugin {
 		worldBuildAllowed 	= new ArrayList<World>();
 		playerBuildMode 	= new ArrayList<Player>();
 		toProcessPlayers 	= new ArrayList<String>();
-		startedWalls 		= new ArrayList<Buildr_Manager_Wallbuilder>();
+		startedBuildings 		= new ArrayList<Buildr_Interface_Building>();
 		playerCuttingTree 	= new LinkedList<Player>();
 		 
 		//load settings
@@ -217,8 +217,8 @@ public class Buildr extends JavaPlugin {
 		}
 	}
 	
-	public boolean checkPlayerHasStartedWall(Player player){
-		for (Buildr_Manager_Wallbuilder wallbuilder : startedWalls) {
+	public boolean checkPlayerHasStartedBuilding(Player player){
+		for (Buildr_Interface_Building wallbuilder : startedBuildings) {
 			if (wallbuilder.getWallcreater() == player) {
 				return true;
 			}
@@ -242,8 +242,8 @@ public class Buildr extends JavaPlugin {
 		return false;
 	}
 	
-	public Buildr_Manager_Wallbuilder giveWallbuilder(Player player){
-		for (Buildr_Manager_Wallbuilder wallbuilder : startedWalls) {
+	public Buildr_Interface_Building giveBuilderManager(Player player){
+		for (Buildr_Interface_Building wallbuilder : startedBuildings) {
 			if (wallbuilder.getWallcreater() == player) {
 				return wallbuilder;
 			}
@@ -251,10 +251,10 @@ public class Buildr extends JavaPlugin {
 		return null;
 	}
 	
-	public void removeStartedWall(Player player){
-		for (Buildr_Manager_Wallbuilder wallbuilder : startedWalls) {
+	public void removeStartedBuilding(Player player){
+		for (Buildr_Interface_Building wallbuilder : startedBuildings) {
 			if (wallbuilder.getWallcreater() == player) {
-				startedWalls.remove(wallbuilder);
+				startedBuildings.remove(wallbuilder);
 				return;
 			}
 		}
@@ -289,26 +289,28 @@ public class Buildr extends JavaPlugin {
 			}
 	}
 	
-	public void playerClickedWallBlock(Player player, Block clickedBlock) {
-		if (!checkPlayerHasStartedWall(player)) {
+	public void playerClickedBuildingBlock(Player player, Block clickedBlock) {
+		if (!checkPlayerHasStartedBuilding(player)) {
 			return;
 		}
-		Buildr_Manager_Wallbuilder wallbuilder = giveWallbuilder(player);
-		if (!wallbuilder.isCoordinate1placed()) {
+		
+		Buildr_Interface_Building wallbuilder = giveBuilderManager(player);
+		if (!wallbuilder.isCoordinate1Placed()) {
 			wallbuilder.addCoordinate1(clickedBlock);
-			player.sendMessage("Got positon 1 of your wall at ["+ChatColor.BLUE+clickedBlock.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getY()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getZ()+ChatColor.WHITE+"]");
+			player.sendMessage("Got positon 1 of your "+wallbuilder.getBuildingName()+" at ["+ChatColor.BLUE+clickedBlock.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getY()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getZ()+ChatColor.WHITE+"]");
 			player.sendMessage("Now rightclick on block 2 (again with a stick) to continue");
 		}
 		else {
-		player.sendMessage("Got positon 2 of your wall at ["+ChatColor.BLUE+clickedBlock.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getY()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getZ()+ChatColor.WHITE+"]");
-			if (wallbuilder.checkCoordinates(clickedBlock)) {
-				player.sendMessage("Positions OK, build wall..");
+		player.sendMessage("Got positon 2 of your"+wallbuilder.getBuildingName()+" at ["+ChatColor.BLUE+clickedBlock.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getY()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getZ()+ChatColor.WHITE+"]");
+			
+		if (wallbuilder.checkCoordinates()) {
+				player.sendMessage("Positions OK, build "+wallbuilder.getBuildingName()+"..");
 				wallbuilder.startBuild();
-				removeStartedWall(player);
+				removeStartedBuilding(player);
 			}
 			else {
-				removeStartedWall(player);
-				player.sendMessage(ChatColor.RED+"ERROR: "+ChatColor.WHITE+"Atleast one dimension of the blocks must be the same. Wallbuild stopped.");
+				removeStartedBuilding(player);
+				player.sendMessage(ChatColor.RED+"ERROR: "+ChatColor.WHITE+wallbuilder.getCoordinateCheckFailed());
 			}
 		}
 	}
@@ -398,7 +400,7 @@ public class Buildr extends JavaPlugin {
 	/**
 	 * @return the startedWalls
 	 */
-	public ArrayList<Buildr_Manager_Wallbuilder> getStartedWalls() {
-		return startedWalls;
+	public ArrayList<Buildr_Interface_Building> getStartedBuildings() {
+		return startedBuildings;
 	}
 }

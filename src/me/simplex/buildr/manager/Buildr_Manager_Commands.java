@@ -497,12 +497,32 @@ public class Buildr_Manager_Commands {
 		if (!plugin.getConfigValue("FEATURE_WALLBUILDER")) {
 			return;
 		}
-		if (plugin.checkPlayerHasStartedWall((Player)sender)) {
-			plugin.removeStartedWall((Player)sender);
-			sender.sendMessage(ChatColor.YELLOW+"previous started Wall dismissed.");
+		if (plugin.checkPlayerHasStartedBuilding((Player)sender)) {
+			plugin.removeStartedBuilding((Player)sender);
+			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
 		}
-		plugin.getStartedWalls().add(new Buildr_Manager_Wallbuilder((Player)sender, material, aironly, plugin));
+		plugin.getStartedBuildings().add(new Buildr_Manager_Wallbuilder((Player)sender, material, aironly, plugin));
 		String buildinfo ="Started new Wall. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly;
+		sender.sendMessage(buildinfo);
+		sender.sendMessage("Rightclick on block 1 while holding a stick to continue");
+	}
+	
+	/**
+	 * 
+	 * @param sender
+	 * @param material
+	 * @param aironly
+	 */
+	public void cmd_wallx(CommandSender sender, Material material, boolean aironly) {
+		if (!plugin.getConfigValue("FEATURE_WALLXBUILDER")) {
+			return;
+		}
+		if (plugin.checkPlayerHasStartedBuilding((Player)sender)) {
+			plugin.removeStartedBuilding((Player)sender);
+			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
+		}
+		plugin.getStartedBuildings().add(new Buildr_Manager_Wallxbuilder((Player)sender, material, aironly, plugin));
+		String buildinfo ="Started new WallX. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on block 1 while holding a stick to continue");
 	}

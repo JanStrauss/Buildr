@@ -44,7 +44,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 		}
 		
 		else if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsStick(event.getPlayer())) {
-			plugin.playerClickedWallBlock(event.getPlayer(),event.getClickedBlock());
+			plugin.playerClickedBuildingBlock(event.getPlayer(),event.getClickedBlock());
 		}
 		
 		else if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsAxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {

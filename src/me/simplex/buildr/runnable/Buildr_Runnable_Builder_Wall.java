@@ -10,7 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_Runnable_Wallbuilder implements Runnable {
+public class Buildr_Runnable_Builder_Wall implements Runnable {
 	private Block position1,position2;
 	private Buildr_Type_Wall type;
 	private Material material;
@@ -18,7 +18,7 @@ public class Buildr_Runnable_Wallbuilder implements Runnable {
 	private Buildr plugin;
 	private Player player;
 	
-	public Buildr_Runnable_Wallbuilder(Block position1, Block position2,Buildr_Type_Wall type, Material material, boolean aironly,Buildr plugin, Player player) {
+	public Buildr_Runnable_Builder_Wall(Block position1, Block position2,Buildr_Type_Wall type, Material material, boolean aironly,Buildr plugin, Player player) {
 		this.position1 = position1;
 		this.position2 = position2;
 		this.type = type;

@@ -20,4 +20,5 @@ public class Buildr_Stack_Undo extends LinkedList<HashMap<Block, Buildr_Containe
 			removeLast();
 		}
   	}
+  	
 }

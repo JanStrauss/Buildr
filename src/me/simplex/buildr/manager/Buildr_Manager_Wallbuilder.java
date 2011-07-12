@@ -1,14 +1,15 @@
 package me.simplex.buildr.manager;
 
 import me.simplex.buildr.Buildr;
-import me.simplex.buildr.runnable.Buildr_Runnable_Wallbuilder;
+import me.simplex.buildr.runnable.Buildr_Runnable_Builder_Wall;
+import me.simplex.buildr.util.Buildr_Interface_Building;
 import me.simplex.buildr.util.Buildr_Type_Wall;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_Manager_Wallbuilder {
+public class Buildr_Manager_Wallbuilder implements Buildr_Interface_Building {
 	private Player wallcreater;
 	private Block position1,position2;
 	private Buildr_Type_Wall type;
@@ -29,8 +30,8 @@ public class Buildr_Manager_Wallbuilder {
 		coordinate1placed = true;
 	}
 	
-	public boolean checkCoordinates(Block position2){
-		this.position2=position2;
+	@Override
+	public boolean checkCoordinates(){
 		Buildr_Type_Wall wallType = checkWallType();
 		if (wallType==null) {
 			return false;
@@ -56,13 +57,15 @@ public class Buildr_Manager_Wallbuilder {
 		}
 	}
 	
+	@Override
 	public void startBuild(){
-		new Thread(new Buildr_Runnable_Wallbuilder(position1,position2,type,material,aironly,plugin,wallcreater)).start();
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Wall(position1,position2,type,material,aironly,plugin,wallcreater));
 	}
 	
 	/**
 	 * @return the wallcreater
 	 */
+	@Override
 	public Player getWallcreater() {
 		return wallcreater;
 	}
@@ -70,8 +73,24 @@ public class Buildr_Manager_Wallbuilder {
 	 * 
 	 * @return is coordinate1placed
 	 */
-	public boolean isCoordinate1placed(){
+	public boolean isCoordinate1Placed(){
 		return coordinate1placed;
+	}
+
+	@Override
+	public void addCoordinate2(Block position2) {
+		this.position2=position2;
+	}
+
+
+	@Override
+	public String getBuildingName() {
+		return "Wall";
+	}
+	
+	@Override
+	public String getCoordinateCheckFailed() {
+		return "Atleast one dimension of the blocks must be the same. Wallbuild stopped.";
 	}
 
 }
