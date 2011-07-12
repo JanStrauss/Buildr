@@ -50,9 +50,9 @@ public class Buildr_Runnable_Builder_Cuboid implements Runnable {
 		int start_z 	= calcStartPoint(position1.getZ(), position2.getZ());
 		int end_z 		= calcEndPoint(position1.getZ(), position2.getZ());
 		
-		for (int pos_x = start_x; pos_x < end_x; pos_x++) {
-			for (int pos_z = start_z; pos_z < end_z; pos_z++) {
-				for (int pos_y = start_y; pos_y < end_y; pos_y++) {
+		for (int pos_x = start_x; pos_x <= end_x; pos_x++) {
+			for (int pos_z = start_z; pos_z <= end_z; pos_z++) {
+				for (int pos_y = start_y; pos_y <= end_y; pos_y++) {
 					Block block_handle = player.getWorld().getBlockAt(pos_x, pos_y, pos_z);
 					if (aironly && hollow) {
 						if (block_handle.getType().equals(Material.AIR) && checkBlockIsOutside(block_handle)) {

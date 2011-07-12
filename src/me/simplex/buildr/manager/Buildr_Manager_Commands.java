@@ -333,7 +333,7 @@ public class Buildr_Manager_Commands {
 		
 		//CUBOID
 		else if (command.getName().equalsIgnoreCase("cuboid")) {
-			if (args.length < 1 || args.length > 2) {
+			if (args.length < 1 || args.length > 3) {
 				return false;
 			}
 			if (plugin.checkPermission((Player)sender, "buildr.cmd.cuboid")) {
@@ -362,7 +362,7 @@ public class Buildr_Manager_Commands {
 							this.cmd_cuboid(sender, material, false, false);
 							return true;
 					}
-					else if (args.length==2) {
+					else if (args.length == 2) {
 						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
 							this.cmd_cuboid(sender, material, true,false);
 							return true;
@@ -375,7 +375,7 @@ public class Buildr_Manager_Commands {
 							return false;
 						}
 					}
-					else if (args.length ==3) {
+					else if (args.length == 3) {
 						boolean hollow = false;
 						boolean aironly = false;
 						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
