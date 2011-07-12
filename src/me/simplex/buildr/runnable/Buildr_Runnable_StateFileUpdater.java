@@ -32,7 +32,7 @@ public class Buildr_Runnable_StateFileUpdater implements Runnable{
 			playernames.add(player.getName());
 		}
 		
-		System.out.println("StateFile update. size:"+builders.size());
+		//System.out.println("StateFile update. size:"+builders.size());
 		
 		try {
 			ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(statefile));

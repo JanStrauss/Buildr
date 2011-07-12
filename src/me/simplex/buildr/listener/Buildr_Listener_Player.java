@@ -96,7 +96,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		plugin.checkPlayerIsToProcess(event.getPlayer());
 			if (plugin.checkPlayerBuildMode(event.getPlayer())) {
-				plugin.log("Treated "+event.getPlayer().getName()+". Inventory restored.");
+				plugin.importantLog("Treated "+event.getPlayer().getName()+". Inventory restored.");
 				plugin.leaveBuildmode(event.getPlayer());
 			}
 	}

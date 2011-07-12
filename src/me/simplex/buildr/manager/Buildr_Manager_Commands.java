@@ -272,6 +272,63 @@ public class Buildr_Manager_Commands {
 			}
 			return true;
 		}
+		
+		//WALLX
+		else if (command.getName().equalsIgnoreCase("wallx")) {
+			if (args.length < 1 || args.length > 2) {
+				return false;
+			}
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.wallx")) {
+				if (args.length >=1 && args.length <=2) {
+					Material material;
+					int id;
+					try {
+						id = Integer.parseInt(args[0]);
+					} catch (NumberFormatException e) {
+						try {
+							id = Material.matchMaterial(args[0]).getId();
+						} catch (NullPointerException e2) {
+							sender.sendMessage(ChatColor.RED+"wrong format");
+							return true;
+						}
+
+					}
+					if (Material.getMaterial(id).isBlock()) {
+						material = Material.getMaterial(id);
+					}
+					else {
+						sender.sendMessage(ChatColor.RED+"unvalid blocktype");
+						return true;
+					}
+					if (args.length==1) {
+							this.cmd_wallx(sender, material, false);
+							return true;
+					}
+					else if (args.length==2) {
+						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
+							this.cmd_wallx(sender, material, true);
+							return true;
+						}
+						else {
+							return false;
+						}
+					}
+					else {
+						return false;
+					}
+				}
+				else {
+					return false;
+				}
+
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
+		
 		//LOCATION
 		else if (command.getName().equalsIgnoreCase("location")) {
 			if (plugin.checkPermission((Player)sender, "buildr.cmd.location")) {
@@ -422,7 +479,10 @@ public class Buildr_Manager_Commands {
 	 * @param sender
 	 */
 	public void cmd_undo(CommandSender sender){		
-		if (!plugin.getConfigValue("FEATURE_AIRFLOOR") && !plugin.getConfigValue("FEATURE_WALLBUILDER") && !plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
+		if (!plugin.getConfigValue("FEATURE_AIRFLOOR") && 
+			!plugin.getConfigValue("FEATURE_WALLBUILDER") && 
+			!plugin.getConfigValue("FEATURE_WALLXBUILDER") && 
+			!plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
 			return;
 		}
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Undo((Player)sender, plugin));

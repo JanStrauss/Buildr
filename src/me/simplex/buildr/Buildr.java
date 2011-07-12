@@ -50,7 +50,6 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_Manager_Configuration cfgManager;
 	  private Buildr_Manager_UndoStack unDoStack;
 
-	  private Buildr_Runnable_TimeChecker timeHandler;
 	  private String pluginDirectory;
 	  private PluginManager pm;
 	  
@@ -66,8 +65,6 @@ public class Buildr extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		importantLog("Shutdown..");
-		timeHandler.setAlive(false);
 		importantLog("Buildr v"+version+" stopped.");
 	}
 
@@ -185,7 +182,7 @@ public class Buildr extends JavaPlugin {
 		}
 	}
 	
-	private void importantLog(String msg){
+	public void importantLog(String msg){
 		log.info(prefix+msg);
 	}
 	
@@ -302,7 +299,7 @@ public class Buildr extends JavaPlugin {
 		}
 		else {
 		player.sendMessage("Got positon 2 of your"+wallbuilder.getBuildingName()+" at ["+ChatColor.BLUE+clickedBlock.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getY()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getZ()+ChatColor.WHITE+"]");
-			
+		wallbuilder.addCoordinate2(clickedBlock);
 		if (wallbuilder.checkCoordinates()) {
 				player.sendMessage("Positions OK, build "+wallbuilder.getBuildingName()+"..");
 				wallbuilder.startBuild();

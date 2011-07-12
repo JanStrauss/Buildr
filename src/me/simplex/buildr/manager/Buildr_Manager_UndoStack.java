@@ -63,7 +63,7 @@ public class Buildr_Manager_UndoStack {
 		
 		public Buildr_StackItem(Player player, HashMap<Block, Buildr_Container_UndoBlock> blocks) {
 			this.orig_blocks = new Buildr_Stack_Undo(20);
-			this.orig_blocks.push(blocks);
+			this.orig_blocks.pushWithLimit(blocks);
 			this.player = player;
 		}
 

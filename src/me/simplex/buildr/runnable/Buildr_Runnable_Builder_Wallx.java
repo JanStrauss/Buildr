@@ -6,6 +6,7 @@ import java.util.HashMap;
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.util.Buildr_Container_UndoBlock;
 
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -40,62 +41,57 @@ public class Buildr_Runnable_Builder_Wallx implements Runnable {
 		ArrayList<Block> groundblocks = new ArrayList<Block>();
 		ArrayList<Block> toBuild = new ArrayList<Block>();
 		HashMap<Block, Buildr_Container_UndoBlock> undo = new HashMap<Block, Buildr_Container_UndoBlock>();
-		 
+		
 		int height 		= calcDistance(position1.getY(), position2.getY());
 		int level  		= calcStartPoint(position1.getY(), position2.getY());
 		
-		int side_a 		= calcDistance(position1.getX(), position2.getX());
-		int side_b 		= calcDistance(position1.getZ(), position2.getZ());
+		int pos1_x		= position1.getX();
+		int pos2_x		= position2.getX();
 		
-		int[] data_x 	= calcStartAndEndPoint(position1.getX(), position2.getX());
-		int start_x 	= data_x[0];
-		int end_x    	= data_x[1];
+		int pos1_z		= position1.getZ();
+		int pos2_z		= position2.getZ();
+		
+		int side_a 		= calcDistance(pos1_x, pos2_x);
+		int side_b 		= calcDistance(pos1_z, pos2_z);
+		
+		double lenght 	= Math.sqrt((side_a*side_a)+(side_b*side_b));
+		double mod 		= 1/lenght;
+		double pos_x	= 0;
+		double pos_z;
+		double i		= 0;
+		
+		
+		while(i<=1){
 			
-		int[] data_z 	= calcStartAndEndPoint(position1.getZ(), position2.getZ());
-		int start_z 	= data_z[0];
-		int end_z    	= data_z[1];
-		
-		int lenght 		= (int)(Math.sqrt((side_a*side_a)+(side_b*side_b)));
-		
-		for (double i = 0; i < lenght; i=i+0.25) {
-			int pos_x = (int)(start_x + i*(end_x-start_x));
-			int pos_z = (int)(start_z + i*(end_z-start_z));
+			pos_x = pos1_x + i*(pos2_x-pos1_x);
+			pos_z = pos1_z + i*(pos2_z-pos1_z);
 			
-			Block block_handle = player.getWorld().getBlockAt(pos_x, level,pos_z);
+			Location loc = new Location(player.getWorld(), pos_x, level, pos_z);
+			
+			Block block_handle = player.getWorld().getBlockAt(loc);
+			
 			if (!groundblocks.contains(block_handle)) {
 				groundblocks.add(block_handle);
-				for (int j = level; j < level+height; j++) {
+				for (int j = 0; j < height; j++) {
 					if (aironly) {
-						if (block_handle.getType() == Material.AIR) {
-							toBuild.add(player.getWorld().getBlockAt(pos_x, j,pos_z));
+						if (block_handle.getType().equals(Material.AIR)) {
+							toBuild.add(block_handle.getRelative(0, j, 0));
 						}
 					}
 					else {
-						toBuild.add(player.getWorld().getBlockAt(pos_x, j,pos_z));
+						toBuild.add(block_handle.getRelative(0, j, 0));
 					}
 					
 				}
 			}
+			i=i+(mod);
 		}
+		
 		for (Block block : toBuild) {
 			undo.put(block, new Buildr_Container_UndoBlock(block.getType(), block.getData()));
 			block.setType(material);
 		}
 		return undo;
-	}
-
-	
-	private int[] calcStartAndEndPoint(int coordinate1, int coordinate2){
-		int[] ret = new int[2];
-		if (coordinate1<=coordinate2) {
-			ret[0]= coordinate1;
-			ret[1]= coordinate2;
-		}
-		else {
-			ret[0]= coordinate2;
-			ret[1]= coordinate1;
-		}
-		return ret;
 	}
 	
 	private int calcStartPoint(int coordinate1, int coordinate2){
