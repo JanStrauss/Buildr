@@ -1,4 +1,4 @@
-package me.simplex.buildr.runnable;
+package me.simplex.buildr.runnable.builder;
 
 import java.util.HashMap;
 
@@ -158,9 +158,7 @@ public class Buildr_Runnable_Builder_Wall implements Runnable {
 	
 	private int calcDistance(int coordinate1, int coordinate2){
 		int distance = Math.abs(coordinate1-coordinate2);
-		if (distance >100) {
-			distance = 100;
-		}
+
 		return distance+1;
 	}
 }

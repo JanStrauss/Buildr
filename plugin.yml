@@ -34,6 +34,11 @@ commands:
     aliases: [wlx]
     usage: |
            /<command> <material #> {a|air|aironly}
+  cuboid:
+    description: Starts the cuboid building function
+    aliases: [cube,cu]
+    usage: |
+           /<command> <material #> {a|air|aironly} {h|hollow}
   airfloor:
     description: places a block (area) of material x y blocks above the player
     aliases: [af,airf]

@@ -3,6 +3,9 @@ package me.simplex.buildr.manager;
 import java.util.HashMap;
 
 import me.simplex.buildr.Buildr;
+import me.simplex.buildr.manager.builder.Buildr_Manager_Builder_Cuboid;
+import me.simplex.buildr.manager.builder.Buildr_Manager_Builder_Wall;
+import me.simplex.buildr.manager.builder.Buildr_Manager_Builder_Wallx;
 import me.simplex.buildr.runnable.Buildr_Runnable_Undo;
 import me.simplex.buildr.util.Buildr_Container_UndoBlock;
 import me.simplex.buildr.util.Buildr_Type_Wool;
@@ -328,6 +331,77 @@ public class Buildr_Manager_Commands {
 			return true;
 		}
 		
+		//CUBOID
+		else if (command.getName().equalsIgnoreCase("cuboid")) {
+			if (args.length < 1 || args.length > 2) {
+				return false;
+			}
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.cuboid")) {
+				if (args.length >=1 && args.length <=3) {
+					Material material;
+					int id;
+					try {
+						id = Integer.parseInt(args[0]);
+					} catch (NumberFormatException e) {
+						try {
+							id = Material.matchMaterial(args[0]).getId();
+						} catch (NullPointerException e2) {
+							sender.sendMessage(ChatColor.RED+"wrong format");
+							return true;
+						}
+
+					}
+					if (Material.getMaterial(id).isBlock()) {
+						material = Material.getMaterial(id);
+					}
+					else {
+						sender.sendMessage(ChatColor.RED+"unvalid blocktype");
+						return true;
+					}
+					if (args.length==1) {
+							this.cmd_cuboid(sender, material, false, false);
+							return true;
+					}
+					else if (args.length==2) {
+						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
+							this.cmd_cuboid(sender, material, true,false);
+							return true;
+						}
+						else if(args[1].equalsIgnoreCase("h") || args[1].equalsIgnoreCase("hollow")) {
+							this.cmd_cuboid(sender, material, false, true);
+							return true;
+						}
+						else {
+							return false;
+						}
+					}
+					else if (args.length ==3) {
+						boolean hollow = false;
+						boolean aironly = false;
+						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
+							aironly = true;
+						}
+						if(args[2].equalsIgnoreCase("h") || args[2].equalsIgnoreCase("hollow")) {
+							hollow = true;
+						}
+						this.cmd_cuboid(sender, material, aironly, hollow);
+						return true;
+					}
+					else {
+						return false;
+					}
+				}
+				else {
+					return false;
+				}
+
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
+		
 		
 		//LOCATION
 		else if (command.getName().equalsIgnoreCase("location")) {
@@ -554,14 +628,14 @@ public class Buildr_Manager_Commands {
 	 * @param aironly
 	 */
 	public void cmd_wall(CommandSender sender, Material material, boolean aironly) {
-		if (!plugin.getConfigValue("FEATURE_WALLBUILDER")) {
+		if (!plugin.getConfigValue("FEATURE_BUILDER_WALL")) {
 			return;
 		}
 		if (plugin.checkPlayerHasStartedBuilding((Player)sender)) {
 			plugin.removeStartedBuilding((Player)sender);
 			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
 		}
-		plugin.getStartedBuildings().add(new Buildr_Manager_Wallbuilder((Player)sender, material, aironly, plugin));
+		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Wall((Player)sender, material, aironly, plugin));
 		String buildinfo ="Started new Wall. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on block 1 while holding a stick to continue");
@@ -574,15 +648,29 @@ public class Buildr_Manager_Commands {
 	 * @param aironly
 	 */
 	public void cmd_wallx(CommandSender sender, Material material, boolean aironly) {
-		if (!plugin.getConfigValue("FEATURE_WALLXBUILDER")) {
+		if (!plugin.getConfigValue("FEATURE_BUILDER_WALLX")) {
 			return;
 		}
 		if (plugin.checkPlayerHasStartedBuilding((Player)sender)) {
 			plugin.removeStartedBuilding((Player)sender);
 			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
 		}
-		plugin.getStartedBuildings().add(new Buildr_Manager_Wallxbuilder((Player)sender, material, aironly, plugin));
+		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Wallx((Player)sender, material, aironly, plugin));
 		String buildinfo ="Started new WallX. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly;
+		sender.sendMessage(buildinfo);
+		sender.sendMessage("Rightclick on block 1 while holding a stick to continue");
+	}
+	
+	public void cmd_cuboid(CommandSender sender, Material material, boolean aironly,boolean hollow) {
+		if (!plugin.getConfigValue("FEATURE_BUILDER_CUBOID")) {
+			return;
+		}
+		if (plugin.checkPlayerHasStartedBuilding((Player)sender)) {
+			plugin.removeStartedBuilding((Player)sender);
+			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
+		}
+		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Cuboid((Player)sender, material, aironly, hollow, plugin));
+		String buildinfo ="Started new Cuboid. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly+ChatColor.WHITE+" Hollow: "+ChatColor.BLUE+hollow;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on block 1 while holding a stick to continue");
 	}

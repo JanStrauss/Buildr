@@ -130,10 +130,13 @@ public class Buildr_Manager_Configuration {
 			writer.write("FEATURE_AIRFLOOR=true");writer.newLine();
 			writer.newLine();
 			writer.write("# Enable the wall command");writer.newLine(); //done
-			writer.write("FEATURE_WALLBUILDER=true");writer.newLine();
+			writer.write("FEATURE_BUILDER_WALL=true");writer.newLine();
 			writer.newLine();
 			writer.write("# Enable the wallx command");writer.newLine(); //done
-			writer.write("FEATURE_WALLXBUILDER=true");writer.newLine();
+			writer.write("FEATURE_BUILDER_WALLX=true");writer.newLine();
+			writer.newLine();
+			writer.write("# Enable the cuboid command");writer.newLine(); //done
+			writer.write("FEATURE_BUILDER_CUBOID=true");writer.newLine();
 			writer.newLine();
 			writer.write("# Enable the top command");writer.newLine(); //done
 			writer.write("FEATURE_TOP=true");writer.newLine();

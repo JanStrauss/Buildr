@@ -1,14 +1,14 @@
-package me.simplex.buildr.manager;
+package me.simplex.buildr.manager.builder;
 
 import me.simplex.buildr.Buildr;
-import me.simplex.buildr.runnable.Buildr_Runnable_Builder_Wallx;
+import me.simplex.buildr.runnable.builder.Buildr_Runnable_Builder_Wallx;
 import me.simplex.buildr.util.Buildr_Interface_Building;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_Manager_Wallxbuilder implements Buildr_Interface_Building {
+public class Buildr_Manager_Builder_Wallx implements Buildr_Interface_Building {
 	private Player wallcreater;
 	private Block position1,position2;
 	private Material material;
@@ -16,7 +16,7 @@ public class Buildr_Manager_Wallxbuilder implements Buildr_Interface_Building {
 	private boolean coordinate1placed = false;
 	private Buildr plugin;
 	
-	public Buildr_Manager_Wallxbuilder(Player player, Material material, boolean aironly, Buildr plugin) {
+	public Buildr_Manager_Builder_Wallx(Player player, Material material, boolean aironly, Buildr plugin) {
 		this.wallcreater=player;
 		this.material = material;
 		this.aironly = aironly;
