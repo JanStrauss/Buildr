@@ -5,16 +5,11 @@ import me.simplex.buildr.Buildr;
 import org.bukkit.World;
 
 public class Buildr_Runnable_TimeChecker implements Runnable {
-	Buildr plugin;
-	boolean alive;
-
-
+	private Buildr plugin;
 
 	public Buildr_Runnable_TimeChecker(Buildr plugin) {
 		this.plugin = plugin;
-		this.alive=true;
 	}
-
 
 	@Override
 	public void run() {
@@ -26,16 +21,6 @@ public class Buildr_Runnable_TimeChecker implements Runnable {
 					}
 				}
 			}
-		System.out.println("time checked");
+		//System.out.println("time checked");
 	}
-	
-	public boolean isAlive() {
-		return alive;
-	}
-
-
-	public void setAlive(boolean alive) {
-		this.alive = alive;
-	}
-
 }

@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.manager.builder.Buildr_Manager_Builder_Cuboid;
+import me.simplex.buildr.manager.builder.Buildr_Manager_Builder_Cylinder;
 import me.simplex.buildr.manager.builder.Buildr_Manager_Builder_Sphere;
 import me.simplex.buildr.manager.builder.Buildr_Manager_Builder_Wall;
 import me.simplex.buildr.manager.builder.Buildr_Manager_Builder_Wallx;
@@ -474,7 +475,7 @@ public class Buildr_Manager_Commands {
 			return true;
 		}
 		
-		//SPHERE
+		//HALFSPHERE
 		else if (command.getName().equalsIgnoreCase("halfsphere")) {
 			if (args.length < 1 || args.length > 3) {
 				return false;
@@ -545,6 +546,76 @@ public class Buildr_Manager_Commands {
 			return true;
 		}
 		
+		//HALFSPHERE
+		else if (command.getName().equalsIgnoreCase("cylinder")) {
+			if (args.length < 1 || args.length > 3) {
+				return false;
+			}
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.cylinder")) {
+				if (args.length >=1 && args.length <=3) {
+					Material material;
+					int id;
+					try {
+						id = Integer.parseInt(args[0]);
+					} catch (NumberFormatException e) {
+						try {
+							id = Material.matchMaterial(args[0]).getId();
+						} catch (NullPointerException e2) {
+							sender.sendMessage(ChatColor.RED+"wrong format");
+							return true;
+						}
+
+					}
+					if (Material.getMaterial(id).isBlock()) {
+						material = Material.getMaterial(id);
+					}
+					else {
+						sender.sendMessage(ChatColor.RED+"unvalid blocktype");
+						return true;
+					}
+					if (args.length==1) {
+							this.cmd_cylinder(sender, material, false, false);
+							return true;
+					}
+					else if (args.length == 2) {
+						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
+							this.cmd_cylinder(sender, material, true,false);
+							return true;
+						}
+						else if(args[1].equalsIgnoreCase("h") || args[1].equalsIgnoreCase("hollow")) {
+							this.cmd_cylinder(sender, material, false, true);
+							return true;
+						}
+						else {
+							return false;
+						}
+					}
+					else if (args.length == 3) {
+						boolean hollow = false;
+						boolean aironly = false;
+						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
+							aironly = true;
+						}
+						if(args[2].equalsIgnoreCase("h") || args[2].equalsIgnoreCase("hollow")) {
+							hollow = true;
+						}
+						this.cmd_cylinder(sender, material, aironly, hollow);
+						return true;
+					}
+					else {
+						return false;
+					}
+				}
+				else {
+					return false;
+				}
+
+			}
+			else {
+				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+			}
+			return true;
+		}
 		
 		//LOCATION
 		else if (command.getName().equalsIgnoreCase("location")) {
@@ -844,6 +915,20 @@ public class Buildr_Manager_Commands {
 		String buildinfo ="Started new half sphere. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly+ChatColor.WHITE+" Hollow: "+ChatColor.BLUE+hollow;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on the center of your sphere while holding a stick to continue");
+	}
+	
+	public void cmd_cylinder(CommandSender sender, Material material, boolean aironly,boolean hollow) {
+		if (!plugin.getConfigValue("FEATURE_BUILDER_CYLINDER")) {
+			return;
+		}
+		if (plugin.checkPlayerHasStartedBuilding((Player)sender)) {
+			plugin.removeStartedBuilding((Player)sender);
+			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
+		}
+		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Cylinder((Player)sender, material, aironly, hollow, plugin));
+		String buildinfo ="Started new cylinder. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly+ChatColor.WHITE+" Hollow: "+ChatColor.BLUE+hollow;
+		sender.sendMessage(buildinfo);
+		sender.sendMessage("Rightclick on the center of your cylinder while holding a stick to continue");
 	}
 
 	/**

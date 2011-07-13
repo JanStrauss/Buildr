@@ -86,7 +86,7 @@ public class Buildr_Runnable_Builder_Sphere implements Runnable {
 	
 	private Location calcStartLocation(double radius, Block center){
 		int radius_round = (int)Math.round(radius);
-		if (halfcube) {
+		if (!halfcube) {
 			return center.getRelative(-radius_round, -radius_round, -radius_round).getLocation();
 		}
 		else {

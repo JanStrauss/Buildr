@@ -142,7 +142,7 @@ public class Buildr extends JavaPlugin {
 
 		 
 		// TimeThread 
-		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Buildr_Runnable_TimeChecker(this), (20*60)*10, (20*60)*10);
+		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Buildr_Runnable_TimeChecker(this), 20*30, 20*30);
 
 		log("started TimeThread");
 		importantLog("Buildr v"+version+" loaded");
