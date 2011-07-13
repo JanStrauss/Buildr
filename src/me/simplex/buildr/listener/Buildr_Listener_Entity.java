@@ -10,25 +10,25 @@ import org.bukkit.event.entity.ItemSpawnEvent;
 
 public class Buildr_Listener_Entity extends EntityListener {
 	private Buildr plugin;
-	
+
 	public Buildr_Listener_Entity(Buildr plugin) {
 		this.plugin = plugin;
 	}
-	
-// Godmode: No Dmg
-@Override
-public void onEntityDamage(EntityDamageEvent event) {
-	if (event.getEntity() instanceof Player) {
-		if (plugin.getConfigValue("BUILDMODE_GODMODE")) {
-			if (plugin.checkPlayerBuildMode((Player)event.getEntity())) {
-				event.setCancelled(true);
+
+	// Godmode: No Dmg
+	@Override
+	public void onEntityDamage(EntityDamageEvent event) {
+		if (event.getEntity() instanceof Player) {
+			if (plugin.getConfigValue("BUILDMODE_GODMODE")) {
+				if (plugin.checkPlayerBuildMode((Player) event.getEntity())) {
+					event.setCancelled(true);
+				}
 			}
 		}
 	}
-}
 
-//Globalbuildmode: No Drops
-@Override
+	// Globalbuildmode: No Drops
+	@Override
 	public void onItemSpawn(ItemSpawnEvent event) {
 		if (plugin.getConfigValue("GLOBALBUILD_NODROPS")) {
 			if (plugin.checkWorldBuildMode(event.getLocation().getWorld())) {
@@ -37,12 +37,12 @@ public void onEntityDamage(EntityDamageEvent event) {
 		}
 	}
 
-//Godmode: No Target
-@Override
+	// Godmode: No Target
+	@Override
 	public void onEntityTarget(EntityTargetEvent event) {
 		if (event.getTarget() instanceof Player) {
 			if (plugin.getConfigValue("BUILDMODE_GODMODE")) {
-				if (plugin.checkPlayerBuildMode((Player)event.getTarget())) {
+				if (plugin.checkPlayerBuildMode((Player) event.getTarget())) {
 					event.setCancelled(true);
 				}
 			}

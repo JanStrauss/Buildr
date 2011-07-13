@@ -18,7 +18,6 @@ public class Buildr_Runnable_TimeChecker implements Runnable {
 
 	@Override
 	public void run() {
-		while(isAlive()){
 			for (World world : plugin.getWorldBuildMode()) {
 				if (plugin.getConfigValue("GLOBALBUILD_TIME")) {
 					if (world.getTime()>=10000) {
@@ -27,7 +26,7 @@ public class Buildr_Runnable_TimeChecker implements Runnable {
 					}
 				}
 			}
-		}
+		System.out.println("time checked");
 	}
 	
 	public boolean isAlive() {

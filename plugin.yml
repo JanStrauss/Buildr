@@ -39,6 +39,21 @@ commands:
     aliases: [cube,cu]
     usage: |
            /<command> <material #> {a|air|aironly} {h|hollow}
+  sphere:
+    description: Starts the sphere building function
+    aliases: [ball,sp]
+    usage: |
+           /<command> <material #> {a|air|aironly} {h|hollow}
+  halfsphere:
+    description: Starts the half sphere building function
+    aliases: [hball,hsp]
+    usage: |
+           /<command> <material #> {a|air|aironly} {h|hollow}
+  cylinder:
+    description: Starts the cylinder building function
+    aliases: [cyl,tube]
+    usage: |
+           /<command> <material #> {a|air|aironly} {h|hollow}
   airfloor:
     description: places a block (area) of material x y blocks above the player
     aliases: [af,airf]

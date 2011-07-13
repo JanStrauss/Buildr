@@ -138,6 +138,9 @@ public class Buildr_Manager_Configuration {
 			writer.write("# Enable the cuboid command");writer.newLine(); //done
 			writer.write("FEATURE_BUILDER_CUBOID=true");writer.newLine();
 			writer.newLine();
+			writer.write("# Enable the sphere command");writer.newLine(); //done
+			writer.write("FEATURE_BUILDER_SPHERE=true");writer.newLine();
+			writer.newLine();
 			writer.write("# Enable the top command");writer.newLine(); //done
 			writer.write("FEATURE_TOP=true");writer.newLine();
 			writer.newLine();
