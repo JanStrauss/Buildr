@@ -91,7 +91,7 @@ public class Buildr extends JavaPlugin {
 		worldBuildAllowed 	= new ArrayList<World>();
 		playerBuildMode 	= new ArrayList<Player>();
 		toProcessPlayers 	= new ArrayList<String>();
-		startedBuildings 		= new ArrayList<Buildr_Interface_Building>();
+		startedBuildings 	= new ArrayList<Buildr_Interface_Building>();
 		playerCuttingTree 	= new LinkedList<Player>();
 		 
 		//load settings
@@ -125,7 +125,6 @@ public class Buildr extends JavaPlugin {
 			importantLog("found "+toProcessPlayers.size()+" builder(s) to treat on login");
 		}
 
-		
 		//register Listener
 		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this); 
 		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Event.Priority.Normal, this); 
@@ -139,7 +138,7 @@ public class Buildr extends JavaPlugin {
 		pm.registerEvent(Type.PLAYER_PORTAL, playerListener, Event.Priority.Normal, this);
 		importantLog("Listener registered");
 
-
+		
 		 
 		// TimeThread 
 		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Buildr_Runnable_TimeChecker(this), 20*30, 20*30);

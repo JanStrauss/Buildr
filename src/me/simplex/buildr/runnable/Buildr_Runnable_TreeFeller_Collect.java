@@ -36,7 +36,9 @@ public class Buildr_Runnable_TreeFeller_Collect implements Runnable {
 			checkBlock(baseblock);
 		} catch (StackOverflowError e) {
 			player.sendMessage(ChatColor.RED+"ERROR: Too many blocks, you can't fell that tree. Try to split it.");
-			plugin.log(player.getName()+" caused a StackOverflow with the Treecutter. Location: ["+player.getLocation().getBlockX()+","+player.getLocation().getBlockY()+","+player.getLocation().getBlockZ()+"]");
+			plugin.importantLog(player.getName()+" caused a StackOverflow with the Treecutter. Location: ["+player.getLocation().getBlockX()+","+player.getLocation().getBlockY()+","+player.getLocation().getBlockZ()+"]");
+			plugin.getPlayerCuttingTree().remove(player);
+			//e.printStackTrace();
 			return;
 		}
 		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_TreeFeller_Perform(logs, leaves, plugin, player));

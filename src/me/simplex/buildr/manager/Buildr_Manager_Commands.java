@@ -40,6 +40,7 @@ public class Buildr_Manager_Commands {
 			if (args.length != 0) {
 				return false;
 			}
+			
 			if (plugin.checkPermission((Player)sender, "buildr.cmd.globalbuild")) {
 				World world;
 				if (args.length > 0) {
