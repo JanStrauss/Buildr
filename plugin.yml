@@ -1,6 +1,6 @@
 name: Buildr
 main: me.simplex.buildr.Buildr
-version: 0.3.1
+version: 0.4
 website: http://www.over9000.eu
 author: simplex
 description: >
