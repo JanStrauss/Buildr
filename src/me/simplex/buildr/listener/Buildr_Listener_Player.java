@@ -29,7 +29,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 @Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsPickaxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
-			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK")) {
+			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreak")) {
 				// Check for Drops
 				if (!(plugin.checkWorldBuildMode(event.getClickedBlock().getWorld()))) {
 					for (ItemStack stk : converter.convert(event.getClickedBlock())) {
