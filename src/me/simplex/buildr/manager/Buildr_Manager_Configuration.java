@@ -119,8 +119,11 @@ public class Buildr_Manager_Configuration {
 			writer.write("# Enable the unlimited itemstacks");writer.newLine(); //done
 			writer.write("BUILDMODE_UNLIMITED_ITEMSTACK=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable the treecutter (Axe)");writer.newLine(); //TODO
+			writer.write("# Enable the treecutter (axe)");writer.newLine(); //done
 			writer.write("BUILDMODE_TREECUTTER=true");writer.newLine();
+			writer.newLine();
+			writer.write("# Enable the jump command");writer.newLine(); //done
+			writer.write("BUILDMODE_JUMP=true");writer.newLine();
 			writer.newLine();
 			writer.newLine();
 			

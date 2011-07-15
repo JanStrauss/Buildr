@@ -115,7 +115,7 @@ public class Buildr_Manager_Commands {
 						material = 35;
 						Buildr_Type_Wool woolcolor;
 						try {
-							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase().substring(5));
 							mat_data = woolcolor.getBlockDataValue();
 						} catch (IllegalArgumentException e) {
 							sender.sendMessage("No such wool");
@@ -253,7 +253,7 @@ public class Buildr_Manager_Commands {
 						id = 35;
 						Buildr_Type_Wool woolcolor;
 						try {
-							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase().substring(5));
 							mat_data = woolcolor.getBlockDataValue();
 						} catch (IllegalArgumentException e) {
 							sender.sendMessage("No such wool");
@@ -323,7 +323,7 @@ public class Buildr_Manager_Commands {
 						id = 35;
 						Buildr_Type_Wool woolcolor;
 						try {
-							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase().substring(5));
 							mat_data = woolcolor.getBlockDataValue();
 						} catch (IllegalArgumentException e) {
 							sender.sendMessage("No such wool");
@@ -392,7 +392,7 @@ public class Buildr_Manager_Commands {
 						id = 35;
 						Buildr_Type_Wool woolcolor;
 						try {
-							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase().substring(5));
 							mat_data = woolcolor.getBlockDataValue();
 						} catch (IllegalArgumentException e) {
 							sender.sendMessage("No such wool");
@@ -477,7 +477,7 @@ public class Buildr_Manager_Commands {
 						id = 35;
 						Buildr_Type_Wool woolcolor;
 						try {
-							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase().substring(5));
 							mat_data = woolcolor.getBlockDataValue();
 						} catch (IllegalArgumentException e) {
 							sender.sendMessage("No such wool");
@@ -562,7 +562,7 @@ public class Buildr_Manager_Commands {
 						id = 35;
 						Buildr_Type_Wool woolcolor;
 						try {
-							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase().substring(5));
 							mat_data = woolcolor.getBlockDataValue();
 						} catch (IllegalArgumentException e) {
 							sender.sendMessage("No such wool");
@@ -647,7 +647,7 @@ public class Buildr_Manager_Commands {
 						id = 35;
 						Buildr_Type_Wool woolcolor;
 						try {
-							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase().substring(5));
 							mat_data = woolcolor.getBlockDataValue();
 						} catch (IllegalArgumentException e) {
 							sender.sendMessage("No such wool");
@@ -731,6 +731,7 @@ public class Buildr_Manager_Commands {
 			}
 			return true;
 		}
+		
 		//ALLOWBUILD
 		else if (command.getName().equalsIgnoreCase("allowbuild")) {
 			if (plugin.checkPermission((Player)sender, "buildr.cmd.allowbuild")) {
@@ -742,6 +743,12 @@ public class Buildr_Manager_Commands {
 			else {
 				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
 			}
+			return true;
+		}
+		
+		//JUMP
+		else if (command.getName().equalsIgnoreCase("jump")) {
+			this.cmd_jump(sender);
 			return true;
 		}
 		
@@ -757,7 +764,7 @@ public class Buildr_Manager_Commands {
 		}
 		if (plugin.getWorldBuildMode().contains(world)) {
 			plugin.leaveGlobalbuildmode(world);
-			sender.sendMessage("Globalbuildmode disabled");
+			sender.sendMessage(ChatColor.YELLOW+"Globalbuildmode disabled");
 			for (Player inhab : world.getPlayers()) {
 				inhab.sendMessage(ChatColor.AQUA+((Player)sender).getName()+" disabled the Globalbuildmode on the world you are currently in");
 			}
@@ -765,9 +772,9 @@ public class Buildr_Manager_Commands {
 		}
 		else {
 			plugin.enterGlobalbuildmode(world);
-			sender.sendMessage("Globalbuildmode enabled");
+			sender.sendMessage(ChatColor.YELLOW+"Globalbuildmode enabled");
 			for (Player inhab : world.getPlayers()) {
-				inhab.sendMessage(ChatColor.AQUA+((Player)sender).getName()+" ensabled the Globalbuildmode on the world you are currently in");
+				inhab.sendMessage(ChatColor.AQUA+((Player)sender).getName()+" enabled the Globalbuildmode on the world you are currently in");
 			}
 			plugin.log("Globalbuildmode enabled in World "+world.getName());
 		}
@@ -1078,6 +1085,39 @@ public class Buildr_Manager_Commands {
 			for (Player player : world.getPlayers()) {
 				player.sendMessage(((Player)sender).getName()+" unlocked the Buildmode in this world");
 			}
+		}
+	}
+	
+	public void cmd_jump(CommandSender sender){
+		Player player = (Player)sender;
+		if (!plugin.getConfigValue("BUILDMODE_JUMP")){
+			return;
+		}
+		if(!plugin.checkPermission(player, "buildr.feature.jump")){
+			return;
+		}
+		if (!plugin.checkPlayerBuildMode(player)) {
+			player.sendMessage("Only available while in buildmode");
+			return;
+		}
+			
+		Block target = player.getTargetBlock(null, 500);
+		Location loc = target.getLocation();
+		loc.setPitch(player.getLocation().getPitch());
+		loc.setYaw(player.getLocation().getYaw());
+		loc.setY(loc.getY()+1);
+		
+		if (target == null || target.getType().equals(Material.AIR)) {
+			player.sendMessage("No block in range");
+			return;
+		}
+		if (target.getRelative(0, 1, 0).getType().equals(Material.AIR)&& target.getRelative(0, 2, 0).getType().equals(Material.AIR)) {
+			player.teleport(loc);
+		}
+		else {
+
+			loc.setY(player.getWorld().getHighestBlockYAt(loc));
+			player.teleport(loc);
 		}
 	}
 }

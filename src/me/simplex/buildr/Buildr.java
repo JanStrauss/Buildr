@@ -136,9 +136,7 @@ public class Buildr extends JavaPlugin {
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
 		pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Event.Priority.Normal, this);
 		pm.registerEvent(Type.PLAYER_PORTAL, playerListener, Event.Priority.Normal, this);
-		importantLog("Listener registered");
-
-		
+		log("Listener registered");
 		 
 		// TimeThread 
 		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Buildr_Runnable_TimeChecker(this), 20*30, 20*30);

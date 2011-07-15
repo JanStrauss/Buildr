@@ -89,8 +89,14 @@ commands:
            /<command> 
            Example: /<command>
   location:
-    description: returns the 
+    description: returns the location of the block under the player
     aliases: [loc,gps]
+    usage: |
+           /<command> 
+           Example: /<command>
+  jump:
+    description: ports the player to the block that he is looking at
+    aliases: [jmp,go]
     usage: |
            /<command> 
            Example: /<command>
