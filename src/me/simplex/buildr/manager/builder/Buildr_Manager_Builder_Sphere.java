@@ -17,14 +17,16 @@ public class Buildr_Manager_Builder_Sphere implements Buildr_Interface_Building 
 	private boolean coordinate1placed;
 	private boolean halfcube;
 	private Buildr plugin;
+	private byte material_data;
 
-	public Buildr_Manager_Builder_Sphere(Player wallcreater, Material material,boolean aironly, boolean hollow,boolean halfcube, Buildr plugin) {
+	public Buildr_Manager_Builder_Sphere(Player wallcreater, Material material,boolean aironly, boolean hollow,boolean halfcube, Buildr plugin, byte material_data) {
 		this.wallcreater = wallcreater;
 		this.material = material;
 		this.aironly = aironly;
 		this.hollow = hollow;
 		this.plugin = plugin;
 		this.halfcube = halfcube;
+		this.material_data = material_data;
 	}
 
 	@Override
@@ -65,6 +67,6 @@ public class Buildr_Manager_Builder_Sphere implements Buildr_Interface_Building 
 
 	@Override
 	public void startBuild() {
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Sphere(position1, position2, material, aironly, hollow, halfcube, plugin, wallcreater));
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Sphere(position1, position2, material, aironly, hollow, halfcube, plugin, wallcreater,material_data));
 	}
 }

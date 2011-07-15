@@ -16,14 +16,16 @@ public class Buildr_Manager_Builder_Cuboid implements Buildr_Interface_Building 
 	private boolean hollow;
 	private boolean coordinate1placed;
 	private Buildr plugin;
+	private byte material_data;
 
-	public Buildr_Manager_Builder_Cuboid(Player wallcreater,Material material, boolean aironly,boolean hollow, Buildr plugin) {
+	public Buildr_Manager_Builder_Cuboid(Player wallcreater,Material material, boolean aironly,boolean hollow, Buildr plugin, byte material_data) {
 		this.wallcreater = wallcreater;
 		this.material = material;
 		this.aironly = aironly;
 		this.hollow = hollow;
 		this.plugin = plugin;
 		this.coordinate1placed = false;
+		this.material_data = material_data;
 	}
 
 	@Override
@@ -64,6 +66,6 @@ public class Buildr_Manager_Builder_Cuboid implements Buildr_Interface_Building 
 
 	@Override
 	public void startBuild() {
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Cuboid(position1, position2, material, aironly, hollow, plugin, wallcreater));
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Cuboid(position1, position2, material, aironly, hollow, plugin, wallcreater,material_data));
 	}
 }

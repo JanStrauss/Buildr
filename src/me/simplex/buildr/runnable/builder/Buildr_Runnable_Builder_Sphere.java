@@ -18,8 +18,10 @@ public class Buildr_Runnable_Builder_Sphere implements Runnable {
 	private boolean halfcube;
 	private Buildr plugin;
 	private Player player;
+	private byte material_data;
+	
 
-	public Buildr_Runnable_Builder_Sphere(Block position1, Block position2,Material material, boolean aironly, boolean hollow,boolean halfcube,Buildr plugin, Player player) {
+	public Buildr_Runnable_Builder_Sphere(Block position1, Block position2,Material material, boolean aironly, boolean hollow,boolean halfcube,Buildr plugin, Player player, byte material_data) {
 		this.centerblock = position1;
 		this.radius_marker = position2;
 		this.material = material;
@@ -28,6 +30,7 @@ public class Buildr_Runnable_Builder_Sphere implements Runnable {
 		this.player = player;
 		this.hollow = hollow;
 		this.halfcube =halfcube;
+		this.material_data = material_data;
 	}
 
 	@Override
@@ -58,23 +61,27 @@ public class Buildr_Runnable_Builder_Sphere implements Runnable {
 							if (block_handle.getType().equals(Material.AIR) && checkBlockIsOutside(radius,block_handle)) {
 								undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
 								block_handle.setType(material);
+								block_handle.setData(material_data);
 							}
 						}
 						else if (!aironly && hollow) {
 							if (checkBlockIsOutside(radius,block_handle)) {
 								undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
 								block_handle.setType(material);
+								block_handle.setData(material_data);
 							}
 						}
 						else if (aironly && !hollow) {
 							if (block_handle.getType().equals(Material.AIR)) {
 								undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
 								block_handle.setType(material);
+								block_handle.setData(material_data);
 							}
 						}
 						else {
 							undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
 							block_handle.setType(material);
+							block_handle.setData(material_data);
 						}
 					}
 

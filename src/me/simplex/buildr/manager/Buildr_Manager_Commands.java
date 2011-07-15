@@ -110,21 +110,36 @@ public class Buildr_Manager_Commands {
 						}
 					}
 					height = Math.abs(Integer.parseInt(args[1]));
-					try {
-						material = Math.abs(Integer.parseInt(args[0]));
-					} catch (NumberFormatException e) {
+					byte mat_data = (byte)0;
+					if (args[0].toUpperCase().startsWith("WOOL:")) {
+						material = 35;
+						Buildr_Type_Wool woolcolor;
 						try {
-							material = Material.matchMaterial(args[0]).getId();
-						} catch (NullPointerException e2) {
-							sender.sendMessage(ChatColor.RED+"wrong format");
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							mat_data = woolcolor.getBlockDataValue();
+						} catch (IllegalArgumentException e) {
+							sender.sendMessage("No such wool");
 							return true;
+						}
+					}
+					else {
+						try {
+							material = Integer.parseInt(args[0]);
+						} catch (NumberFormatException e) {
+							try {
+								material = Material.matchMaterial(args[0]).getId();
+							} catch (NullPointerException e2) {
+								sender.sendMessage(ChatColor.RED+"wrong format");
+								return true;
+							}
+
 						}
 					}
 					if (Material.getMaterial(material)== null) {
 						sender.sendMessage("Invalid Material");
 						return true;
 					}
-					this.cmd_airfloor(sender, material, height, size);
+					this.cmd_airfloor(sender, material, mat_data, height, size);
 					} 
 				catch (NumberFormatException e) {
 					sender.sendMessage("Wrong format, usage: /airfloor <material> <height> <size>");
@@ -233,17 +248,32 @@ public class Buildr_Manager_Commands {
 				if (args.length >=1 && args.length <=2) {
 					Material material;
 					int id;
-					try {
-						id = Integer.parseInt(args[0]);
-					} catch (NumberFormatException e) {
+					byte mat_data = (byte)0;
+					if (args[0].toUpperCase().startsWith("WOOL:")) {
+						id = 35;
+						Buildr_Type_Wool woolcolor;
 						try {
-							id = Material.matchMaterial(args[0]).getId();
-						} catch (NullPointerException e2) {
-							sender.sendMessage(ChatColor.RED+"wrong format");
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							mat_data = woolcolor.getBlockDataValue();
+						} catch (IllegalArgumentException e) {
+							sender.sendMessage("No such wool");
 							return true;
 						}
-
 					}
+					else {
+						try {
+							id = Integer.parseInt(args[0]);
+						} catch (NumberFormatException e) {
+							try {
+								id = Material.matchMaterial(args[0]).getId();
+							} catch (NullPointerException e2) {
+								sender.sendMessage(ChatColor.RED+"wrong format");
+								return true;
+							}
+
+						}
+					}
+
 					if (Material.getMaterial(id).isBlock()) {
 						material = Material.getMaterial(id);
 					}
@@ -252,12 +282,12 @@ public class Buildr_Manager_Commands {
 						return true;
 					}
 					if (args.length==1) {
-							this.cmd_wall(sender, material, false);
+							this.cmd_wall(sender, material, mat_data, false);
 							return true;
 					}
 					else if (args.length==2) {
 						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
-							this.cmd_wall(sender, material, true);
+							this.cmd_wall(sender, material, mat_data, true);
 							return true;
 						}
 						else {
@@ -288,16 +318,30 @@ public class Buildr_Manager_Commands {
 				if (args.length >=1 && args.length <=2) {
 					Material material;
 					int id;
-					try {
-						id = Integer.parseInt(args[0]);
-					} catch (NumberFormatException e) {
+					byte mat_data = (byte)0;
+					if (args[0].toUpperCase().startsWith("WOOL:")) {
+						id = 35;
+						Buildr_Type_Wool woolcolor;
 						try {
-							id = Material.matchMaterial(args[0]).getId();
-						} catch (NullPointerException e2) {
-							sender.sendMessage(ChatColor.RED+"wrong format");
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							mat_data = woolcolor.getBlockDataValue();
+						} catch (IllegalArgumentException e) {
+							sender.sendMessage("No such wool");
 							return true;
 						}
+					}
+					else {
+						try {
+							id = Integer.parseInt(args[0]);
+						} catch (NumberFormatException e) {
+							try {
+								id = Material.matchMaterial(args[0]).getId();
+							} catch (NullPointerException e2) {
+								sender.sendMessage(ChatColor.RED+"wrong format");
+								return true;
+							}
 
+						}
 					}
 					if (Material.getMaterial(id).isBlock()) {
 						material = Material.getMaterial(id);
@@ -307,12 +351,12 @@ public class Buildr_Manager_Commands {
 						return true;
 					}
 					if (args.length==1) {
-							this.cmd_wallx(sender, material, false);
+							this.cmd_wallx(sender, material, mat_data, false);
 							return true;
 					}
 					else if (args.length==2) {
 						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
-							this.cmd_wallx(sender, material, true);
+							this.cmd_wallx(sender, material, mat_data, true);
 							return true;
 						}
 						else {
@@ -343,16 +387,30 @@ public class Buildr_Manager_Commands {
 				if (args.length >=1 && args.length <=3) {
 					Material material;
 					int id;
-					try {
-						id = Integer.parseInt(args[0]);
-					} catch (NumberFormatException e) {
+					byte mat_data = (byte)0;
+					if (args[0].toUpperCase().startsWith("WOOL:")) {
+						id = 35;
+						Buildr_Type_Wool woolcolor;
 						try {
-							id = Material.matchMaterial(args[0]).getId();
-						} catch (NullPointerException e2) {
-							sender.sendMessage(ChatColor.RED+"wrong format");
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							mat_data = woolcolor.getBlockDataValue();
+						} catch (IllegalArgumentException e) {
+							sender.sendMessage("No such wool");
 							return true;
 						}
+					}
+					else {
+						try {
+							id = Integer.parseInt(args[0]);
+						} catch (NumberFormatException e) {
+							try {
+								id = Material.matchMaterial(args[0]).getId();
+							} catch (NullPointerException e2) {
+								sender.sendMessage(ChatColor.RED+"wrong format");
+								return true;
+							}
 
+						}
 					}
 					if (Material.getMaterial(id).isBlock()) {
 						material = Material.getMaterial(id);
@@ -362,16 +420,16 @@ public class Buildr_Manager_Commands {
 						return true;
 					}
 					if (args.length==1) {
-							this.cmd_cuboid(sender, material, false, false);
+							this.cmd_cuboid(sender, material, mat_data, false, false);
 							return true;
 					}
 					else if (args.length == 2) {
 						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
-							this.cmd_cuboid(sender, material, true,false);
+							this.cmd_cuboid(sender, material, mat_data, true,false);
 							return true;
 						}
 						else if(args[1].equalsIgnoreCase("h") || args[1].equalsIgnoreCase("hollow")) {
-							this.cmd_cuboid(sender, material, false, true);
+							this.cmd_cuboid(sender, material, mat_data, false, true);
 							return true;
 						}
 						else {
@@ -387,7 +445,7 @@ public class Buildr_Manager_Commands {
 						if(args[2].equalsIgnoreCase("h") || args[2].equalsIgnoreCase("hollow")) {
 							hollow = true;
 						}
-						this.cmd_cuboid(sender, material, aironly, hollow);
+						this.cmd_cuboid(sender, material, mat_data, aironly, hollow);
 						return true;
 					}
 					else {
@@ -414,16 +472,30 @@ public class Buildr_Manager_Commands {
 				if (args.length >=1 && args.length <=3) {
 					Material material;
 					int id;
-					try {
-						id = Integer.parseInt(args[0]);
-					} catch (NumberFormatException e) {
+					byte mat_data = (byte)0;
+					if (args[0].toUpperCase().startsWith("WOOL:")) {
+						id = 35;
+						Buildr_Type_Wool woolcolor;
 						try {
-							id = Material.matchMaterial(args[0]).getId();
-						} catch (NullPointerException e2) {
-							sender.sendMessage(ChatColor.RED+"wrong format");
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							mat_data = woolcolor.getBlockDataValue();
+						} catch (IllegalArgumentException e) {
+							sender.sendMessage("No such wool");
 							return true;
 						}
+					}
+					else {
+						try {
+							id = Integer.parseInt(args[0]);
+						} catch (NumberFormatException e) {
+							try {
+								id = Material.matchMaterial(args[0]).getId();
+							} catch (NullPointerException e2) {
+								sender.sendMessage(ChatColor.RED+"wrong format");
+								return true;
+							}
 
+						}
 					}
 					if (Material.getMaterial(id).isBlock()) {
 						material = Material.getMaterial(id);
@@ -433,16 +505,16 @@ public class Buildr_Manager_Commands {
 						return true;
 					}
 					if (args.length==1) {
-							this.cmd_sphere(sender, material, false, false);
+							this.cmd_sphere(sender, material, mat_data, false, false);
 							return true;
 					}
 					else if (args.length == 2) {
 						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
-							this.cmd_sphere(sender, material, true,false);
+							this.cmd_sphere(sender, material, mat_data, true,false);
 							return true;
 						}
 						else if(args[1].equalsIgnoreCase("h") || args[1].equalsIgnoreCase("hollow")) {
-							this.cmd_sphere(sender, material, false, true);
+							this.cmd_sphere(sender, material, mat_data, false, true);
 							return true;
 						}
 						else {
@@ -458,7 +530,7 @@ public class Buildr_Manager_Commands {
 						if(args[2].equalsIgnoreCase("h") || args[2].equalsIgnoreCase("hollow")) {
 							hollow = true;
 						}
-						this.cmd_sphere(sender, material, aironly, hollow);
+						this.cmd_sphere(sender, material, mat_data, aironly, hollow);
 						return true;
 					}
 					else {
@@ -485,16 +557,30 @@ public class Buildr_Manager_Commands {
 				if (args.length >=1 && args.length <=3) {
 					Material material;
 					int id;
-					try {
-						id = Integer.parseInt(args[0]);
-					} catch (NumberFormatException e) {
+					byte mat_data = (byte)0;
+					if (args[0].toUpperCase().startsWith("WOOL:")) {
+						id = 35;
+						Buildr_Type_Wool woolcolor;
 						try {
-							id = Material.matchMaterial(args[0]).getId();
-						} catch (NullPointerException e2) {
-							sender.sendMessage(ChatColor.RED+"wrong format");
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							mat_data = woolcolor.getBlockDataValue();
+						} catch (IllegalArgumentException e) {
+							sender.sendMessage("No such wool");
 							return true;
 						}
+					}
+					else {
+						try {
+							id = Integer.parseInt(args[0]);
+						} catch (NumberFormatException e) {
+							try {
+								id = Material.matchMaterial(args[0]).getId();
+							} catch (NullPointerException e2) {
+								sender.sendMessage(ChatColor.RED+"wrong format");
+								return true;
+							}
 
+						}
 					}
 					if (Material.getMaterial(id).isBlock()) {
 						material = Material.getMaterial(id);
@@ -504,16 +590,16 @@ public class Buildr_Manager_Commands {
 						return true;
 					}
 					if (args.length==1) {
-							this.cmd_half_sphere(sender, material, false, false);
+							this.cmd_half_sphere(sender, material, mat_data, false, false);
 							return true;
 					}
 					else if (args.length == 2) {
 						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
-							this.cmd_half_sphere(sender, material, true,false);
+							this.cmd_half_sphere(sender, material, mat_data, true,false);
 							return true;
 						}
 						else if(args[1].equalsIgnoreCase("h") || args[1].equalsIgnoreCase("hollow")) {
-							this.cmd_half_sphere(sender, material, false, true);
+							this.cmd_half_sphere(sender, material, mat_data, false, true);
 							return true;
 						}
 						else {
@@ -529,7 +615,7 @@ public class Buildr_Manager_Commands {
 						if(args[2].equalsIgnoreCase("h") || args[2].equalsIgnoreCase("hollow")) {
 							hollow = true;
 						}
-						this.cmd_half_sphere(sender, material, aironly, hollow);
+						this.cmd_half_sphere(sender, material, mat_data, aironly, hollow);
 						return true;
 					}
 					else {
@@ -556,16 +642,30 @@ public class Buildr_Manager_Commands {
 				if (args.length >=1 && args.length <=3) {
 					Material material;
 					int id;
-					try {
-						id = Integer.parseInt(args[0]);
-					} catch (NumberFormatException e) {
+					byte mat_data = (byte)0;
+					if (args[0].toUpperCase().startsWith("WOOL:")) {
+						id = 35;
+						Buildr_Type_Wool woolcolor;
 						try {
-							id = Material.matchMaterial(args[0]).getId();
-						} catch (NullPointerException e2) {
-							sender.sendMessage(ChatColor.RED+"wrong format");
+							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase());
+							mat_data = woolcolor.getBlockDataValue();
+						} catch (IllegalArgumentException e) {
+							sender.sendMessage("No such wool");
 							return true;
 						}
+					}
+					else {
+						try {
+							id = Integer.parseInt(args[0]);
+						} catch (NumberFormatException e) {
+							try {
+								id = Material.matchMaterial(args[0]).getId();
+							} catch (NullPointerException e2) {
+								sender.sendMessage(ChatColor.RED+"wrong format");
+								return true;
+							}
 
+						}
 					}
 					if (Material.getMaterial(id).isBlock()) {
 						material = Material.getMaterial(id);
@@ -575,16 +675,16 @@ public class Buildr_Manager_Commands {
 						return true;
 					}
 					if (args.length==1) {
-							this.cmd_cylinder(sender, material, false, false);
+							this.cmd_cylinder(sender, material, mat_data, false, false);
 							return true;
 					}
 					else if (args.length == 2) {
 						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
-							this.cmd_cylinder(sender, material, true,false);
+							this.cmd_cylinder(sender, material, mat_data, true,false);
 							return true;
 						}
 						else if(args[1].equalsIgnoreCase("h") || args[1].equalsIgnoreCase("hollow")) {
-							this.cmd_cylinder(sender, material, false, true);
+							this.cmd_cylinder(sender, material, mat_data, false, true);
 							return true;
 						}
 						else {
@@ -600,7 +700,7 @@ public class Buildr_Manager_Commands {
 						if(args[2].equalsIgnoreCase("h") || args[2].equalsIgnoreCase("hollow")) {
 							hollow = true;
 						}
-						this.cmd_cylinder(sender, material, aironly, hollow);
+						this.cmd_cylinder(sender, material, mat_data, aironly, hollow);
 						return true;
 					}
 					else {
@@ -718,7 +818,7 @@ public class Buildr_Manager_Commands {
 	 * @param height
 	 * @param size
 	 */
-	public void cmd_airfloor(CommandSender sender, int material, int height, int size){
+	public void cmd_airfloor(CommandSender sender, int material, byte mat_data, int height, int size){
 		if (!plugin.getConfigValue("FEATURE_AIRFLOOR")) {
 			return;
 		}
@@ -751,6 +851,7 @@ public class Buildr_Manager_Commands {
 					Block block = player.getWorld().getBlockAt(x, blockheight, z);
 					UnDoList.put(block, new Buildr_Container_UndoBlock(block.getType(), block.getData()));
 					player.getWorld().getBlockAt(x, blockheight, z).setTypeId(material);
+					player.getWorld().getBlockAt(x, blockheight, z).setData(mat_data);
 					z++;
 				}
 				z=zstart;
@@ -842,7 +943,7 @@ public class Buildr_Manager_Commands {
 	 * @param material
 	 * @param aironly
 	 */
-	public void cmd_wall(CommandSender sender, Material material, boolean aironly) {
+	public void cmd_wall(CommandSender sender, Material material, byte material_data, boolean aironly) {
 		if (!plugin.getConfigValue("FEATURE_BUILDER_WALL")) {
 			return;
 		}
@@ -850,7 +951,7 @@ public class Buildr_Manager_Commands {
 			plugin.removeStartedBuilding((Player)sender);
 			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
 		}
-		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Wall((Player)sender, material, aironly, plugin));
+		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Wall((Player)sender, material, aironly, plugin,material_data));
 		String buildinfo ="Started new Wall. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on block 1 while holding a stick to continue");
@@ -862,7 +963,7 @@ public class Buildr_Manager_Commands {
 	 * @param material
 	 * @param aironly
 	 */
-	public void cmd_wallx(CommandSender sender, Material material, boolean aironly) {
+	public void cmd_wallx(CommandSender sender, Material material,byte material_data, boolean aironly) {
 		if (!plugin.getConfigValue("FEATURE_BUILDER_WALLX")) {
 			return;
 		}
@@ -870,13 +971,13 @@ public class Buildr_Manager_Commands {
 			plugin.removeStartedBuilding((Player)sender);
 			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
 		}
-		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Wallx((Player)sender, material, aironly, plugin));
+		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Wallx((Player)sender, material, aironly, plugin,material_data));
 		String buildinfo ="Started new WallX. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on block 1 while holding a stick to continue");
 	}
 	
-	public void cmd_cuboid(CommandSender sender, Material material, boolean aironly,boolean hollow) {
+	public void cmd_cuboid(CommandSender sender, Material material, byte material_data, boolean aironly,boolean hollow) {
 		if (!plugin.getConfigValue("FEATURE_BUILDER_CUBOID")) {
 			return;
 		}
@@ -884,13 +985,13 @@ public class Buildr_Manager_Commands {
 			plugin.removeStartedBuilding((Player)sender);
 			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
 		}
-		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Cuboid((Player)sender, material, aironly, hollow, plugin));
+		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Cuboid((Player)sender, material, aironly, hollow, plugin,material_data));
 		String buildinfo ="Started new Cuboid. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly+ChatColor.WHITE+" Hollow: "+ChatColor.BLUE+hollow;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on block 1 while holding a stick to continue");
 	}
 	
-	public void cmd_sphere(CommandSender sender, Material material, boolean aironly,boolean hollow) {
+	public void cmd_sphere(CommandSender sender, Material material, byte material_data, boolean aironly,boolean hollow) {
 		if (!plugin.getConfigValue("FEATURE_BUILDER_SPHERE")) {
 			return;
 		}
@@ -898,13 +999,13 @@ public class Buildr_Manager_Commands {
 			plugin.removeStartedBuilding((Player)sender);
 			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
 		}
-		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Sphere((Player)sender, material, aironly, hollow, false, plugin));
+		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Sphere((Player)sender, material, aironly, hollow, false, plugin,material_data));
 		String buildinfo ="Started new Sphere. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly+ChatColor.WHITE+" Hollow: "+ChatColor.BLUE+hollow;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on the center of your sphere while holding a stick to continue");
 	}
 	
-	public void cmd_half_sphere(CommandSender sender, Material material, boolean aironly,boolean hollow) {
+	public void cmd_half_sphere(CommandSender sender, Material material, byte material_data, boolean aironly,boolean hollow) {
 		if (!plugin.getConfigValue("FEATURE_BUILDER_SPHERE")) {
 			return;
 		}
@@ -912,13 +1013,13 @@ public class Buildr_Manager_Commands {
 			plugin.removeStartedBuilding((Player)sender);
 			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
 		}
-		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Sphere((Player)sender, material, aironly, hollow, true, plugin));
+		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Sphere((Player)sender, material, aironly, hollow, true, plugin,material_data));
 		String buildinfo ="Started new half sphere. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly+ChatColor.WHITE+" Hollow: "+ChatColor.BLUE+hollow;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on the center of your sphere while holding a stick to continue");
 	}
 	
-	public void cmd_cylinder(CommandSender sender, Material material, boolean aironly,boolean hollow) {
+	public void cmd_cylinder(CommandSender sender, Material material, byte material_data, boolean aironly,boolean hollow) {
 		if (!plugin.getConfigValue("FEATURE_BUILDER_CYLINDER")) {
 			return;
 		}
@@ -926,7 +1027,7 @@ public class Buildr_Manager_Commands {
 			plugin.removeStartedBuilding((Player)sender);
 			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
 		}
-		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Cylinder((Player)sender, material, aironly, hollow, plugin));
+		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Cylinder((Player)sender, material, aironly, hollow, plugin,material_data));
 		String buildinfo ="Started new cylinder. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly+ChatColor.WHITE+" Hollow: "+ChatColor.BLUE+hollow;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on the center of your cylinder while holding a stick to continue");

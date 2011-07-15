@@ -16,13 +16,15 @@ public class Buildr_Manager_Builder_Cylinder implements Buildr_Interface_Buildin
 	private boolean hollow;
 	private boolean coordinate1placed;
 	private Buildr plugin;
+	private byte material_data;
 
-	public Buildr_Manager_Builder_Cylinder(Player wallcreater, Material material,boolean aironly, boolean hollow, Buildr plugin) {
+	public Buildr_Manager_Builder_Cylinder(Player wallcreater, Material material,boolean aironly, boolean hollow, Buildr plugin, byte material_data) {
 		this.wallcreater = wallcreater;
 		this.material = material;
 		this.aironly = aironly;
 		this.hollow = hollow;
 		this.plugin = plugin;
+		this.material_data = material_data;
 	}
 
 	@Override
@@ -63,6 +65,6 @@ public class Buildr_Manager_Builder_Cylinder implements Buildr_Interface_Buildin
 
 	@Override
 	public void startBuild() {
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Cylinder(position1, position2, material, aironly, hollow, plugin, wallcreater));
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Cylinder(position1, position2, material, aironly, hollow, plugin, wallcreater,material_data));
 	}
 }

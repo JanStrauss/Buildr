@@ -17,14 +17,16 @@ public class Buildr_Runnable_Builder_Wallx implements Runnable {
 	private boolean aironly;
 	private Buildr plugin;
 	private Player player;
+	private byte material_data;
 	
-	public Buildr_Runnable_Builder_Wallx(Block position1, Block position2,Material material, boolean aironly,Buildr plugin, Player player) {
+	public Buildr_Runnable_Builder_Wallx(Block position1, Block position2,Material material, boolean aironly,Buildr plugin, Player player, byte material_data) {
 		this.position1 = position1;
 		this.position2 = position2;
 		this.material = material;
 		this.aironly = aironly;
 		this.plugin = plugin;
 		this.player = player;
+		this.material_data = material_data;
 	}
 
 	@Override
@@ -78,11 +80,13 @@ public class Buildr_Runnable_Builder_Wallx implements Runnable {
 						if (block_handle.getType().equals(Material.AIR)) {
 							undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
 							block_handle.setType(material);
+							block_handle.setData(material_data);
 						}
 					}
 					else {
 						undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
 						block_handle.setType(material);
+						block_handle.setData(material_data);
 					}
 					
 				}

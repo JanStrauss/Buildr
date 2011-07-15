@@ -16,8 +16,9 @@ public class Buildr_Runnable_Builder_Cuboid implements Runnable {
 	private boolean hollow;
 	private Buildr plugin;
 	private Player player;
+	private byte material_data;
 	
-	public Buildr_Runnable_Builder_Cuboid(Block position1, Block position2,Material material, boolean aironly, boolean hollow,Buildr plugin, Player player) {
+	public Buildr_Runnable_Builder_Cuboid(Block position1, Block position2,Material material, boolean aironly, boolean hollow,Buildr plugin, Player player, byte material_data) {
 		this.position1 = position1;
 		this.position2 = position2;
 		this.material = material;
@@ -25,6 +26,7 @@ public class Buildr_Runnable_Builder_Cuboid implements Runnable {
 		this.plugin = plugin;
 		this.player = player;
 		this.hollow = hollow;
+		this.material_data = material_data;
 	}
 
 	@Override
@@ -58,23 +60,27 @@ public class Buildr_Runnable_Builder_Cuboid implements Runnable {
 						if (block_handle.getType().equals(Material.AIR) && checkBlockIsOutside(block_handle)) {
 							undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
 							block_handle.setType(material);
+							block_handle.setData(material_data);
 						}
 					}
 					else if (!aironly && hollow) {
 						if (checkBlockIsOutside(block_handle)) {
 							undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
 							block_handle.setType(material);
+							block_handle.setData(material_data);
 						}
 					}
 					else if (aironly && !hollow) {
 						if (block_handle.getType().equals(Material.AIR)) {
 							undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
 							block_handle.setType(material);
+							block_handle.setData(material_data);
 						}
 					}
 					else {
 						undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
 						block_handle.setType(material);
+						block_handle.setData(material_data);
 					}
 				}
 			}

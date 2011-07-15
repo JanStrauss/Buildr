@@ -17,8 +17,9 @@ public class Buildr_Runnable_Builder_Wall implements Runnable {
 	private boolean aironly;
 	private Buildr plugin;
 	private Player player;
+	private byte material_data;
 	
-	public Buildr_Runnable_Builder_Wall(Block position1, Block position2,Buildr_Type_Wall type, Material material, boolean aironly,Buildr plugin, Player player) {
+	public Buildr_Runnable_Builder_Wall(Block position1, Block position2,Buildr_Type_Wall type, Material material, boolean aironly,Buildr plugin, Player player, byte material_data) {
 		this.position1 = position1;
 		this.position2 = position2;
 		this.type = type;
@@ -26,6 +27,7 @@ public class Buildr_Runnable_Builder_Wall implements Runnable {
 		this.aironly = aironly;
 		this.plugin = plugin;
 		this.player = player;
+		this.material_data = material_data;
 	}
 
 	@Override
@@ -57,17 +59,20 @@ public class Buildr_Runnable_Builder_Wall implements Runnable {
 		
 		for (int i = 0; i < distY; i++) {			//y
 			for (int j = 0; j < distZ; j++) {		//z
-				Block actionBlock = position1.getWorld().getBlockAt(fixed_X, y, z);
+				Block block_handle = position1.getWorld().getBlockAt(fixed_X, y, z);
 				
 				if (aironly) {
-					if (actionBlock.getType().equals(Material.AIR)) {
-						undo.put(actionBlock, new Buildr_Container_UndoBlock(actionBlock.getType(), actionBlock.getData()));
-						actionBlock.setType(material);
+					if (block_handle.getType().equals(Material.AIR)) {
+						undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
+						block_handle.setType(material);
+						block_handle.setData(material_data);
+						
 					}
 				}
 				else {
-					undo.put(actionBlock, new Buildr_Container_UndoBlock(actionBlock.getType(), actionBlock.getData()));
-					actionBlock.setType(material);
+					undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
+					block_handle.setType(material);
+					block_handle.setData(material_data);
 				}
 				z++;
 			}
@@ -91,17 +96,19 @@ public class Buildr_Runnable_Builder_Wall implements Runnable {
 		
 		for (int i = 0; i < distX; i++) {			//x
 			for (int j = 0; j < distZ; j++) {		//z
-				Block actionBlock = position1.getWorld().getBlockAt(x, fixed_Y, z);
+				Block block_handle = position1.getWorld().getBlockAt(x, fixed_Y, z);
 				
 				if (aironly) {
-					if (actionBlock.getType().equals(Material.AIR)) {
-						undo.put(actionBlock, new Buildr_Container_UndoBlock(actionBlock.getType(), actionBlock.getData()));
-						actionBlock.setType(material);
+					if (block_handle.getType().equals(Material.AIR)) {
+						undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
+						block_handle.setType(material);
+						block_handle.setData(material_data);
 					}
 				}
 				else {
-					undo.put(actionBlock, new Buildr_Container_UndoBlock(actionBlock.getType(), actionBlock.getData()));
-					actionBlock.setType(material);
+					undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
+					block_handle.setType(material);
+					block_handle.setData(material_data);
 				}
 
 				z++;
@@ -126,17 +133,19 @@ public class Buildr_Runnable_Builder_Wall implements Runnable {
 		
 		for (int i = 0; i < distX; i++) {			//x
 			for (int j = 0; j < distY; j++) {		//y
-				Block actionBlock = position1.getWorld().getBlockAt(x, y, fixed_Z);
+				Block block_handle = position1.getWorld().getBlockAt(x, y, fixed_Z);
 				
 				if (aironly) {
-					if (actionBlock.getType().equals(Material.AIR)) {
-						undo.put(actionBlock, new Buildr_Container_UndoBlock(actionBlock.getType(), actionBlock.getData()));
-						actionBlock.setType(material);
+					if (block_handle.getType().equals(Material.AIR)) {
+						undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
+						block_handle.setType(material);
+						block_handle.setData(material_data);
 					}
 				}
 				else {
-					undo.put(actionBlock, new Buildr_Container_UndoBlock(actionBlock.getType(), actionBlock.getData()));
-					actionBlock.setType(material);
+					undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
+					block_handle.setType(material);
+					block_handle.setData(material_data);
 				}
 
 				y++;

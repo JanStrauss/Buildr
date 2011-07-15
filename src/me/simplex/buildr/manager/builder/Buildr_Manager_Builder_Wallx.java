@@ -15,12 +15,14 @@ public class Buildr_Manager_Builder_Wallx implements Buildr_Interface_Building {
 	private boolean aironly;
 	private boolean coordinate1placed = false;
 	private Buildr plugin;
+	private byte material_data;
 	
-	public Buildr_Manager_Builder_Wallx(Player player, Material material, boolean aironly, Buildr plugin) {
+	public Buildr_Manager_Builder_Wallx(Player player, Material material, boolean aironly, Buildr plugin, byte material_data) {
 		this.wallcreater=player;
 		this.material = material;
 		this.aironly = aironly;
 		this.plugin = plugin;
+		this.material_data = material_data;
 	}
 	
 	public void addCoordinate1(Block position1){
@@ -34,7 +36,7 @@ public class Buildr_Manager_Builder_Wallx implements Buildr_Interface_Building {
 	
 	@Override
 	public void startBuild(){
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Wallx(position1,position2,material,aironly,plugin,wallcreater));
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Wallx(position1,position2,material,aironly,plugin,wallcreater,material_data));
 	}
 	
 	/**
