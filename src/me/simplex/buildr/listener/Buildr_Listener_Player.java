@@ -26,7 +26,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 		this.converter = new Buildr_Converter_BlockToDrop();
 	}
 
-@Override
+	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsPickaxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
 			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreak")) {

@@ -17,7 +17,13 @@ public class Buildr_Listener_Block extends BlockListener {
 	public void onBlockPlace(BlockPlaceEvent event) {
 		if (plugin.getConfigValue("BUILDMODE_UNLIMITED_ITEMSTACK")) {
 			if (plugin.checkPlayerBuildMode(event.getPlayer())) {
-				event.getPlayer().setItemInHand(new ItemStack(event.getItemInHand().getType(), 64));
+				//ItemStack give = event.getItemInHand();
+				ItemStack give = event.getPlayer().getItemInHand();
+				give.setAmount(64);
+				System.out.println("dmg: "+give.getDurability());
+				System.out.println("type: "+give.getType().toString());
+				
+				event.getPlayer().setItemInHand(give);
 			}
 		}
 	}
