@@ -856,9 +856,18 @@ public class Buildr_Manager_Commands {
 			for (int i = 0; i < size; i++) { //x
 				for (int j = 0; j < size; j++) {//z
 					Block block = player.getWorld().getBlockAt(x, blockheight, z);
-					UnDoList.put(block, new Buildr_Container_UndoBlock(block.getType(), block.getData()));
-					player.getWorld().getBlockAt(x, blockheight, z).setTypeId(material);
-					player.getWorld().getBlockAt(x, blockheight, z).setData(mat_data);
+					if (!plugin.checkPermission(player, "buildr.feature.break_bedrock")) {
+						if (!block.getType().equals(Material.BEDROCK)) {
+							UnDoList.put(block, new Buildr_Container_UndoBlock(block.getType(), block.getData()));
+							player.getWorld().getBlockAt(x, blockheight, z).setTypeId(material);
+							player.getWorld().getBlockAt(x, blockheight, z).setData(mat_data);
+						}
+					}
+					else {
+						UnDoList.put(block, new Buildr_Container_UndoBlock(block.getType(), block.getData()));
+						player.getWorld().getBlockAt(x, blockheight, z).setTypeId(material);
+						player.getWorld().getBlockAt(x, blockheight, z).setData(mat_data);
+					}
 					z++;
 				}
 				z=zstart;
