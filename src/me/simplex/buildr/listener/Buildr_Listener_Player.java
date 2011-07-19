@@ -39,7 +39,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 					}
 				}
 				
-				if (!plugin.getConfigValue("BUILDMODE_PICKAXE_BEDROCK")) {
+				if (!plugin.checkPermission(event.getPlayer(), "buildr.feature.break_bedrock")) {
 					if (!event.getClickedBlock().getType().equals(Material.BEDROCK)) {
 						event.getClickedBlock().setType(Material.AIR);
 					}

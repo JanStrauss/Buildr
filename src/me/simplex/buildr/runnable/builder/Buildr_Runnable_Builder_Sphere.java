@@ -59,29 +59,21 @@ public class Buildr_Runnable_Builder_Sphere implements Runnable {
 					if (isBlockInRadius(radius, block_handle)) {
 						if (aironly && hollow) {
 							if (block_handle.getType().equals(Material.AIR) && checkBlockIsOutside(radius,block_handle)) {
-								undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
-								block_handle.setType(material);
-								block_handle.setData(material_data);
+								changeBlock(block_handle, undo);
 							}
 						}
 						else if (!aironly && hollow) {
 							if (checkBlockIsOutside(radius,block_handle)) {
-								undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
-								block_handle.setType(material);
-								block_handle.setData(material_data);
+								changeBlock(block_handle, undo);
 							}
 						}
 						else if (aironly && !hollow) {
 							if (block_handle.getType().equals(Material.AIR)) {
-								undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
-								block_handle.setType(material);
-								block_handle.setData(material_data);
+								changeBlock(block_handle, undo);
 							}
 						}
 						else {
-							undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
-							block_handle.setType(material);
-							block_handle.setData(material_data);
+							changeBlock(block_handle, undo);
 						}
 					}
 
@@ -133,6 +125,20 @@ public class Buildr_Runnable_Builder_Sphere implements Runnable {
 		}
 		else {
 			return false;
+		}
+	}
+	
+	private void changeBlock(Block block_handle, HashMap<Block, Buildr_Container_UndoBlock> undo){
+		undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
+		if (!plugin.checkPermission(player, "buildr.feature.break_bedrock")) {
+			if (!block_handle.getType().equals(Material.BEDROCK)) {
+				block_handle.setType(material);
+				block_handle.setData(material_data);
+			}
+		}
+		else {
+			block_handle.setType(material);
+			block_handle.setData(material_data);
 		}
 	}
 	
