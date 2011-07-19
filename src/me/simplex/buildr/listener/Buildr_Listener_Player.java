@@ -38,7 +38,14 @@ public class Buildr_Listener_Player extends PlayerListener {
 						}
 					}
 				}
-				event.getClickedBlock().setType(Material.AIR);
+				if (!plugin.getConfigValue("BUILDMODE_PICKAXE_BEDROCK")) {
+					if (!event.getClickedBlock().equals(Material.BEDROCK)) {
+						event.getClickedBlock().setType(Material.AIR);
+					}
+				}
+				else {
+					event.getClickedBlock().setType(Material.AIR);
+				}
 				event.setCancelled(true);
 			}
 		}

@@ -20,8 +20,8 @@ public class Buildr_Listener_Block extends BlockListener {
 				//ItemStack give = event.getItemInHand();
 				ItemStack give = event.getPlayer().getItemInHand();
 				give.setAmount(64);
-				System.out.println("dmg: "+give.getDurability());
-				System.out.println("type: "+give.getType().toString());
+				//System.out.println("dmg: "+give.getDurability());
+				//System.out.println("type: "+give.getType().toString());
 				
 				event.getPlayer().setItemInHand(give);
 			}

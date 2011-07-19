@@ -113,6 +113,9 @@ public class Buildr_Manager_Configuration {
 			writer.write("# Enable Instant block break with a Pickaxe");writer.newLine(); //done
 			writer.write("BUILDMODE_INSTANT_BLOCK_BREAK=true");writer.newLine();
 			writer.newLine();
+			writer.write("# Pickaxe can destroy bedrock");writer.newLine(); //done
+			writer.write("BUILDMODE_PICKAXE_BEDROCK=true");writer.newLine();
+			writer.newLine();
 			writer.write("# Disable item pickup");writer.newLine(); //done
 			writer.write("BUILDMODE_DISABLEPICKUP=true");writer.newLine();
 			writer.newLine();
