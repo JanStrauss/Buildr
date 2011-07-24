@@ -11,4 +11,4 @@ Most of the tools are nothing new and can most likely be found in other plugins 
 
 Builder supports permissions and has a fallback to OP if no permission plugin was found.
 
-This fork is the unofficial version of the plugin by Relick.
+Includes Changes made by Relick (https://github.com/Relick) Thanks great work on those!
