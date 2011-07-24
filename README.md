@@ -1,4 +1,4 @@
-Buildr - Toolbox for creative players/servers
+Buildr v0.5 - Toolbox for creative players/servers
 =============================================
 
 Buildr is a collection of useful tools to make building/creating stuff easier and faster.
