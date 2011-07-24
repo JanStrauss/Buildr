@@ -223,7 +223,7 @@ public class Buildr_Manager_Commands {
 		}
 		
 		//ClearInv
-		else if (command.getName().equalsIgnoreCase("clearinv")) {
+		else if (command.getName().equalsIgnoreCase("clearinv") || command.getName().equalsIgnoreCase("cleari") || command.getName().equalsIgnoreCase("clear")) {
 			if (args.length != 0) {
 				return false;
 			}
@@ -1103,10 +1103,6 @@ public class Buildr_Manager_Commands {
 			return;
 		}
 		if(!plugin.checkPermission(player, "buildr.feature.jump")){
-			return;
-		}
-		if (!plugin.checkPlayerBuildMode(player)) {
-			player.sendMessage("Only available while in buildmode");
 			return;
 		}
 			
