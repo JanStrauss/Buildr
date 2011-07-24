@@ -2,6 +2,7 @@ package me.simplex.buildr;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import me.simplex.buildr.listener.Buildr_Listener_Block;
@@ -17,6 +18,7 @@ import me.simplex.buildr.util.Buildr_Interface_Building;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -35,6 +37,7 @@ public class Buildr extends JavaPlugin {
 	
 	  //tech
 	  public static PermissionHandler permissionHandler;
+	  public Server server;
 	  private Logger log = Logger.getLogger("Minecraft");
 	  
 	  private String prefix;
@@ -142,9 +145,19 @@ public class Buildr extends JavaPlugin {
 		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Buildr_Runnable_TimeChecker(this), 20*30, 20*30);
 
 		log("started TimeThread");
-		importantLog("Buildr v"+version+" loaded");
+		importantLog("Buildr v"+version+" (relick's modified) loaded");
+		
+		List<World> worlds = getServer().getWorlds();
+		for(World name : worlds ) {
+			String worldString = name.getName();
+			if(hasConfigValue(worldString)) {
+				if(getConfigValue(worldString)) {
+					this.enterGlobalbuildmode(name);
+				}
+			}
+		}
 	}
-	
+
 	@Override
 	public boolean onCommand(CommandSender sender, Command command,String label, String[] args) {
 		if (!(sender instanceof Player)) { //disable console 
@@ -364,6 +377,10 @@ public class Buildr extends JavaPlugin {
 
 	public boolean getConfigValue(String key){
 		return cfgManager.getConfigValue(key);
+	}
+
+	public boolean hasConfigValue(String key){
+		return cfgManager.hasConfigValue(key);
 	}
 	
 	public ArrayList<World> getWorldBuildMode() {
