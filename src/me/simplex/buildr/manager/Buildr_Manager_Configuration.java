@@ -64,7 +64,7 @@ public class Buildr_Manager_Configuration {
 			writer.write("#                                                          #");writer.newLine();
 			writer.write("#                    BUILDR CONFIGURATION                  #");writer.newLine();
 			writer.write("#                                                          #");writer.newLine();
-			writer.write("#                            v0.1                          #");writer.newLine();
+			writer.write("#                            v0.5                          #");writer.newLine();
 			writer.write("############################################################");writer.newLine();
 			writer.newLine();
 			writer.write("##### General settings: ####################################");writer.newLine();
@@ -74,6 +74,9 @@ public class Buildr_Manager_Configuration {
 			writer.newLine();
 			writer.write("# Enable Permissions, if false Buildr checks for OP (will also check for OP if no PermissionsPlugin was found)");writer.newLine();
 			writer.write("GENERAL_USE_PERMISSIONS=true");writer.newLine();
+			writer.newLine();
+			writer.write("# Toggle wether to use the Permissions Plugin or the build-in Bukkit permissions (only rudimentary support)");writer.newLine();
+			writer.write("GENERAL_USE_BUKKIT_PERMISSIONS=false");writer.newLine();
 			writer.newLine();
 			writer.write("# If set, will log quite alot in the server console (mostly debug)");writer.newLine();
 			writer.write("GENERAL_DETAILED_LOG=false");writer.newLine();

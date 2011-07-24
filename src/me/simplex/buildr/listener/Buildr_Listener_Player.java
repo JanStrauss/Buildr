@@ -32,7 +32,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsPickaxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
-			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreakpick")) {
+			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreak")) {
 				// Check for Drops
 				if (!(plugin.checkWorldBuildMode(event.getClickedBlock().getWorld()))) {
 					for (ItemStack stk : converter.convert(event.getClickedBlock())) {
@@ -42,15 +42,21 @@ public class Buildr_Listener_Player extends PlayerListener {
 					}
 				} else {
 				
-					event.getClickedBlock().setType(Material.AIR);
+					if (event.getClickedBlock().getType().equals(Material.BEDROCK)) {
+						if (plugin.checkPermission(event.getPlayer(), "buildr.feature.break_bedrock")) {
+							event.getClickedBlock().setType(Material.AIR);
+						}
+					}
+					else {
+						event.getClickedBlock().setType(Material.AIR);
+					}
 				}
-					
 				event.setCancelled(true);
 			}
 		}
 		
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerBuildMode(event.getPlayer())) {
-			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreak")) {
+			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreakall")) {
 				// Check for Drops
 				if (!(plugin.checkWorldBuildMode(event.getClickedBlock().getWorld()))) {
 					for (ItemStack stk : converter.convert(event.getClickedBlock())) {
@@ -68,11 +74,11 @@ public class Buildr_Listener_Player extends PlayerListener {
 		}
 		
 		
-		else if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsStick(event.getPlayer())) {
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsStick(event.getPlayer())) {
 			plugin.playerClickedBuildingBlock(event.getPlayer(),event.getClickedBlock());
 		}
 		
-		else if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsAxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
+		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsAxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
 			if (event.getClickedBlock().getType() == Material.LOG || plugin.checkTreecuterFireOnLeaves(event.getClickedBlock())) {
 				if (plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
 					if (plugin.checkPermission(event.getPlayer(), "buildr.feature.treecutter")) {

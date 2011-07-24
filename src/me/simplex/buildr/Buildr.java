@@ -56,6 +56,8 @@ public class Buildr extends JavaPlugin {
 	  private String pluginDirectory;
 	  private PluginManager pm;
 	  
+	  private boolean bukkitperms;
+	  
 	  //logic
 	  private ArrayList<World> worldBuildMode;
 	  private ArrayList<World> worldBuildAllowed;
@@ -167,23 +169,30 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	private void setupPermissions() {
-	    if (permissionHandler != null) {
-	        return;
-	    }
-	    
-	    Plugin permissionsPlugin = this.getServer().getPluginManager().getPlugin("Permissions");
-	    
-	    if (permissionsPlugin == null) {
-	        log("Permission system not detected, defaulting to OP");
-	        return;
-	    }
-		if (!getConfigValue("GENERAL_USE_PERMISSIONS")) {
-	        log("Permission system disabled, using OP");
-	        return;
+		if (!getConfigValue("GENERAL_USE_BUKKIT_PERMISSIONS")) {
+		    if (permissionHandler != null) {
+		        return;
+		    }
+		    
+		    Plugin permissionsPlugin = this.getServer().getPluginManager().getPlugin("Permissions");
+		    
+		    if (permissionsPlugin == null) {
+		        log("Permission system not detected, defaulting to OP");
+		        return;
+		    }
+			if (!getConfigValue("GENERAL_USE_PERMISSIONS")) {
+		        log("Permission system disabled, using OP");
+		        return;
+			}
+		    
+		    permissionHandler = ((Permissions) permissionsPlugin).getHandler();
+		    log("Found and will use plugin "+((Permissions)permissionsPlugin).getDescription().getFullName());
+		    bukkitperms = false;
 		}
-	    
-	    permissionHandler = ((Permissions) permissionsPlugin).getHandler();
-	    log("Found and will use plugin "+((Permissions)permissionsPlugin).getDescription().getFullName());
+		else {
+			bukkitperms = true;
+			log("will use bukkits build-in permissions");
+		}
 	}
 	
 	public void log(String msg){
@@ -197,11 +206,16 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	public boolean checkPermission(Player player, String node){
-		if (permissionHandler!=null) {
-			return permissionHandler.has(player, node);
+		if (bukkitperms) {
+			return player.hasPermission(node);
 		}
 		else {
-			return player.isOp();
+			if (permissionHandler!=null) {
+				return permissionHandler.has(player, node);
+			}
+			else {
+				return player.isOp();
+			}
 		}
 	}
 	
