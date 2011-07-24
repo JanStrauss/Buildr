@@ -13,12 +13,12 @@ import me.simplex.buildr.Buildr;
 
 public class Buildr_Manager_Configuration {
 	private Buildr plugin;
-	private File configfile;
+	public static File configfile;
 	private HashMap<String, Boolean> settings;
 	
 	public Buildr_Manager_Configuration(Buildr buildr){
 		this.plugin = buildr;
-		this.configfile = new File(plugin.getPluginDirectory()+File.separator+"settings.properties");
+		Buildr_Manager_Configuration.configfile = new File(plugin.getPluginDirectory()+File.separator+"settings.properties");
 		this.settings = new HashMap<String, Boolean>();
 	}
 	
@@ -172,8 +172,11 @@ public class Buildr_Manager_Configuration {
 			writer.write("# if set, a tree can be felt if you hit its leaves, else you can only fell it by hitting log");writer.newLine(); //done
 			writer.write("TREECUTTER_ACTIVATE_ON_LEAVES=true");writer.newLine();
 			writer.newLine();
+			writer.write("##### Worlds below here that will have globalbuild on startup: ");writer.newLine();
+			writer.write("# e.g. world=true");writer.newLine();
+			writer.write("# If you don't want a world, put false instead.");writer.newLine();
 			writer.newLine();
-			
+			writer.newLine();
 			writer.close();
 			stream.close();
 			
@@ -185,6 +188,10 @@ public class Buildr_Manager_Configuration {
 	
 	public boolean getConfigValue(String key){
 		return settings.get(key);
+	}
+	
+	public boolean hasConfigValue(String key){
+		return settings.containsKey(key);
 	}
 	
 	public HashMap<String, Boolean> getSettings(){
