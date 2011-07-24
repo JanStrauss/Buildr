@@ -5,7 +5,10 @@ import me.simplex.buildr.runnable.Buildr_Runnable_TreeFeller_Collect;
 import me.simplex.buildr.util.Buildr_Converter_BlockToDrop;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -29,6 +32,24 @@ public class Buildr_Listener_Player extends PlayerListener {
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsPickaxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
+			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreakpick")) {
+				// Check for Drops
+				if (!(plugin.checkWorldBuildMode(event.getClickedBlock().getWorld()))) {
+					for (ItemStack stk : converter.convert(event.getClickedBlock())) {
+						if (stk != null) {
+							event.getClickedBlock().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(), stk);
+						}
+					}
+				} else {
+				
+					event.getClickedBlock().setType(Material.AIR);
+				}
+					
+				event.setCancelled(true);
+			}
+		}
+		
+		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerBuildMode(event.getPlayer())) {
 			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreak")) {
 				// Check for Drops
 				if (!(plugin.checkWorldBuildMode(event.getClickedBlock().getWorld()))) {
@@ -39,17 +60,13 @@ public class Buildr_Listener_Player extends PlayerListener {
 					}
 				}
 				
-				if (!plugin.checkPermission(event.getPlayer(), "buildr.feature.break_bedrock")) {
 					if (!event.getClickedBlock().getType().equals(Material.BEDROCK)) {
 						event.getClickedBlock().setType(Material.AIR);
 					}
-				}
-				else {
-					event.getClickedBlock().setType(Material.AIR);
-				}
 				event.setCancelled(true);
 			}
 		}
+		
 		
 		else if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsStick(event.getPlayer())) {
 			plugin.playerClickedBuildingBlock(event.getPlayer(),event.getClickedBlock());
@@ -65,6 +82,42 @@ public class Buildr_Listener_Player extends PlayerListener {
 							event.setCancelled(true);
 						}
 					}
+				}
+			}
+		}
+		
+		ItemStack compassjumpitem = event.getPlayer().getItemInHand();
+		Player player = event.getPlayer();
+
+		if (compassjumpitem.getType() == Material.COMPASS) {
+
+			if (event.getAction() == Action.RIGHT_CLICK_AIR
+					|| event.getAction() == Action.RIGHT_CLICK_BLOCK) {
+				
+				if (!plugin.getConfigValue("BUILDMODE_JUMP")){
+					return;
+				}
+				if(!plugin.checkPermission(player, "buildr.feature.compassjump")){
+					return;
+				}
+					
+				Block target = player.getTargetBlock(null, 500);
+				Location loc = target.getLocation();
+				loc.setPitch(player.getLocation().getPitch());
+				loc.setYaw(player.getLocation().getYaw());
+				loc.setY(loc.getY()+1);
+				
+				if (target == null || target.getType().equals(Material.AIR)) {
+					player.sendMessage("No block in range");
+					return;
+				}
+				if (target.getRelative(0, 1, 0).getType().equals(Material.AIR)&& target.getRelative(0, 2, 0).getType().equals(Material.AIR)) {
+					player.teleport(loc);
+				}
+				else {
+
+					loc.setY(player.getWorld().getHighestBlockYAt(loc));
+					player.teleport(loc);
 				}
 			}
 		}
