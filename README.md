@@ -10,3 +10,5 @@ While the modes are disabled you can play minecraft without
 Most of the tools are nothing new and can most likely be found in other plugins and because of this you can disable every tool if you already use a plugin that offers this functionality in the detailed configuration file. 
 
 Builder supports permissions and has a fallback to OP if no permission plugin was found.
+
+This fork is the unofficial version of the plugin by Relick.
