@@ -84,7 +84,7 @@ commands:
            Example: /<command> 20 50 gives a stack of 50 Glass to the player
   clearinv:
     description: clears the inventory of the player
-    aliases: [clrinv,ci,clearinventory]
+    aliases: [clrinv,ci,cleari,clear,clearinventory]
     usage: |
            /<command> 
            Example: /<command>
