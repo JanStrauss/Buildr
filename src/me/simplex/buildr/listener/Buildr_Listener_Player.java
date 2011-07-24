@@ -40,18 +40,35 @@ public class Buildr_Listener_Player extends PlayerListener {
 							event.getClickedBlock().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(), stk);
 						}
 					}
-				} else {
+				}
 				
-					if (event.getClickedBlock().getType().equals(Material.BEDROCK)) {
-						if (plugin.checkPermission(event.getPlayer(), "buildr.feature.break_bedrock")) {
-							event.getClickedBlock().setType(Material.AIR);
-						}
-					}
-					else {
+				if (event.getClickedBlock().getType().equals(Material.BEDROCK)) {
+					if (plugin.checkPermission(event.getPlayer(), "buildr.feature.break_bedrock")) {
 						event.getClickedBlock().setType(Material.AIR);
 					}
 				}
+				else {
+					event.getClickedBlock().setType(Material.AIR);
+				}
+					
+				
 				event.setCancelled(true);
+				return;
+			}
+		}
+		
+		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsAxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
+			if (event.getClickedBlock().getType() == Material.LOG || plugin.checkTreecuterFireOnLeaves(event.getClickedBlock())) {
+				if (plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
+					if (plugin.checkPermission(event.getPlayer(), "buildr.feature.treecutter")) {
+						if (!plugin.getPlayerCuttingTree().contains(event.getPlayer())) {
+							plugin.getPlayerCuttingTree().add(event.getPlayer());
+							plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Buildr_Runnable_TreeFeller_Collect(event.getClickedBlock(), plugin, event.getPlayer()));
+							event.setCancelled(true);
+							return;
+						}
+					}
+				}
 			}
 		}
 		
@@ -70,26 +87,14 @@ public class Buildr_Listener_Player extends PlayerListener {
 						event.getClickedBlock().setType(Material.AIR);
 					}
 				event.setCancelled(true);
+				return;
 			}
 		}
 		
 		
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsStick(event.getPlayer())) {
 			plugin.playerClickedBuildingBlock(event.getPlayer(),event.getClickedBlock());
-		}
-		
-		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsAxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
-			if (event.getClickedBlock().getType() == Material.LOG || plugin.checkTreecuterFireOnLeaves(event.getClickedBlock())) {
-				if (plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
-					if (plugin.checkPermission(event.getPlayer(), "buildr.feature.treecutter")) {
-						if (!plugin.getPlayerCuttingTree().contains(event.getPlayer())) {
-							plugin.getPlayerCuttingTree().add(event.getPlayer());
-							plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Buildr_Runnable_TreeFeller_Collect(event.getClickedBlock(), plugin, event.getPlayer()));
-							event.setCancelled(true);
-						}
-					}
-				}
-			}
+			return;
 		}
 		
 		ItemStack compassjumpitem = event.getPlayer().getItemInHand();
