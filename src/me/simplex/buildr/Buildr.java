@@ -101,7 +101,27 @@ public class Buildr extends JavaPlugin {
 		 
 		//load settings
 		importantLog("Buildr v"+version+" loading..");
-			
+
+		Buildr_Manager_Configuration.getMsg("Random");
+String VersionF1 = Buildr_Manager_Configuration.getMsg("Version");
+String[] VersionF2 = VersionF1.split("}");
+String VersionF = VersionF2[0];
+if (VersionF.equalsIgnoreCase(version)) {
+	
+} else {
+	
+	File oldcon = new File("plugins/Buildr/settings.properties");
+	File oldconr = new File("plugins/Buildr/settings_old.properties");
+	File oldversion = new File("plugins/Buildr/version.properties");
+	oldcon.renameTo(oldconr);
+	oldversion.delete();
+	Buildr_Manager_Configuration.getMsg("This is to load the getMsg method");
+	
+
+	
+	
+}
+	
 		if (cfgManager.checkDirectory()) {
 			importantLog("created Buildr directory");
 		}
