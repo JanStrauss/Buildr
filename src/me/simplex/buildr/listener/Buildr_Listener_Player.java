@@ -73,7 +73,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 		}
 		
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerBuildMode(event.getPlayer())) {
-			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreakall")) {
+			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK_ALL") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreakall")) {
 				// Check for Drops
 				if (!(plugin.checkWorldBuildMode(event.getClickedBlock().getWorld()))) {
 					for (ItemStack stk : converter.convert(event.getClickedBlock())) {
@@ -82,13 +82,14 @@ public class Buildr_Listener_Player extends PlayerListener {
 						}
 					}
 				}
-				
-					if (!event.getClickedBlock().getType().equals(Material.BEDROCK)) {
-						event.getClickedBlock().setType(Material.AIR);
-					}
+					
+				if (!event.getClickedBlock().getType().equals(Material.BEDROCK)) {
+					event.getClickedBlock().setType(Material.AIR);
+				}
 				event.setCancelled(true);
 				return;
 			}
+			
 		}
 		
 		

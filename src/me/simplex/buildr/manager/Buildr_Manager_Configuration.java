@@ -116,6 +116,9 @@ public class Buildr_Manager_Configuration {
 			writer.write("# Enable Instant block break with a Pickaxe");writer.newLine(); //done
 			writer.write("BUILDMODE_INSTANT_BLOCK_BREAK=true");writer.newLine();
 			writer.newLine();
+			writer.write("# Enable Instant block break with every item");writer.newLine(); //done
+			writer.write("BUILDMODE_INSTANT_BLOCK_BREAK_ALL=false");writer.newLine();
+			writer.newLine();
 			writer.write("# Disable item pickup");writer.newLine(); //done
 			writer.write("BUILDMODE_DISABLEPICKUP=true");writer.newLine();
 			writer.newLine();
