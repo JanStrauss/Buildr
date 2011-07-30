@@ -7,8 +7,6 @@ import java.util.ArrayList;
 
 import me.simplex.buildr.Buildr;
 
-import org.bukkit.entity.Player;
-
 public class Buildr_Runnable_StateFileUpdater implements Runnable{
 	private File statefile;
 	private ArrayList<String> builders;

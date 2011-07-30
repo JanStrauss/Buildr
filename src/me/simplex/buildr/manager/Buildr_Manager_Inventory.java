@@ -123,16 +123,8 @@ public class Buildr_Manager_Inventory {
 			e.printStackTrace();
 		}
 	}
-	
-	public void updateInventoryStateFilePlayer(ArrayList<Player> builders){
-		ArrayList<String> names = new ArrayList<String>();
-		for (Player player : builders) {
-			names.add(player.getName());
-		}
-		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Buildr_Runnable_StateFileUpdater(new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat"), names,plugin));
-	}
-	
-	public void updateInventoryStateFileString(ArrayList<String> toProcess) {
+		
+	public void updateInventoryStateFile(ArrayList<String> toProcess) {
 		plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Buildr_Runnable_StateFileUpdater(new File(plugin.getPluginDirectory()+File.separator+"inv_data"+File.separator+"InventoryState.dat"), toProcess,plugin));
 	}
 	

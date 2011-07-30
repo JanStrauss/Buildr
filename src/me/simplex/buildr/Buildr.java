@@ -73,11 +73,7 @@ public class Buildr extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		if (!toProcessPlayers.isEmpty()) {
-			ArrayList<String> toProcess = invManager.loadInventoryStateFile();
-			for (Player player : playerBuildMode) {
-				toProcess.add(player.getName());
-			}
-			invManager.updateInventoryStateFileString(toProcess);
+			invManager.updateInventoryStateFile(buildInvStateList());
 		}
 		importantLog("Buildr v"+version+" stopped.");
 	}
@@ -150,7 +146,7 @@ public class Buildr extends JavaPlugin {
 		Player[] online = getServer().getOnlinePlayers();
 		if (online.length > 0) {
 			for (Player player : online) {
-				toProcessPlayers.remove(player);
+				handlePlayerOnLogin(player);
 			}
 		}
 
@@ -387,7 +383,7 @@ public class Buildr extends JavaPlugin {
 		getPlayerBuildMode().add(player);
 		if (getConfigValue("BUILDMODE_INVENTORY")) {
 			invManager.switchInventory(player);
-			invManager.updateInventoryStateFilePlayer(playerBuildMode);
+			invManager.updateInventoryStateFile(buildInvStateList());
 		}
 		
 	}
@@ -398,10 +394,10 @@ public class Buildr extends JavaPlugin {
 			if (getConfigValue("BUILDMODE_INVENTORY")) {
 				invManager.switchInventory(player);
 				if (playerBuildMode.isEmpty()) {
-					invManager.updateInventoryStateFilePlayer(null);
+					invManager.updateInventoryStateFile(null);
 				}
 				else {
-					invManager.updateInventoryStateFilePlayer(playerBuildMode);
+					invManager.updateInventoryStateFile(buildInvStateList());
 				}
 			}
 		}
@@ -427,10 +423,20 @@ public class Buildr extends JavaPlugin {
 		}
 
 	}
+	
 	public void leaveGlobalbuildmode(World world) {
 		getWorldBuildMode().remove(world);
 	}
-		
+	
+	private ArrayList<String> buildInvStateList(){
+		ArrayList<String> toProcess = toProcessPlayers;
+		for (Player player : playerBuildMode) {
+			if (!toProcess.contains(player.getName())) {
+				toProcess.add(player.getName());
+			}
+		}
+		return toProcess;
+	}
 	//get+set 
 	
 	/**
