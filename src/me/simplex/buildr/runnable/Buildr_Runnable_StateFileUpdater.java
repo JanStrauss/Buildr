@@ -11,11 +11,11 @@ import org.bukkit.entity.Player;
 
 public class Buildr_Runnable_StateFileUpdater implements Runnable{
 	private File statefile;
-	private ArrayList<Player> builders;
+	private ArrayList<String> builders;
 	private Buildr plugin;
 
 	
-	public Buildr_Runnable_StateFileUpdater(File statefile, ArrayList<Player> builders, Buildr plugin) {
+	public Buildr_Runnable_StateFileUpdater(File statefile, ArrayList<String> builders, Buildr plugin) {
 		this.statefile = statefile;
 		this.builders = builders;
 		this.plugin = plugin;
@@ -24,19 +24,14 @@ public class Buildr_Runnable_StateFileUpdater implements Runnable{
 	@Override
 	public void run() {
 		if (builders== null) {
-			statefile.delete();
+			//statefile.delete();
 			return;
-		}
-		ArrayList<String> playernames= new ArrayList<String>();
-		for (Player player : builders) {
-			playernames.add(player.getName());
-		}
-		
+		}		
 		//System.out.println("StateFile update. size:"+builders.size());
 		
 		try {
 			ObjectOutputStream objctOutStrm = new ObjectOutputStream(new FileOutputStream(statefile));
-			objctOutStrm.writeObject(playernames);
+			objctOutStrm.writeObject(builders);
 			objctOutStrm.flush();
 			objctOutStrm.close();
 		} catch (Exception e) {
