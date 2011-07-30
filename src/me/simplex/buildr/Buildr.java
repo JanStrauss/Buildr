@@ -2,13 +2,13 @@ package me.simplex.buildr;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.logging.Logger;
 
 import me.simplex.buildr.listener.Buildr_Listener_Block;
 import me.simplex.buildr.listener.Buildr_Listener_Entity;
 import me.simplex.buildr.listener.Buildr_Listener_Player;
 import me.simplex.buildr.listener.Buildr_Listener_Weather;
+import me.simplex.buildr.listener.Buildr_Listener_World;
 import me.simplex.buildr.manager.Buildr_Manager_Commands;
 import me.simplex.buildr.manager.Buildr_Manager_Configuration;
 import me.simplex.buildr.manager.Buildr_Manager_Inventory;
@@ -47,6 +47,7 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_Listener_Player playerListener;
 	  private Buildr_Listener_Weather weatherListener;
 	  private Buildr_Listener_Block blockListener;
+	  private Buildr_Listener_World worldListener;
 	  
 	  private Buildr_Manager_Commands cmdHandler;
 	  private Buildr_Manager_Inventory invManager;
@@ -91,6 +92,7 @@ public class Buildr extends JavaPlugin {
 		playerListener 		= new Buildr_Listener_Player(this);
 		weatherListener 	= new Buildr_Listener_Weather(this);
 		blockListener 		= new Buildr_Listener_Block(this);
+		worldListener		= new Buildr_Listener_World(this);
 		 
 		worldBuildMode 		= new ArrayList<World>();
 		worldBuildAllowed 	= new ArrayList<World>();
@@ -150,6 +152,7 @@ public class Buildr extends JavaPlugin {
 		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
 		pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Event.Priority.Normal, this);
 		pm.registerEvent(Type.PLAYER_PORTAL, playerListener, Event.Priority.Normal, this);
+		pm.registerEvent(Type.WORLD_LOAD, worldListener, Event.Priority.Normal, this);
 		log("Listener registered");
 		 
 		// TimeThread 
@@ -157,17 +160,6 @@ public class Buildr extends JavaPlugin {
 
 		log("started TimeThread");
 		importantLog("Buildr v"+version+" loaded");
-		
-		//init worlds
-		List<World> worlds = getServer().getWorlds();
-		for(World name : worlds ) {
-			String worldString = name.getName();
-			if(hasConfigValue(worldString)) {
-				if(getConfigValue(worldString)) {
-					this.enterGlobalbuildmode(name);
-				}
-			}
-		}
 	}
 
 	@Override
@@ -415,10 +407,6 @@ public class Buildr extends JavaPlugin {
 
 	public boolean getConfigValue(String key){
 		return cfgManager.getConfigValue(key);
-	}
-
-	public boolean hasConfigValue(String key){
-		return cfgManager.hasConfigValue(key);
 	}
 	
 	public ArrayList<World> getWorldBuildMode() {
