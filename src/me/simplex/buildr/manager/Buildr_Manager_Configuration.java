@@ -64,7 +64,7 @@ public class Buildr_Manager_Configuration {
 			writer.write("#                                                          #");writer.newLine();
 			writer.write("#                    BUILDR CONFIGURATION                  #");writer.newLine();
 			writer.write("#                                                          #");writer.newLine();
-			writer.write("#                            v0.5                          #");writer.newLine();
+			writer.write("#                           v0.5.2                         #");writer.newLine();
 			writer.write("############################################################");writer.newLine();
 			writer.newLine();
 			writer.write("##### General settings: ####################################");writer.newLine();
@@ -97,12 +97,18 @@ public class Buildr_Manager_Configuration {
 			writer.write("# Enable Dropblocker");writer.newLine(); //done
 			writer.write("GLOBALBUILD_NODROPS=true");writer.newLine();
 			writer.newLine();
+			writer.write("# Force Players to Buildmode if the world they are in is in Globalbuildmode");writer.newLine(); //done
+			writer.write("GLOBALBUILD_FORCE_BUILDMODE=false");writer.newLine();
+			writer.newLine();
 			writer.newLine();
 			
 			writer.write("##### Buildmode settings: ##################################");writer.newLine();
 			writer.newLine();
 			writer.write("# Enable the buildmode");writer.newLine(); //done
 			writer.write("BUILDMODE_ENABLE=true");writer.newLine(); 
+			writer.newLine();
+			writer.write("# If set, users won't be switched out of buildmode after a reconnect/login");writer.newLine(); //done
+			writer.write("BUILDMODE_STAY_AFTER_LOGOUT=false");writer.newLine(); 
 			writer.newLine();
 			writer.write("# If set, users are only able to activate the buildmode if the mode is allowed in the world they are in");writer.newLine(); //done
 			writer.write("BUILDMODE_REQUIRE_ALLOW=false");writer.newLine(); 
@@ -178,11 +184,16 @@ public class Buildr_Manager_Configuration {
 			writer.write("# if set, a tree can be felt if you hit its leaves, else you can only fell it by hitting log");writer.newLine(); //done
 			writer.write("TREECUTTER_ACTIVATE_ON_LEAVES=true");writer.newLine();
 			writer.newLine();
-			writer.write("##### Worlds below here that will have globalbuild on startup: ");writer.newLine();
+			writer.newLine();
+			
+			writer.write("##### World settings  ####################################");writer.newLine();
+			writer.newLine();
+			writer.write("# put every world in here you want to have globalbuildmode enabled on default");writer.newLine();
+			writer.write("# If you don't want a world, put false instead (or just leave it out).");writer.newLine();
 			writer.write("# e.g. world=true");writer.newLine();
-			writer.write("# If you don't want a world, put false instead.");writer.newLine();
 			writer.newLine();
 			writer.newLine();
+			
 			writer.close();
 			stream.close();
 			
@@ -193,6 +204,10 @@ public class Buildr_Manager_Configuration {
 	}
 	
 	public boolean getConfigValue(String key){
+		Object ret = settings.get(key);
+		if (ret == null) {
+			return false;
+		}
 		return settings.get(key);
 	}
 	

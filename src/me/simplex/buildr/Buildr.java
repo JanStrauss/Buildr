@@ -120,14 +120,23 @@ public class Buildr extends JavaPlugin {
 		if (invManager.startupCheck()) {
 			importantLog("created Inventory directory");
 		}
-		
-			setupPermissions();
+				
+		//permissions
+		setupPermissions();
 			
 		// check for InventoryStateFile
 		if (invManager.checkInventoryStateFile()) {
 			importantLog("loading InventoyStateFile..");
 			toProcessPlayers.addAll(invManager.loadInventoryStateFile());
 			importantLog("found "+toProcessPlayers.size()+" builder(s) to treat on login");
+		}
+		
+		//check if /reload and if remove players from toProcessPlayers list
+		Player[] online = getServer().getOnlinePlayers();
+		if (online.length > 0) {
+			for (Player player : online) {
+				toProcessPlayers.remove(player);
+			}
 		}
 
 		//register Listener
@@ -147,8 +156,9 @@ public class Buildr extends JavaPlugin {
 		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Buildr_Runnable_TimeChecker(this), 20*30, 20*30);
 
 		log("started TimeThread");
-		importantLog("Buildr v"+version+" (relick's modified) loaded");
+		importantLog("Buildr v"+version+" loaded");
 		
+		//init worlds
 		List<World> worlds = getServer().getWorlds();
 		for(World name : worlds ) {
 			String worldString = name.getName();
@@ -226,7 +236,7 @@ public class Buildr extends JavaPlugin {
 		return playerBuildMode.contains(player);
 	}
 	
-	public void checkPlayerIsToProcess(Player player){
+	public void handlePlayerOnLogin(Player player){
 		for (String name : toProcessPlayers) {
 			if (name.equals(player.getName())) {
 				toProcessPlayers.remove(name);
@@ -235,6 +245,13 @@ public class Buildr extends JavaPlugin {
 				}
 				return;
 			}
+		}
+		if (!getConfigValue("BUILDMODE_STAY_AFTER_LOGOUT") && checkPlayerBuildMode(player)) {
+			importantLog("Treated "+player.getName()+". Inventory restored.");
+			leaveBuildmode(player);
+		}
+		if (getConfigValue("GLOBALBUILD_FORCE_BUILDMODE") && checkWorldBuildMode(player.getWorld())) {
+			enterBuildmode(player);
 		}
 	}
 	
@@ -376,6 +393,13 @@ public class Buildr extends JavaPlugin {
 
 		if (getConfigValue("GLOBALBUILD_TIME")) {
 			world.setTime(0);
+		}
+		
+		if (getConfigValue("GLOBALBUILD_FORCE_BUILDMODE")) {
+			for (Player player : world.getPlayers()) {
+				enterBuildmode(player);
+				player.sendMessage("You have been forced to use buildmode");
+			}
 		}
 
 	}

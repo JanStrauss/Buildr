@@ -7,6 +7,7 @@ import me.simplex.buildr.util.Buildr_Converter_BlockToDrop;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.Action;
@@ -31,6 +32,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 
 	@Override
 	public void onPlayerInteract(PlayerInteractEvent event) {
+		//block break pickaxe
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsPickaxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
 			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreak")) {
 				// Check for Drops
@@ -57,6 +59,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 			}
 		}
 		
+		//Tree feller
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsAxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
 			if (event.getClickedBlock().getType() == Material.LOG || plugin.checkTreecuterFireOnLeaves(event.getClickedBlock())) {
 				if (plugin.getConfigValue("BUILDMODE_TREECUTTER")) {
@@ -72,6 +75,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 			}
 		}
 		
+		//Block Break all
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerBuildMode(event.getPlayer())) {
 			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK_ALL") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreakall")) {
 				// Check for Drops
@@ -92,12 +96,13 @@ public class Buildr_Listener_Player extends PlayerListener {
 			
 		}
 		
-		
+		// Builders
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsStick(event.getPlayer())) {
 			plugin.playerClickedBuildingBlock(event.getPlayer(),event.getClickedBlock());
 			return;
 		}
 		
+		// Compass jmp
 		ItemStack compassjumpitem = event.getPlayer().getItemInHand();
 		Player player = event.getPlayer();
 
@@ -146,31 +151,47 @@ public class Buildr_Listener_Player extends PlayerListener {
 	
 	@Override
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
-		if (!event.getFrom().getWorld().equals(event.getTo().getWorld())) {
-			System.out.println("worldchange fired");
-			if (plugin.checkPlayerBuildMode(event.getPlayer())) {
-				plugin.leaveBuildmode(event.getPlayer());
-				event.getPlayer().sendMessage(ChatColor.BLUE+"Buildr: "+ChatColor.WHITE+"Left Buildmode because of Port between worlds");
+		World from = event.getFrom().getWorld();
+		World to = event.getTo().getWorld();
+		Player player = event.getPlayer();
+
+		if (!from.equals(to)) {
+			plugin.log("worldchange fired");
+			if (plugin.getConfigValue("GLOBALBUILD_FORCE_BUILDMODE") && plugin.checkWorldBuildMode(to)) {
+				plugin.enterBuildmode(player);
+				player.sendMessage(ChatColor.BLUE+"Buildr: "+ChatColor.WHITE+"Forced Buildmode because you ported to a world with globalbuildmode activated");
+			}
+			else {
+				if (plugin.checkPlayerBuildMode(player)) {
+					plugin.leaveBuildmode(player);
+					player.sendMessage(ChatColor.BLUE+"Buildr: "+ChatColor.WHITE+"Left Buildmode because of Port between worlds");
+				}
 			}
 		}
 	}
 	@Override
 	public void onPlayerPortal(PlayerPortalEvent event) {
-		if (!event.getFrom().getWorld().equals(event.getTo().getWorld())) {
-			System.out.println("worldchange fired");
-			if (plugin.checkPlayerBuildMode(event.getPlayer())) {
-				plugin.leaveBuildmode(event.getPlayer());
-				event.getPlayer().sendMessage(ChatColor.BLUE+"Buildr: "+ChatColor.WHITE+"Left Buildmode because of Port between worlds");
+		World from = event.getFrom().getWorld();
+		World to = event.getTo().getWorld();
+		Player player = event.getPlayer();
+
+		if (!from.equals(to)) {
+			plugin.log("worldchange fired");
+			if (plugin.getConfigValue("GLOBALBUILD_FORCE_BUILDMODE") && plugin.checkWorldBuildMode(to)) {
+				plugin.enterBuildmode(player);
+				player.sendMessage(ChatColor.BLUE+"Buildr: "+ChatColor.WHITE+"Forced Buildmode because you ported to a world with globalbuildmode activated");
+			}
+			else {
+				if (plugin.checkPlayerBuildMode(player)) {
+					plugin.leaveBuildmode(player);
+					player.sendMessage(ChatColor.BLUE+"Buildr: "+ChatColor.WHITE+"Left Buildmode because of Port between worlds");
+				}
 			}
 		}
 	}
 	
 	@Override
 	public void onPlayerJoin(PlayerJoinEvent event) {
-		plugin.checkPlayerIsToProcess(event.getPlayer());
-			if (plugin.checkPlayerBuildMode(event.getPlayer())) {
-				plugin.importantLog("Treated "+event.getPlayer().getName()+". Inventory restored.");
-				plugin.leaveBuildmode(event.getPlayer());
-			}
+		plugin.handlePlayerOnLogin(event.getPlayer());
 	}
 }
