@@ -15,6 +15,7 @@ public class Buildr_Manager_Configuration {
 	private Buildr plugin;
 	public static File configfile;
 	private HashMap<String, Boolean> settings;
+	private String version;
 	
 	public Buildr_Manager_Configuration(Buildr buildr){
 		this.plugin = buildr;
@@ -40,13 +41,16 @@ public class Buildr_Manager_Configuration {
 					if(line==null){
 						break;
 					}
-					if(!line.startsWith("#") && !line.isEmpty()){
+					if(!line.startsWith("#") && !line.isEmpty() && !line.startsWith("CFG=")){
 						String linecont[] = line.split("=");
 						if(linecont.length==2){
 							String key = linecont[0];
 							String value = linecont[1];
 							settings.put(key, Boolean.valueOf(value));
 						}
+					}
+					if ((version == null) && line.startsWith("CFG=")) {
+						version = line.substring(4).trim();
 					}
 				}
 				bffrdRdr.close();
@@ -64,8 +68,10 @@ public class Buildr_Manager_Configuration {
 			writer.write("#                                                          #");writer.newLine();
 			writer.write("#                    BUILDR CONFIGURATION                  #");writer.newLine();
 			writer.write("#                                                          #");writer.newLine();
-			writer.write("#                           v0.5.2                         #");writer.newLine();
+			writer.write("#                            v0.5.2                        #");writer.newLine();
 			writer.write("############################################################");writer.newLine();
+			writer.newLine();
+			writer.write("CFG=0.5.2");writer.newLine();
 			writer.newLine();
 			writer.write("##### General settings: ####################################");writer.newLine();
 			writer.newLine();
@@ -200,6 +206,24 @@ public class Buildr_Manager_Configuration {
 		} catch (Exception e) {
 			System.out.println("ERROR writing cfgfile");
 			e.printStackTrace();
+		}
+	}
+	
+	public void checkVersion(){
+		if (!version.equals(plugin.getCurrentConfig())) {
+			plugin.importantLog("outdated settings.properties!");
+			
+			File con = new File("plugins/Buildr/settings.properties");
+			File oldcon = new File("plugins/Buildr/settings_old.properties");
+			if (oldcon.exists()) {
+				oldcon.delete();
+			}
+			con.renameTo(oldcon);
+			con.delete();
+			createSettings();
+		}
+		else {
+			plugin.log("Config: Version OK");
 		}
 	}
 	

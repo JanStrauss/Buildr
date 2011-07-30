@@ -1,8 +1,9 @@
 name: Buildr
 main: me.simplex.buildr.Buildr
-version: 0.5.1
-website: http://forums.bukkit.org/threads/edit-mech-buildr-v0-4-4-toolbox-for-creative-servers-allows-faster-and-easier-building-1000.25644/
-author: simplex,relick
+version: 0.5.2
+website: http://forums.bukkit.org/threads/25644/
+author: simplex
+startup: startup
 description: >
              Collection of tools for faster & more comfortable building
 commands:

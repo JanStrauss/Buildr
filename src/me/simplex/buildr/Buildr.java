@@ -42,6 +42,7 @@ public class Buildr extends JavaPlugin {
 	  
 	  private String prefix;
 	  private String version;
+	  private String version_cfg;
 	  
 	  private Buildr_Listener_Entity entityListener;
 	  private Buildr_Listener_Player playerListener;
@@ -81,26 +82,27 @@ public class Buildr extends JavaPlugin {
 		
 		pluginDirectory 	=  "plugins/Buildr";
 		version 			= getDescription().getVersion();
+		version_cfg			= version;
 		prefix 				= "[Buildr] ";
-		 
+		
 		cmdHandler 			= new Buildr_Manager_Commands(this);
 		invManager 			= new Buildr_Manager_Inventory(this);
 		cfgManager 			= new Buildr_Manager_Configuration(this);
 		unDoStack 			= new Buildr_Manager_UndoStack();
-		 
+
 		entityListener 		= new Buildr_Listener_Entity(this);
 		playerListener 		= new Buildr_Listener_Player(this);
 		weatherListener 	= new Buildr_Listener_Weather(this);
 		blockListener 		= new Buildr_Listener_Block(this);
 		worldListener		= new Buildr_Listener_World(this);
-		 
+
 		worldBuildMode 		= new ArrayList<World>();
 		worldBuildAllowed 	= new ArrayList<World>();
 		playerBuildMode 	= new ArrayList<Player>();
 		toProcessPlayers 	= new ArrayList<String>();
 		startedBuildings 	= new ArrayList<Buildr_Interface_Building>();
 		playerCuttingTree 	= new LinkedList<Player>();
-		 
+
 		//load settings
 		importantLog("Buildr v"+version+" loading..");
 			
@@ -112,17 +114,21 @@ public class Buildr extends JavaPlugin {
 			importantLog("created Buildr Configfile settings.cfg");
 		}
 		cfgManager.loadSettings();
+		cfgManager.checkVersion();
 		importantLog("loaded settings.cfg");
 
+		//print settings to console
 		if (getConfigValue("GENERAL_DISPLAY_SETTINGS_ON_LOAD")) {
 			for (String cfg : cfgManager.getSettings().keySet()) {
 				importantLog("KEY: "+cfg+" VALUE: "+getConfigValue(cfg));
 			}
 		}
+		
+		//check Inventory directory
 		if (invManager.startupCheck()) {
 			importantLog("created Inventory directory");
 		}
-				
+
 		//permissions
 		setupPermissions();
 			
@@ -133,7 +139,7 @@ public class Buildr extends JavaPlugin {
 			importantLog("found "+toProcessPlayers.size()+" builder(s) to treat on login");
 		}
 		
-		//check if /reload and if remove players from toProcessPlayers list
+		//check if /reload and if so remove players from toProcessPlayers list
 		Player[] online = getServer().getOnlinePlayers();
 		if (online.length > 0) {
 			for (Player player : online) {
@@ -398,7 +404,7 @@ public class Buildr extends JavaPlugin {
 	public void leaveGlobalbuildmode(World world) {
 		getWorldBuildMode().remove(world);
 	}
-	
+		
 	//get+set 
 	
 	/**
@@ -434,10 +440,13 @@ public class Buildr extends JavaPlugin {
 		return playerCuttingTree;
 	}
 
-	/**
-	 * @return the startedWalls
-	 */
 	public ArrayList<Buildr_Interface_Building> getStartedBuildings() {
 		return startedBuildings;
 	}
+
+	public String getCurrentConfig() {
+		return version_cfg;
+	}
+	
+	
 }
