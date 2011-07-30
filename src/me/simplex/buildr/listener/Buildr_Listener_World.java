@@ -21,4 +21,5 @@ public class Buildr_Listener_World extends WorldListener {
 			plugin.log("Enabled Globalbuildmode for world "+world.getName()+". (ConfigValue)");
 		}
 	}
+
 }

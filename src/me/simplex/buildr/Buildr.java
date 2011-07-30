@@ -163,6 +163,20 @@ public class Buildr extends JavaPlugin {
 		 
 		// TimeThread 
 		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Buildr_Runnable_TimeChecker(this), 20*30, 20*30);
+		
+		// Check Worlds on Serverstart
+		getServer().getScheduler().scheduleSyncDelayedTask(this, new Runnable() {
+
+			@Override
+			public void run() {
+				for(World world : getServer().getWorlds()) {
+					String worldString = world.getName();
+					if(getConfigValue(worldString)) {
+						enterGlobalbuildmode(world);
+					}
+				}
+			}
+		});
 
 		log("started TimeThread");
 		importantLog("Buildr v"+version+" loaded");
@@ -396,7 +410,7 @@ public class Buildr extends JavaPlugin {
 		if (getConfigValue("GLOBALBUILD_FORCE_BUILDMODE")) {
 			for (Player player : world.getPlayers()) {
 				enterBuildmode(player);
-				player.sendMessage("You have been forced to use buildmode");
+				player.sendMessage(ChatColor.GOLD+"You have been forced to use buildmode.");
 			}
 		}
 

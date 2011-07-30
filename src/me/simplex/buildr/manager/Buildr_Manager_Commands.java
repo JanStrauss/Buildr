@@ -762,7 +762,7 @@ public class Buildr_Manager_Commands {
 		if (!plugin.getConfigValue("GLOBALBUILD_ENABLE")) {
 			return;
 		}
-		if (plugin.getWorldBuildMode().contains(world)) {
+		if (plugin.checkWorldBuildMode(world)) {
 			plugin.leaveGlobalbuildmode(world);
 			sender.sendMessage(ChatColor.YELLOW+"Globalbuildmode disabled");
 			for (Player inhab : world.getPlayers()) {
@@ -771,11 +771,11 @@ public class Buildr_Manager_Commands {
 			plugin.log("Globalbuildmode disabled in World "+world.getName());
 		}
 		else {
-			plugin.enterGlobalbuildmode(world);
 			sender.sendMessage(ChatColor.YELLOW+"Globalbuildmode enabled");
 			for (Player inhab : world.getPlayers()) {
 				inhab.sendMessage(ChatColor.AQUA+((Player)sender).getName()+" enabled the Globalbuildmode on the world you are currently in");
 			}
+			plugin.enterGlobalbuildmode(world);
 			plugin.log("Globalbuildmode enabled in World "+world.getName());
 		}
 	}
@@ -788,8 +788,11 @@ public class Buildr_Manager_Commands {
 		if (!plugin.getConfigValue("BUILDMODE_ENABLE")) {
 			return;
 		}
-		if (plugin.getPlayerBuildMode().contains((Player)sender)) {
-			
+		if (plugin.checkPlayerBuildMode((Player)sender)) {
+			if (plugin.getConfigValue("GLOBALBUILD_FORCE_BUILDMODE") && plugin.checkWorldBuildMode(((Player)sender).getWorld())) {
+				sender.sendMessage("Buildmode is forced in this world. You can't disable it here.");
+				return;
+			}
 			sender.sendMessage(ChatColor.BLUE+"Buildmode disabled");
 			plugin.leaveBuildmode((Player)sender);
 		}

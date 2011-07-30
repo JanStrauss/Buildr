@@ -19,7 +19,7 @@ public class Buildr_Manager_Configuration {
 	
 	public Buildr_Manager_Configuration(Buildr buildr){
 		this.plugin = buildr;
-		Buildr_Manager_Configuration.configfile = new File(plugin.getPluginDirectory()+File.separator+"settings.properties");
+		configfile = new File(plugin.getPluginDirectory()+File.separator+"settings.properties");
 		this.settings = new HashMap<String, Boolean>();
 	}
 	
@@ -194,8 +194,7 @@ public class Buildr_Manager_Configuration {
 			
 			writer.write("##### World settings  ####################################");writer.newLine();
 			writer.newLine();
-			writer.write("# put every world in here you want to have globalbuildmode enabled on default");writer.newLine();
-			writer.write("# If you don't want a world, put false instead (or just leave it out).");writer.newLine();
+			writer.write("# Worlds below here will have globalbuild enabled startup");writer.newLine();
 			writer.write("# e.g. world=true");writer.newLine();
 			writer.newLine();
 			writer.newLine();
@@ -210,14 +209,15 @@ public class Buildr_Manager_Configuration {
 	}
 	
 	public void checkVersion(){
-		if (!version.equals(plugin.getCurrentConfig())) {
+		if (version == null || !version.equals(plugin.getCurrentConfig())) {
 			plugin.importantLog("outdated settings.properties!");
 			
 			File con = new File("plugins/Buildr/settings.properties");
-			File oldcon = new File("plugins/Buildr/settings_old.properties");
+			File oldcon = new File("plugins/Buildr/settings_old_"+version+".properties");
 			if (oldcon.exists()) {
 				oldcon.delete();
 			}
+			
 			con.renameTo(oldcon);
 			con.delete();
 			createSettings();
