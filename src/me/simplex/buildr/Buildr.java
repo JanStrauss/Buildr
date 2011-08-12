@@ -252,7 +252,7 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	public void handlePlayerOnLogin(Player player){
-		System.out.println("login handle");
+		//System.out.println("login handle");
 		for (String name : toProcessPlayers) {
 			if (name.equals(player.getName())) {
 				if (!playerBuildMode.contains(player)) {
@@ -261,15 +261,15 @@ public class Buildr extends JavaPlugin {
 				}
 			}
 		}
-		System.out.println("BM_STAY_AFTR_LGOUT"+getConfigValue("BUILDMODE_STAY_AFTER_LOGOUT"));
+		//System.out.println("BM_STAY_AFTR_LGOUT"+getConfigValue("BUILDMODE_STAY_AFTER_LOGOUT"));
 		if (!getConfigValue("BUILDMODE_STAY_AFTER_LOGOUT") && checkPlayerBuildMode(player)) {
 			importantLog("Treated "+player.getName()+". Inventory restored.");
 			leaveBuildmode(player);
-			System.out.println("leave bm");
+			//System.out.println("leave bm");
 		}
 		if (getConfigValue("GLOBALBUILD_FORCE_BUILDMODE") && checkWorldBuildMode(player.getWorld())) {
 			enterBuildmode(player);
-			System.out.println("enter bm");
+			//System.out.println("enter bm");
 		}
 	}
 	
