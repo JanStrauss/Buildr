@@ -85,7 +85,7 @@ public class Buildr extends JavaPlugin {
 		
 		pluginDirectory 	=  "plugins/Buildr";
 		version 			= getDescription().getVersion();
-		version_cfg			= version;
+		version_cfg			= "0.5.2";
 		prefix 				= "[Buildr] ";
 		
 		cmdHandler 			= new Buildr_Manager_Commands(this);
