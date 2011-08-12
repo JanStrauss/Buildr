@@ -84,8 +84,10 @@ public class Buildr_Listener_Player extends PlayerListener {
 						if (stk != null) {
 							event.getClickedBlock().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(), stk);
 						}
+						
 					}
 				}
+
 					
 				if (!event.getClickedBlock().getType().equals(Material.BEDROCK)) {
 					event.getClickedBlock().setType(Material.AIR);

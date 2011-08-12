@@ -254,7 +254,6 @@ public class Buildr extends JavaPlugin {
 	public void handlePlayerOnLogin(Player player){
 		for (String name : toProcessPlayers) {
 			if (name.equals(player.getName())) {
-				toProcessPlayers.remove(name);
 				if (!playerBuildMode.contains(player)) {
 					playerBuildMode.add(player);
 				}
@@ -376,7 +375,7 @@ public class Buildr extends JavaPlugin {
 				}
 			}
 			
-		if (getPlayerBuildMode().contains(player)) {
+		if (playerBuildMode.contains(player)) {
 			return;
 		}
 		

@@ -56,6 +56,8 @@ public class Buildr_Runnable_Builder_Sphere implements Runnable {
 					
 					Block block_handle = player.getWorld().getBlockAt(pos_x, pos_y, pos_z);
 					
+					
+					
 					if (isBlockInRadius(radius, block_handle)) {
 						if (aironly && hollow) {
 							if (block_handle.getType().equals(Material.AIR) && checkBlockIsOutside(radius,block_handle)) {
