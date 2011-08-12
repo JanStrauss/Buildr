@@ -390,6 +390,7 @@ public class Buildr extends JavaPlugin {
 	public void leaveBuildmode(Player player) {
 		boolean wasIn = getPlayerBuildMode().remove(player);
 		if (wasIn) {
+			toProcessPlayers.remove(player.getName());
 			if (getConfigValue("BUILDMODE_INVENTORY")) {
 				invManager.switchInventory(player);
 				if (playerBuildMode.isEmpty()) {
