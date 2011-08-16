@@ -173,8 +173,14 @@ public class Buildr_Listener_Player extends PlayerListener {
 	}
 	@Override
 	public void onPlayerPortal(PlayerPortalEvent event) {
-		World from = event.getFrom().getWorld();
-		World to = event.getTo().getWorld();
+		Location loc_to = event.getTo();
+		Location loc_from = event.getFrom();
+		
+		if (loc_from == null || loc_to == null) {
+			return;
+		}
+		World from = loc_from.getWorld();
+		World to = loc_to.getWorld();
 		Player player = event.getPlayer();
 
 		if (!from.equals(to)) {
