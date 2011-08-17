@@ -21,6 +21,7 @@ public class Buildr_Manager_Builder_Wallx implements Buildr_Interface_Building {
 		this.wallcreater=player;
 		this.material = material;
 		this.replace = replace;
+		this.replace_mat = replace_mat;
 		this.plugin = plugin;
 		this.material_data = material_data;
 	}

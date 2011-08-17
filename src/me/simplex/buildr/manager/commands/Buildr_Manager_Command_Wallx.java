@@ -70,7 +70,7 @@ public class Buildr_Manager_Command_Wallx extends Buildr_Manager_Command_Super {
 							id = Integer.parseInt(mat_re);
 						} catch (NumberFormatException e) {
 							try {
-								id = Material.matchMaterial(args[0]).getId();
+								id = Material.matchMaterial(mat_re).getId();
 							} catch (NullPointerException e2) {
 								sender.sendMessage(ChatColor.RED+"wrong format");
 								return true;
