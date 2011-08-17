@@ -14,17 +14,19 @@ public class Buildr_Runnable_Builder_Wall implements Runnable {
 	private Block position1,position2;
 	private Buildr_Type_Wall type;
 	private Material material;
-	private boolean aironly;
+	private boolean replace;
+	private Material replace_mat;
 	private Buildr plugin;
 	private Player player;
 	private byte material_data;
 	
-	public Buildr_Runnable_Builder_Wall(Block position1, Block position2,Buildr_Type_Wall type, Material material, boolean aironly,Buildr plugin, Player player, byte material_data) {
+	public Buildr_Runnable_Builder_Wall(Block position1, Block position2,Buildr_Type_Wall type, Material material, boolean replace, Material replace_mat,Buildr plugin, Player player, byte material_data) {
 		this.position1 = position1;
 		this.position2 = position2;
 		this.type = type;
 		this.material = material;
-		this.aironly = aironly;
+		this.replace = replace;
+		this.replace_mat = replace_mat;
 		this.plugin = plugin;
 		this.player = player;
 		this.material_data = material_data;
@@ -61,8 +63,8 @@ public class Buildr_Runnable_Builder_Wall implements Runnable {
 			for (int j = 0; j < distZ; j++) {		//z
 				Block block_handle = position1.getWorld().getBlockAt(fixed_X, y, z);
 				
-				if (aironly) {
-					if (block_handle.getType().equals(Material.AIR)) {
+				if (replace) {
+					if (block_handle.getType().equals(replace_mat)) {
 						changeBlock(block_handle, undo);
 					}
 				}
@@ -93,7 +95,7 @@ public class Buildr_Runnable_Builder_Wall implements Runnable {
 			for (int j = 0; j < distZ; j++) {		//z
 				Block block_handle = position1.getWorld().getBlockAt(x, fixed_Y, z);
 				
-				if (aironly) {
+				if (replace) {
 					if (block_handle.getType().equals(Material.AIR)) {
 						changeBlock(block_handle, undo);
 					}
@@ -126,7 +128,7 @@ public class Buildr_Runnable_Builder_Wall implements Runnable {
 			for (int j = 0; j < distY; j++) {		//y
 				Block block_handle = position1.getWorld().getBlockAt(x, y, fixed_Z);
 				
-				if (aironly) {
+				if (replace) {
 					if (block_handle.getType().equals(Material.AIR)) {
 						changeBlock(block_handle, undo);
 					}

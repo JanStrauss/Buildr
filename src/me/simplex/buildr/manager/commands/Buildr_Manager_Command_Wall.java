@@ -26,6 +26,7 @@ public class Buildr_Manager_Command_Wall extends Buildr_Manager_Command_Super {
 			if (plugin.checkPermission((Player)sender, "buildr.cmd.wall")) {
 				if (args.length >=1 && args.length <=2) {
 					Material material;
+					Material material_re;
 					int id;
 					byte mat_data = (byte)0;
 					if (args[0].toUpperCase().startsWith("WOOL:")) {
@@ -61,17 +62,36 @@ public class Buildr_Manager_Command_Wall extends Buildr_Manager_Command_Super {
 						return true;
 					}
 					if (args.length==1) {
-							this.cmd_wall(sender, material, mat_data, false);
+							this.cmd_wall(sender, material, mat_data, false, null);
 							return true;
 					}
 					else if (args.length==2) {
-						if (args[1].equalsIgnoreCase("a") || args[1].equalsIgnoreCase("air") || args[1].equalsIgnoreCase("aironly")) {
-							this.cmd_wall(sender, material, mat_data, true);
-							return true;
-						}
-						else {
-							return false;
-						}
+						if (args[1].toLowerCase().startsWith("r")) {
+							String mat_re = args[1].substring(1);	
+							try {
+								id = Integer.parseInt(mat_re);
+							} catch (NumberFormatException e) {
+								try {
+									id = Material.matchMaterial(mat_re).getId();
+								} catch (NullPointerException e2) {
+									sender.sendMessage(ChatColor.RED+"wrong format");
+									return true;
+								}
+
+							}
+							if (Material.getMaterial(id).isBlock()) {
+								material_re = Material.getMaterial(id);
+							}
+							else {
+								sender.sendMessage(ChatColor.RED+"unvalid blocktype");
+								return true;
+							}
+								this.cmd_wall(sender, material, mat_data, true, material_re);
+								return true;
+							}
+							else {
+								return false;
+							}
 					}
 					else {
 						return false;
@@ -90,7 +110,7 @@ public class Buildr_Manager_Command_Wall extends Buildr_Manager_Command_Super {
 		return false;
 	}
 	
-	public void cmd_wall(CommandSender sender, Material material, byte material_data, boolean aironly) {
+	public void cmd_wall(CommandSender sender, Material material, byte material_data, boolean replace, Material replace_mat) {
 		if (!plugin.getConfigValue("FEATURE_BUILDER_WALL")) {
 			return;
 		}
@@ -98,8 +118,12 @@ public class Buildr_Manager_Command_Wall extends Buildr_Manager_Command_Super {
 			plugin.removeStartedBuilding((Player)sender);
 			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
 		}
-		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Wall((Player)sender, material, aironly, plugin,material_data));
-		String buildinfo ="Started new Wall. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+aironly;
+		String replace_info ="";
+		if (replace) {
+			replace_info = "Replace: "+ChatColor.BLUE+replace_mat;
+		}
+		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Wall((Player)sender, material, replace, replace_mat, plugin,material_data));
+		String buildinfo ="Started new Wall. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") "+replace_info;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on block 1 while holding a stick to continue");
 	}
