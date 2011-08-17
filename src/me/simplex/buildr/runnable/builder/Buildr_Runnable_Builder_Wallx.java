@@ -76,13 +76,14 @@ public class Buildr_Runnable_Builder_Wallx implements Runnable {
 			if (!groundblocks.contains(block_handle)) {
 				groundblocks.add(block_handle);
 				for (int j = 0; j < height; j++) {
+					Block toChange = block_handle.getRelative(0, j, 0);
 					if (aironly) {
 						if (block_handle.getType().equals(Material.AIR)) {
-							changeBlock(block_handle, undo);
+							changeBlock(toChange, undo);
 						}
 					}
 					else {
-						changeBlock(block_handle, undo);
+						changeBlock(toChange, undo);
 					}
 					
 				}
