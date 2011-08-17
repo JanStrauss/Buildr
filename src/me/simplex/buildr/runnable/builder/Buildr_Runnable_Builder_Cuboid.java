@@ -17,16 +17,18 @@ public class Buildr_Runnable_Builder_Cuboid implements Runnable {
 	private Buildr plugin;
 	private Player player;
 	private byte material_data;
+	private Material replace_mat;
 	
-	public Buildr_Runnable_Builder_Cuboid(Block position1, Block position2,Material material, boolean aironly, boolean hollow,Buildr plugin, Player player, byte material_data) {
+	public Buildr_Runnable_Builder_Cuboid(Block position1, Block position2,Material material, boolean replace, Material replace_mat, boolean hollow,Buildr plugin, Player player, byte material_data) {
 		this.position1 = position1;
 		this.position2 = position2;
 		this.material = material;
-		this.aironly = aironly;
+		this.aironly = replace;
 		this.plugin = plugin;
 		this.player = player;
 		this.hollow = hollow;
 		this.material_data = material_data;
+		this.replace_mat = replace_mat;
 	}
 
 	@Override
@@ -57,7 +59,7 @@ public class Buildr_Runnable_Builder_Cuboid implements Runnable {
 				for (int pos_y = start_y; pos_y <= end_y; pos_y++) {
 					Block block_handle = player.getWorld().getBlockAt(pos_x, pos_y, pos_z);
 					if (aironly && hollow) {
-						if (block_handle.getType().equals(Material.AIR) && checkBlockIsOutside(block_handle)) {
+						if (block_handle.getType().equals(replace_mat) && checkBlockIsOutside(block_handle)) {
 							changeBlock(block_handle, undo);
 						}
 					}
@@ -67,7 +69,7 @@ public class Buildr_Runnable_Builder_Cuboid implements Runnable {
 						}
 					}
 					else if (aironly && !hollow) {
-						if (block_handle.getType().equals(Material.AIR)) {
+						if (block_handle.getType().equals(replace_mat)) {
 							changeBlock(block_handle, undo);
 						}
 					}
