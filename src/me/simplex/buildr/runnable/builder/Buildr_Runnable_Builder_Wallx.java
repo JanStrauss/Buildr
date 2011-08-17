@@ -14,16 +14,17 @@ import org.bukkit.entity.Player;
 public class Buildr_Runnable_Builder_Wallx implements Runnable {
 	private Block position1,position2;
 	private Material material;
-	private boolean aironly;
+	private Material replace_mat;
+	private boolean replace;
 	private Buildr plugin;
 	private Player player;
 	private byte material_data;
 	
-	public Buildr_Runnable_Builder_Wallx(Block position1, Block position2,Material material, boolean aironly,Buildr plugin, Player player, byte material_data) {
+	public Buildr_Runnable_Builder_Wallx(Block position1, Block position2,Material material, boolean replace, Material replace_mat ,Buildr plugin, Player player, byte material_data) {
 		this.position1 = position1;
 		this.position2 = position2;
 		this.material = material;
-		this.aironly = aironly;
+		this.replace = replace;
 		this.plugin = plugin;
 		this.player = player;
 		this.material_data = material_data;
@@ -77,8 +78,8 @@ public class Buildr_Runnable_Builder_Wallx implements Runnable {
 				groundblocks.add(block_handle);
 				for (int j = 0; j < height; j++) {
 					Block toChange = block_handle.getRelative(0, j, 0);
-					if (aironly) {
-						if (block_handle.getType().equals(Material.AIR)) {
+					if (replace) {
+						if (block_handle.getType().equals(replace_mat)) {
 							changeBlock(toChange, undo);
 						}
 					}

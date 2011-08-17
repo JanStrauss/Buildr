@@ -11,16 +11,16 @@ import org.bukkit.entity.Player;
 public class Buildr_Manager_Builder_Wallx implements Buildr_Interface_Building {
 	private Player wallcreater;
 	private Block position1,position2;
-	private Material material;
-	private boolean aironly;
+	private Material material, replace_mat;
+	private boolean replace;
 	private boolean coordinate1placed = false;
 	private Buildr plugin;
 	private byte material_data;
 	
-	public Buildr_Manager_Builder_Wallx(Player player, Material material, boolean aironly, Buildr plugin, byte material_data) {
+	public Buildr_Manager_Builder_Wallx(Player player, Material material, boolean replace,Material replace_mat, Buildr plugin, byte material_data) {
 		this.wallcreater=player;
 		this.material = material;
-		this.aironly = aironly;
+		this.replace = replace;
 		this.plugin = plugin;
 		this.material_data = material_data;
 	}
@@ -36,7 +36,7 @@ public class Buildr_Manager_Builder_Wallx implements Buildr_Interface_Building {
 	
 	@Override
 	public void startBuild(){
-		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Wallx(position1,position2,material,aironly,plugin,wallcreater,material_data));
+		plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Wallx(position1,position2,material,replace,replace_mat,plugin,wallcreater,material_data));
 	}
 	
 	/**
