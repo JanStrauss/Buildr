@@ -13,21 +13,23 @@ import org.bukkit.entity.Player;
 public class Buildr_Runnable_Builder_Cylinder implements Runnable {
 	private Block centerblock,radius_marker;
 	private Material material;
-	private boolean aironly;
+	private boolean replace;
+	private Material replace_mat;
 	private boolean hollow;
 	private Buildr plugin;
 	private Player player;
 	private byte material_data;
 
-	public Buildr_Runnable_Builder_Cylinder(Block position1, Block position2,Material material, boolean aironly, boolean hollow, Buildr plugin, Player player, byte material_data) {
+	public Buildr_Runnable_Builder_Cylinder(Block position1, Block position2,Material material, boolean replace,Material replace_mat, boolean hollow, Buildr plugin, Player player, byte material_data) {
 		this.centerblock = position1;
 		this.radius_marker = position2;
 		this.material = material;
-		this.aironly = aironly;
+		this.replace = replace;
 		this.plugin = plugin;
 		this.player = player;
 		this.hollow = hollow;
 		this.material_data = material_data;
+		this.replace_mat = replace_mat;
 	}
 
 	@Override
@@ -56,18 +58,18 @@ public class Buildr_Runnable_Builder_Cylinder implements Runnable {
 					Block block_handle = player.getWorld().getBlockAt(pos_x, pos_y, pos_z);
 					
 					if (isBlockInRadius(radius, block_handle)) {
-						if (aironly && hollow) {
-							if (block_handle.getType().equals(Material.AIR) && checkBlockIsOutside(radius,block_handle)) {
+						if (replace && hollow) {
+							if (block_handle.getType().equals(replace_mat) && checkBlockIsOutside(radius,block_handle)) {
 								changeBlock(block_handle, undo);
 							}
 						}
-						else if (!aironly && hollow) {
+						else if (!replace && hollow) {
 							if (checkBlockIsOutside(radius,block_handle)) {
 								changeBlock(block_handle, undo);
 							}
 						}
-						else if (aironly && !hollow) {
-							if (block_handle.getType().equals(Material.AIR)) {
+						else if (replace && !hollow) {
+							if (block_handle.getType().equals(replace_mat)) {
 								changeBlock(block_handle, undo);
 							}
 						}
