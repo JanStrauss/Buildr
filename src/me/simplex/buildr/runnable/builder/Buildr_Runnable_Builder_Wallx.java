@@ -25,6 +25,7 @@ public class Buildr_Runnable_Builder_Wallx implements Runnable {
 		this.position2 = position2;
 		this.material = material;
 		this.replace = replace;
+		this.replace_mat = replace_mat;
 		this.plugin = plugin;
 		this.player = player;
 		this.material_data = material_data;

@@ -115,7 +115,11 @@ public class Buildr_Manager_Command_Wallx extends Buildr_Manager_Command_Super {
 			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
 		}
 		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Wallx((Player)sender, material, replace, replace_mat,plugin,material_data));
-		String buildinfo ="Started new WallX. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") Aironly: "+ChatColor.BLUE+replace;
+		String replace_info ="";
+		if (replace) {
+			replace_info = "Replace: "+ChatColor.BLUE+replace_mat;
+		}
+		String buildinfo ="Started new WallX. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") "+replace_info;
 		sender.sendMessage(buildinfo);
 		sender.sendMessage("Rightclick on block 1 while holding a stick to continue");
 	}
