@@ -96,7 +96,7 @@ public class Buildr_Runnable_Builder_Wall implements Runnable {
 				Block block_handle = position1.getWorld().getBlockAt(x, fixed_Y, z);
 				
 				if (replace) {
-					if (block_handle.getType().equals(Material.AIR)) {
+					if (block_handle.getType().equals(replace_mat)) {
 						changeBlock(block_handle, undo);
 					}
 				}
@@ -129,7 +129,7 @@ public class Buildr_Runnable_Builder_Wall implements Runnable {
 				Block block_handle = position1.getWorld().getBlockAt(x, y, fixed_Z);
 				
 				if (replace) {
-					if (block_handle.getType().equals(Material.AIR)) {
+					if (block_handle.getType().equals(replace_mat)) {
 						changeBlock(block_handle, undo);
 					}
 				}
