@@ -60,7 +60,7 @@ public class Buildr_Manager_Command_Givex extends Buildr_Manager_Command_Super {
 		try {
 			give_mat = Material.getMaterial(Integer.parseInt(mat));
 		} catch (NumberFormatException e) {
-			give_mat = Material.matchMaterial(material);
+			give_mat = Material.matchMaterial(mat);
 		}
 		try {
 			give_data = Byte.parseByte(data);
