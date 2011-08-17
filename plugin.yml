@@ -107,3 +107,36 @@ commands:
     usage: |
            /<command> 
            Example: /<command>
+permissions:
+    buildr.*:
+        description: Gives access to all buildr parts
+        children:
+            buildr.cmd.*: true
+            buildr.feature.*: true
+    buildr.cmd.*:
+        description: Gives access to all buildr commands
+        children:
+            buildr.cmd.build: true
+            buildr.cmd.globalbuild: true
+            buildr.cmd.allow: true
+            buildr.cmd.wall: true
+            buildr.cmd.wallx: true
+            buildr.cmd.cuboid: true
+            buildr.cmd.sphere: true
+            buildr.cmd.cylinder: true
+            buildr.cmd.airfloor: true
+            buildr.cmd.top: true
+            buildr.cmd.undo: true
+            buildr.cmd.give: true
+            buildr.cmd.givex: true
+            buildr.cmd.clearinv: true
+            buildr.cmd.location: true
+    buildr.feature.*:
+        description: Gives access to all buildr features
+        children:
+            buildr.feature.treecutter: true
+            buildr.feature.jump: true
+            buildr.feature.compassjump: true
+            buildr.feature.instantblockbreak: true
+            buildr.feature.instantblockbreakall: true
+            buildr.feature.break_bedrock: true
