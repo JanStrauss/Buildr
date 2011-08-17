@@ -29,32 +29,32 @@ commands:
     description: Starts the wall building function
     aliases: [wl]
     usage: |
-           /<command> <material #> {a|air|aironly}
+           /<command> <material #> {rReplace}
   wallx:
     description: Starts the wallx building function
     aliases: [wlx]
     usage: |
-           /<command> <material #> {a|air|aironly}
+           /<command> <material #> {rReplace}
   cuboid:
     description: Starts the cuboid building function
     aliases: [cube,cu]
     usage: |
-           /<command> <material #> {a|air|aironly} {h|hollow}
+           /<command> <material #>  {rReplace} {h|hollow}
   sphere:
     description: Starts the sphere building function
     aliases: [ball,sp]
     usage: |
-           /<command> <material #> {a|air|aironly} {h|hollow}
+           /<command> <material #>  {rReplace} {h|hollow}
   halfsphere:
     description: Starts the half sphere building function
     aliases: [hball,hsp]
     usage: |
-           /<command> <material #> {a|air|aironly} {h|hollow}
+           /<command> <material #>  {rReplace} {h|hollow}
   cylinder:
     description: Starts the cylinder building function
     aliases: [cyl,tube]
     usage: |
-           /<command> <material #> {a|air|aironly} {h|hollow}
+           /<command> <material #>  {rReplace} {h|hollow}
   airfloor:
     description: places a block (area) of material x y blocks above the player
     aliases: [af,airf]
