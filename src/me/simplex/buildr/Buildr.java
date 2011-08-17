@@ -9,10 +9,26 @@ import me.simplex.buildr.listener.Buildr_Listener_Entity;
 import me.simplex.buildr.listener.Buildr_Listener_Player;
 import me.simplex.buildr.listener.Buildr_Listener_Weather;
 import me.simplex.buildr.listener.Buildr_Listener_World;
-import me.simplex.buildr.manager.Buildr_Manager_Commands;
 import me.simplex.buildr.manager.Buildr_Manager_Configuration;
 import me.simplex.buildr.manager.Buildr_Manager_Inventory;
 import me.simplex.buildr.manager.Buildr_Manager_UndoStack;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Airfloor;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Allowbuild;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Build;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_ClearInv;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Cuboid;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Cylinder;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Give;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Globalbuild;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Halfsphere;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Jump;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Location;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Sphere;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Top;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Undo;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Wall;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Wallx;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Wool;
 import me.simplex.buildr.runnable.Buildr_Runnable_TimeChecker;
 import me.simplex.buildr.util.Buildr_Interface_Building;
 
@@ -21,8 +37,6 @@ import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Type;
@@ -50,11 +64,29 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_Listener_Block blockListener;
 	  private Buildr_Listener_World worldListener;
 	  
-	  private Buildr_Manager_Commands cmdHandler;
 	  private Buildr_Manager_Inventory invManager;
 	  private Buildr_Manager_Configuration cfgManager;
 	  private Buildr_Manager_UndoStack unDoStack;
+	  
+	  private Buildr_Manager_Command_Airfloor cmdAirfloor;
+	  private Buildr_Manager_Command_Allowbuild cmdAllowbuild;
+	  private Buildr_Manager_Command_Build cmdBuild;
+	  private Buildr_Manager_Command_ClearInv cmdClearInv;
+	  private Buildr_Manager_Command_Cuboid cmdCuboid;
+	  private Buildr_Manager_Command_Cylinder cmdCylinder;
+	  private Buildr_Manager_Command_Give cmdGive;
+	  private Buildr_Manager_Command_Globalbuild cmdGlobalbuild;
+	  private Buildr_Manager_Command_Halfsphere cmdHalfsphere;
+	  private Buildr_Manager_Command_Jump cmdJump;
+	  private Buildr_Manager_Command_Location cmdLocation;
+	  private Buildr_Manager_Command_Top cmdTop;
+	  private Buildr_Manager_Command_Undo cmdUndo;
+	  private Buildr_Manager_Command_Sphere cmdSphere;
+	  private Buildr_Manager_Command_Wall cmdWall;
+	  private Buildr_Manager_Command_Wallx cmdWallx;
+	  private Buildr_Manager_Command_Wool cmdWool;
 
+	  
 	  private String pluginDirectory;
 	  private PluginManager pm;
 	  
@@ -88,7 +120,6 @@ public class Buildr extends JavaPlugin {
 		version_cfg			= "0.5.2";
 		prefix 				= "[Buildr] ";
 		
-		cmdHandler 			= new Buildr_Manager_Commands(this);
 		invManager 			= new Buildr_Manager_Inventory(this);
 		cfgManager 			= new Buildr_Manager_Configuration(this);
 		unDoStack 			= new Buildr_Manager_UndoStack();
@@ -98,6 +129,24 @@ public class Buildr extends JavaPlugin {
 		weatherListener 	= new Buildr_Listener_Weather(this);
 		blockListener 		= new Buildr_Listener_Block(this);
 		worldListener		= new Buildr_Listener_World(this);
+		
+		cmdAirfloor 		= new Buildr_Manager_Command_Airfloor(this);
+		cmdAllowbuild 		= new Buildr_Manager_Command_Allowbuild(this);
+		cmdBuild 			= new Buildr_Manager_Command_Build(this);
+		cmdClearInv 		= new Buildr_Manager_Command_ClearInv(this);
+		cmdCuboid 			= new Buildr_Manager_Command_Cuboid(this);
+		cmdCylinder 		= new Buildr_Manager_Command_Cylinder(this);
+		cmdGive 			= new Buildr_Manager_Command_Give(this);
+		cmdGlobalbuild 		= new Buildr_Manager_Command_Globalbuild(this);
+		cmdHalfsphere 		= new Buildr_Manager_Command_Halfsphere(this);
+		cmdJump 			= new Buildr_Manager_Command_Jump(this);
+		cmdLocation 		= new Buildr_Manager_Command_Location(this);
+		cmdTop 				= new Buildr_Manager_Command_Top(this);
+		cmdUndo 			= new Buildr_Manager_Command_Undo(this);
+		cmdSphere 			= new Buildr_Manager_Command_Sphere(this);
+		cmdWall 			= new Buildr_Manager_Command_Wall(this);
+		cmdWallx 			= new Buildr_Manager_Command_Wallx(this);
+		cmdWool 			= new Buildr_Manager_Command_Wool(this);
 
 		worldBuildMode 		= new ArrayList<World>();
 		worldBuildAllowed 	= new ArrayList<World>();
@@ -163,6 +212,26 @@ public class Buildr extends JavaPlugin {
 		pm.registerEvent(Type.PLAYER_PORTAL, playerListener, Event.Priority.Normal, this);
 		pm.registerEvent(Type.WORLD_LOAD, worldListener, Event.Priority.Normal, this);
 		log("Listener registered");
+		
+		//set command executors
+		getCommand("airfloor").setExecutor(cmdAirfloor);
+		getCommand("allowbuild").setExecutor(cmdAllowbuild);
+		getCommand("build").setExecutor(cmdBuild);
+		getCommand("clearinv").setExecutor(cmdClearInv);
+		getCommand("cuboid").setExecutor(cmdCuboid);
+		getCommand("cylinder").setExecutor(cmdCylinder);
+		getCommand("give").setExecutor(cmdGive);
+		getCommand("globalbuild").setExecutor(cmdGlobalbuild);
+		getCommand("halfsphere").setExecutor(cmdHalfsphere);
+		getCommand("jump").setExecutor(cmdJump);
+		getCommand("location").setExecutor(cmdLocation);
+		getCommand("sphere").setExecutor(cmdSphere);
+		getCommand("top").setExecutor(cmdTop);
+		getCommand("undo").setExecutor(cmdUndo);
+		getCommand("wall").setExecutor(cmdWall);
+		getCommand("wallx").setExecutor(cmdWallx);
+		getCommand("wool").setExecutor(cmdWool);
+		log("command executors set");
 		 
 		// TimeThread 
 		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Buildr_Runnable_TimeChecker(this), 20*30, 20*30);
@@ -183,14 +252,6 @@ public class Buildr extends JavaPlugin {
 
 		log("started TimeThread");
 		importantLog("Buildr v"+version+" loaded");
-	}
-
-	@Override
-	public boolean onCommand(CommandSender sender, Command command,String label, String[] args) {
-		if (!(sender instanceof Player)) { //disable console 
-			return true;
-		}
-		return cmdHandler.handleCommand(sender, command, args);
 	}
 	
 	private void setupPermissions() {
