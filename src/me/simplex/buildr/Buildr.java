@@ -19,6 +19,7 @@ import me.simplex.buildr.manager.commands.Buildr_Manager_Command_ClearInv;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Cuboid;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Cylinder;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Give;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Givex;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Globalbuild;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Halfsphere;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Jump;
@@ -40,17 +41,12 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Type;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import com.nijiko.permissions.PermissionHandler;
-import com.nijikokun.bukkit.Permissions.Permissions;
 
 public class Buildr extends JavaPlugin {
 	
 	  //tech
-	  public static PermissionHandler permissionHandler;
 	  public Server server;
 	  private Logger log = Logger.getLogger("Minecraft");
 	  
@@ -75,6 +71,7 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_Manager_Command_Cuboid cmdCuboid;
 	  private Buildr_Manager_Command_Cylinder cmdCylinder;
 	  private Buildr_Manager_Command_Give cmdGive;
+	  private Buildr_Manager_Command_Givex cmdGivex;
 	  private Buildr_Manager_Command_Globalbuild cmdGlobalbuild;
 	  private Buildr_Manager_Command_Halfsphere cmdHalfsphere;
 	  private Buildr_Manager_Command_Jump cmdJump;
@@ -90,7 +87,6 @@ public class Buildr extends JavaPlugin {
 	  private String pluginDirectory;
 	  private PluginManager pm;
 	  
-	  private boolean bukkitperms;
 	  
 	  //logic
 	  private ArrayList<World> worldBuildMode;
@@ -117,7 +113,7 @@ public class Buildr extends JavaPlugin {
 		
 		pluginDirectory 	=  "plugins/Buildr";
 		version 			= getDescription().getVersion();
-		version_cfg			= "0.5.2";
+		version_cfg			= "0.6";
 		prefix 				= "[Buildr] ";
 		
 		invManager 			= new Buildr_Manager_Inventory(this);
@@ -137,6 +133,7 @@ public class Buildr extends JavaPlugin {
 		cmdCuboid 			= new Buildr_Manager_Command_Cuboid(this);
 		cmdCylinder 		= new Buildr_Manager_Command_Cylinder(this);
 		cmdGive 			= new Buildr_Manager_Command_Give(this);
+		cmdGivex 			= new Buildr_Manager_Command_Givex(this);
 		cmdGlobalbuild 		= new Buildr_Manager_Command_Globalbuild(this);
 		cmdHalfsphere 		= new Buildr_Manager_Command_Halfsphere(this);
 		cmdJump 			= new Buildr_Manager_Command_Jump(this);
@@ -221,6 +218,7 @@ public class Buildr extends JavaPlugin {
 		getCommand("cuboid").setExecutor(cmdCuboid);
 		getCommand("cylinder").setExecutor(cmdCylinder);
 		getCommand("give").setExecutor(cmdGive);
+		getCommand("givex").setExecutor(cmdGivex);
 		getCommand("globalbuild").setExecutor(cmdGlobalbuild);
 		getCommand("halfsphere").setExecutor(cmdHalfsphere);
 		getCommand("jump").setExecutor(cmdJump);
@@ -255,30 +253,7 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	private void setupPermissions() {
-		if (!getConfigValue("GENERAL_USE_BUKKIT_PERMISSIONS")) {
-		    if (permissionHandler != null) {
-		        return;
-		    }
-		    
-		    Plugin permissionsPlugin = this.getServer().getPluginManager().getPlugin("Permissions");
-		    
-		    if (permissionsPlugin == null) {
-		        log("Permission system not detected, defaulting to OP");
-		        return;
-		    }
-			if (!getConfigValue("GENERAL_USE_PERMISSIONS")) {
-		        log("Permission system disabled, using OP");
-		        return;
-			}
-		    
-		    permissionHandler = ((Permissions) permissionsPlugin).getHandler();
-		    log("Found and will use plugin "+((Permissions)permissionsPlugin).getDescription().getFullName());
-		    bukkitperms = false;
-		}
-		else {
-			bukkitperms = true;
-			log("will use bukkits build-in permissions");
-		}
+		log("using bukkitperms");
 	}
 	
 	public void log(String msg){
@@ -292,17 +267,10 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	public boolean checkPermission(Player player, String node){
-		if (bukkitperms) {
-			return player.hasPermission(node);
+		if (!getConfigValue("GENERAL_USE_PERMISSIONS")) {
+			return player.isOp();
 		}
-		else {
-			if (permissionHandler!=null) {
-				return permissionHandler.has(player, node);
-			}
-			else {
-				return player.isOp();
-			}
-		}
+		return player.hasPermission(node);
 	}
 	
 	public boolean checkWorldBuildMode(World world){
@@ -336,7 +304,7 @@ public class Buildr extends JavaPlugin {
 	
 	public boolean checkPlayerHasStartedBuilding(Player player){
 		for (Buildr_Interface_Building wallbuilder : startedBuildings) {
-			if (wallbuilder.getWallcreater() == player) {
+			if (wallbuilder.getBuildingcreater() == player) {
 				return true;
 			}
 		}
@@ -360,9 +328,9 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	public Buildr_Interface_Building giveBuilderManager(Player player){
-		for (Buildr_Interface_Building wallbuilder : startedBuildings) {
-			if (wallbuilder.getWallcreater() == player) {
-				return wallbuilder;
+		for (Buildr_Interface_Building builder : startedBuildings) {
+			if (builder.getBuildingcreater() == player) {
+				return builder;
 			}
 		}
 		return null;
@@ -370,7 +338,7 @@ public class Buildr extends JavaPlugin {
 	
 	public void removeStartedBuilding(Player player){
 		for (Buildr_Interface_Building wallbuilder : startedBuildings) {
-			if (wallbuilder.getWallcreater() == player) {
+			if (wallbuilder.getBuildingcreater() == player) {
 				startedBuildings.remove(wallbuilder);
 				return;
 			}
@@ -389,21 +357,19 @@ public class Buildr extends JavaPlugin {
 
 	public boolean checkPlayerItemInHandIsAxe(Player player) {
 		if (player.getItemInHand().getType() == Material.DIAMOND_AXE ||
-				player.getItemInHand().getType() == Material.IRON_AXE ||
-				player.getItemInHand().getType() == Material.STONE_AXE ||
-				player.getItemInHand().getType() == Material.WOOD_AXE) {
-				return true;
+			player.getItemInHand().getType() == Material.IRON_AXE ||
+			player.getItemInHand().getType() == Material.STONE_AXE ||
+			player.getItemInHand().getType() == Material.WOOD_AXE) {
+			return true;
 		}
 		return false;
 	}
 	
 	public boolean checkPlayerItemInHandIsStick(Player player) {
 		if (player.getItemInHand().getType() == Material.STICK){
-				return true;
-			}
-			else {
-				return false;
-			}
+			return true;
+		}
+		return false;
 	}
 	
 	public void playerClickedBuildingBlock(Player player, Block clickedBlock) {

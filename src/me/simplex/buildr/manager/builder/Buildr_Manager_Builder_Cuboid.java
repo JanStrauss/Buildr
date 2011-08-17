@@ -55,7 +55,7 @@ public class Buildr_Manager_Builder_Cuboid implements Buildr_Interface_Building 
 	}
 
 	@Override
-	public Player getWallcreater() {
+	public Player getBuildingcreater() {
 		return wallcreater;
 	}
 

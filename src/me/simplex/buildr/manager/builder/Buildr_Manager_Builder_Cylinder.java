@@ -54,7 +54,7 @@ public class Buildr_Manager_Builder_Cylinder implements Buildr_Interface_Buildin
 	}
 
 	@Override
-	public Player getWallcreater() {
+	public Player getBuildingcreater() {
 		return wallcreater;
 	}
 

@@ -83,6 +83,12 @@ commands:
     usage: |
            /<command> <player> <itemid #|itemname> <amount #>
            Example: /<command> 20 50 gives a stack of 50 Glass to the player
+  givex:
+    description: gives a Stack of items with the specified datavalue to yourself
+    aliases: [gvx,gx]
+    usage: |
+           /<command> <itemid:data> <amount #>
+           Example: /<command> 17:1 50 gives yourself a stack of 50 Redwood Log
   clearinv:
     description: clears the inventory of the player
     aliases: [clrinv,ci,cleari,clear,clearinventory]

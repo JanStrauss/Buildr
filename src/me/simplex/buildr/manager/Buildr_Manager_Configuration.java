@@ -68,21 +68,18 @@ public class Buildr_Manager_Configuration {
 			writer.write("#                                                          #");writer.newLine();
 			writer.write("#                    BUILDR CONFIGURATION                  #");writer.newLine();
 			writer.write("#                                                          #");writer.newLine();
-			writer.write("#                            v0.5.2                        #");writer.newLine();
+			writer.write("#                             v0.6                         #");writer.newLine();
 			writer.write("############################################################");writer.newLine();
 			writer.newLine();
-			writer.write("CFG=0.5.2");writer.newLine();
+			writer.write("CFG=0.6");writer.newLine();
 			writer.newLine();
 			writer.write("##### General settings: ####################################");writer.newLine();
 			writer.newLine();
 			writer.write("# Print the settings while Buildr loads");writer.newLine();//done
 			writer.write("GENERAL_DISPLAY_SETTINGS_ON_LOAD=false");writer.newLine(); 
 			writer.newLine();
-			writer.write("# Enable Permissions, if false Buildr checks for OP (will also check for OP if no PermissionsPlugin was found)");writer.newLine();
+			writer.write("# Enable Permissions, if false Buildr checks for OP");writer.newLine();
 			writer.write("GENERAL_USE_PERMISSIONS=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Toggle wether to use the Permissions Plugin or the build-in Bukkit permissions (only rudimentary support)");writer.newLine();
-			writer.write("GENERAL_USE_BUKKIT_PERMISSIONS=false");writer.newLine();
 			writer.newLine();
 			writer.write("# If set, will log quite alot in the server console (mostly debug)");writer.newLine();
 			writer.write("GENERAL_DETAILED_LOG=false");writer.newLine();
@@ -170,6 +167,9 @@ public class Buildr_Manager_Configuration {
 			writer.newLine();
 			writer.write("# Enable the give command");writer.newLine(); //done
 			writer.write("FEATURE_GIVE=true");writer.newLine();
+			writer.newLine();
+			writer.write("# Enable the givex command");writer.newLine(); //done
+			writer.write("FEATURE_GIVEX=true");writer.newLine();
 			writer.newLine();
 			writer.write("# Enable the wool command");writer.newLine(); //done
 			writer.write("FEATURE_WOOL=true");writer.newLine();

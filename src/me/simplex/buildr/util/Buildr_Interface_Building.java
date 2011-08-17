@@ -4,7 +4,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public interface Buildr_Interface_Building {
-	public Player getWallcreater();
+	public Player getBuildingcreater();
 	public void startBuild();
 	public boolean isCoordinate1Placed();
 	public void addCoordinate1(Block position1);

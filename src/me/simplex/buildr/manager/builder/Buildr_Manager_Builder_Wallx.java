@@ -42,7 +42,7 @@ public class Buildr_Manager_Builder_Wallx implements Buildr_Interface_Building {
 	/**
 	 * @return the wallcreater
 	 */
-	public Player getWallcreater() {
+	public Player getBuildingcreater() {
 		return wallcreater;
 	}
 	/**
