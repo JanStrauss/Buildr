@@ -118,7 +118,7 @@ permissions:
         children:
             buildr.cmd.build: true
             buildr.cmd.globalbuild: true
-            buildr.cmd.allow: true
+            buildr.cmd.allowbuild: true
             buildr.cmd.wall: true
             buildr.cmd.wallx: true
             buildr.cmd.cuboid: true
