@@ -10,16 +10,17 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerPortalEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 
-public class Buildr_Listener_Player extends PlayerListener {
+public class Buildr_Listener_Player implements Listener {
 	
 	private Buildr plugin;
 	private Buildr_Converter_BlockToDrop converter;
@@ -30,7 +31,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 		this.converter = new Buildr_Converter_BlockToDrop();
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
 		//block break pickaxe
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsPickaxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
@@ -142,7 +143,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 		}
 	}
 
-	@Override
+	@EventHandler
 	public void onPlayerPickupItem(PlayerPickupItemEvent event) {
 		if (plugin.getConfigValue("BUILDMODE_DISABLEPICKUP")) {
 			if (plugin.checkPlayerBuildMode(event.getPlayer())) {
@@ -151,7 +152,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 		}
 	}
 	
-	@Override
+	@EventHandler
 	public void onPlayerTeleport(PlayerTeleportEvent event) {
 		World from = event.getFrom().getWorld();
 		World to = event.getTo().getWorld();
@@ -171,7 +172,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 			}
 		}
 	}
-	@Override
+	@EventHandler
 	public void onPlayerPortal(PlayerPortalEvent event) {
 		Location loc_to = event.getTo();
 		Location loc_from = event.getFrom();
@@ -198,7 +199,7 @@ public class Buildr_Listener_Player extends PlayerListener {
 		}
 	}
 	
-	@Override
+	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent event) {
 		plugin.handlePlayerOnLogin(event.getPlayer());
 	}

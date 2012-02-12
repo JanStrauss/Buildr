@@ -36,6 +36,5 @@ public class Buildr_Runnable_StateFileUpdater implements Runnable{
 			plugin.log("Failed to write to InventoryStateFile");
 			e.printStackTrace();
 		}
-		
 	}
 }

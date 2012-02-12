@@ -39,8 +39,6 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Type;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -48,6 +46,7 @@ public class Buildr extends JavaPlugin {
 	
 	  //tech
 	  public Server server;
+	  
 	  private Logger log = Logger.getLogger("Minecraft");
 	  
 	  private String prefix;
@@ -83,10 +82,9 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_Manager_Command_Wallx cmdWallx;
 	  private Buildr_Manager_Command_Wool cmdWool;
 
-	  
 	  private String pluginDirectory;
-	  private PluginManager pm;
 	  
+	  private PluginManager pm;
 	  
 	  //logic
 	  private ArrayList<World> worldBuildMode;
@@ -197,17 +195,12 @@ public class Buildr extends JavaPlugin {
 		}
 
 		//register Listener
-		pm.registerEvent(Type.ENTITY_DAMAGE, entityListener, Event.Priority.Normal, this); 
-		pm.registerEvent(Type.ENTITY_TARGET, entityListener, Event.Priority.Normal, this); 
-		pm.registerEvent(Type.ITEM_SPAWN, entityListener, Event.Priority.Normal, this); 
-		pm.registerEvent(Type.PLAYER_INTERACT, playerListener, Event.Priority.Normal, this);
-		pm.registerEvent(Type.PLAYER_PICKUP_ITEM, playerListener, Event.Priority.Normal, this); 
-		pm.registerEvent(Type.WEATHER_CHANGE, weatherListener, Event.Priority.Normal, this); 
-		pm.registerEvent(Type.BLOCK_PLACE, blockListener, Event.Priority.Normal, this);
-		pm.registerEvent(Type.PLAYER_JOIN, playerListener, Event.Priority.Normal, this);
-		pm.registerEvent(Type.PLAYER_TELEPORT, playerListener, Event.Priority.Normal, this);
-		pm.registerEvent(Type.PLAYER_PORTAL, playerListener, Event.Priority.Normal, this);
-		pm.registerEvent(Type.WORLD_LOAD, worldListener, Event.Priority.Normal, this);
+		pm.registerEvents(worldListener, this);
+		pm.registerEvents(weatherListener, this);
+		pm.registerEvents(entityListener, this);
+		pm.registerEvents(playerListener, this);
+		pm.registerEvents(blockListener, this);
+		
 		log("Listener registered");
 		
 		//set command executors

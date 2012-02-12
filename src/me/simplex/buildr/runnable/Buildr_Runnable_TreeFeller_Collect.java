@@ -83,64 +83,59 @@ public class Buildr_Runnable_TreeFeller_Collect implements Runnable {
 	}
 	
 	private Block giveNeighborBlockForLog(Block toProcess, int id){
-		Block ret=null;
 		int x = 0;
 		int y = 0;
 		int z = 0;
 		
 		switch (id) {
+			//height+1
+			case  0: x--	; y++	; z--;	; break;
+			case  1:  		; y++	; z--;	; break;
+			case  2: x++	; y++	; z--;	; break;
+			case  3: x--	; y++	;		; break;
+			case  4:  		; y++	;		; break;
+			case  5: x++	; y++	;		; break;
+			case  6: x--	; y++	; z++;	; break;
+			case  7:  		; y++	; z++;	; break;
+			case  8: x++	; y++	; z++;	; break;
 		
-		//height+1
-		case  0: x--	; y++	; z--;	; break;
-		case  1:  		; y++	; z--;	; break;
-		case  2: x++	; y++	; z--;	; break;
-		case  3: x--	; y++	;		; break;
-		case  4:  		; y++	;		; break;
-		case  5: x++	; y++	;		; break;
-		case  6: x--	; y++	; z++;	; break;
-		case  7:  		; y++	; z++;	; break;
-		case  8: x++	; y++	; z++;	; break;
+			//height-1
+			case  9: x--	; y--	; z--;	; break;
+			case 10:  		; y--	; z--;	; break;
+			case 11: x++	; y--	; z--;	; break;
+			case 12: x--	; y--	;		; break;
+			case 13:  		; y--	;		; break;
+			case 14: x++	; y--	;		; break;
+			case 15: x--	; y--	; z++;	; break;
+			case 16:  		; y--	; z++;	; break;
+			case 17: x++	; y--	; z++;	; break;
 		
-		//height-1
-		case  9: x--	; y--	; z--;	; break;
-		case 10:  		; y--	; z--;	; break;
-		case 11: x++	; y--	; z--;	; break;
-		case 12: x--	; y--	;		; break;
-		case 13:  		; y--	;		; break;
-		case 14: x++	; y--	;		; break;
-		case 15: x--	; y--	; z++;	; break;
-		case 16:  		; y--	; z++;	; break;
-		case 17: x++	; y--	; z++;	; break;
-		
-		//height0
-		case 18: x--	;    	; z--;	; break;
-		case 19:  		;    	; z--;	; break;
-		case 20: x++	;    	; z--;	; break;
-		case 21: x--	;    	;		; break;
-		case 22: x++	;    	;		; break;
-		case 23: x--	;    	; z++;	; break;
-		case 24:  		;    	; z++;	; break;
-		case 25: x++	;    	; z++;	; break;
+			//height0
+			case 18: x--	;    	; z--;	; break;
+			case 19:  		;    	; z--;	; break;
+			case 20: x++	;    	; z--;	; break;
+			case 21: x--	;    	;		; break;
+			case 22: x++	;    	;		; break;
+			case 23: x--	;    	; z++;	; break;
+			case 24:  		;    	; z++;	; break;
+			case 25: x++	;    	; z++;	; break;
 		}
-		
-		ret = toProcess.getWorld().getBlockAt(x, y, z);
-		ret = toProcess.getRelative(x, y, z);
-		return ret;
+		return toProcess.getRelative(x, y, z);
 	}
 	
 	private Block giveNeighborBlockForLeaves(Block toProcess, int id){
 		Block ret=null;
 		switch (id) {
-		case  0: ret =  toProcess.getRelative(BlockFace.NORTH); break;
-		case  1: ret =  toProcess.getRelative(BlockFace.NORTH_EAST); break;
-		case  2: ret =  toProcess.getRelative(BlockFace.EAST); break;
-		case  3: ret =  toProcess.getRelative(BlockFace.SOUTH_EAST); break;
-		case  4: ret =  toProcess.getRelative(BlockFace.SOUTH); break;
-		case  5: ret =  toProcess.getRelative(BlockFace.SOUTH_WEST); break;
-		case  6: ret =  toProcess.getRelative(BlockFace.WEST); break;
-		case  7: ret =  toProcess.getRelative(BlockFace.NORTH_WEST); break;
-		case  8: ret =  toProcess.getRelative(BlockFace.UP); break;
-		case  9: ret =  toProcess.getRelative(BlockFace.DOWN); break;
+			case  0: ret =  toProcess.getRelative(BlockFace.NORTH); 	 break;
+			case  1: ret =  toProcess.getRelative(BlockFace.NORTH_EAST); break;
+			case  2: ret =  toProcess.getRelative(BlockFace.EAST); 		 break;
+			case  3: ret =  toProcess.getRelative(BlockFace.SOUTH_EAST); break;
+			case  4: ret =  toProcess.getRelative(BlockFace.SOUTH); 	 break;
+			case  5: ret =  toProcess.getRelative(BlockFace.SOUTH_WEST); break;
+			case  6: ret =  toProcess.getRelative(BlockFace.WEST); 		 break;
+			case  7: ret =  toProcess.getRelative(BlockFace.NORTH_WEST); break;
+			case  8: ret =  toProcess.getRelative(BlockFace.UP); 		 break;
+			case  9: ret =  toProcess.getRelative(BlockFace.DOWN); 		 break;
 		}
 		return ret;
 	}

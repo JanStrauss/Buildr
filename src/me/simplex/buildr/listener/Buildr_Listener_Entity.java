@@ -3,12 +3,13 @@ package me.simplex.buildr.listener;
 import me.simplex.buildr.Buildr;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityListener;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.ItemSpawnEvent;
 
-public class Buildr_Listener_Entity extends EntityListener {
+public class Buildr_Listener_Entity implements Listener {
 	private Buildr plugin;
 
 	public Buildr_Listener_Entity(Buildr plugin) {
@@ -16,7 +17,7 @@ public class Buildr_Listener_Entity extends EntityListener {
 	}
 
 	// Godmode: No Dmg
-	@Override
+	@EventHandler
 	public void onEntityDamage(EntityDamageEvent event) {
 		if (event.getEntity() instanceof Player) {
 			if (plugin.getConfigValue("BUILDMODE_GODMODE")) {
@@ -28,7 +29,7 @@ public class Buildr_Listener_Entity extends EntityListener {
 	}
 
 	// Globalbuildmode: No Drops
-	@Override
+	@EventHandler
 	public void onItemSpawn(ItemSpawnEvent event) {
 		if (plugin.getConfigValue("GLOBALBUILD_NODROPS")) {
 			if (plugin.checkWorldBuildMode(event.getLocation().getWorld())) {
@@ -38,7 +39,7 @@ public class Buildr_Listener_Entity extends EntityListener {
 	}
 
 	// Godmode: No Target
-	@Override
+	@EventHandler
 	public void onEntityTarget(EntityTargetEvent event) {
 		if (event.getTarget() instanceof Player) {
 			if (plugin.getConfigValue("BUILDMODE_GODMODE")) {
