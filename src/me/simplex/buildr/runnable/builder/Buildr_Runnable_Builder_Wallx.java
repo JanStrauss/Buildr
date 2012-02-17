@@ -5,20 +5,16 @@ import java.util.HashMap;
 
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.util.Buildr_Container_UndoBlock;
+import me.simplex.buildr.util.Buildr_Runnable_Builder_Super;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_Runnable_Builder_Wallx implements Runnable {
-	private Block position1,position2;
-	private Material material;
-	private Material replace_mat;
+public class Buildr_Runnable_Builder_Wallx extends Buildr_Runnable_Builder_Super implements Runnable {
 	private boolean replace;
-	private Buildr plugin;
-	private Player player;
-	private byte material_data;
+
 	
 	public Buildr_Runnable_Builder_Wallx(Block position1, Block position2,Material material, boolean replace, Material replace_mat ,Buildr plugin, Player player, byte material_data) {
 		this.position1 = position1;
@@ -95,31 +91,9 @@ public class Buildr_Runnable_Builder_Wallx implements Runnable {
 		return undo;
 	}
 	
-	private int calcStartPoint(int coordinate1, int coordinate2){
-		if (coordinate1<=coordinate2) {
-			return coordinate1;
-		}
-		else {
-			return coordinate2;
-		}
-	}
 	
 	private int calcDistance(int coordinate1, int coordinate2){
 		int distance = Math.abs(coordinate1-coordinate2);
 		return distance+1;
-	}
-	
-	private void changeBlock(Block block_handle, HashMap<Block, Buildr_Container_UndoBlock> undo){
-		undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
-		if (!plugin.checkPermission(player, "buildr.feature.break_bedrock")) {
-			if (!block_handle.getType().equals(Material.BEDROCK)) {
-				block_handle.setType(material);
-				block_handle.setData(material_data);
-			}
-		}
-		else {
-			block_handle.setType(material);
-			block_handle.setData(material_data);
-		}
 	}
 }

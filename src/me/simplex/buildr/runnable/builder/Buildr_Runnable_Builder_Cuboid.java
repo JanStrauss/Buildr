@@ -4,20 +4,13 @@ import java.util.HashMap;
 
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.util.Buildr_Container_UndoBlock;
+import me.simplex.buildr.util.Buildr_Runnable_Builder_Super;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_Runnable_Builder_Cuboid implements Runnable {
-	private Block position1,position2;
-	private Material material;
-	private boolean aironly;
-	private boolean hollow;
-	private Buildr plugin;
-	private Player player;
-	private byte material_data;
-	private Material replace_mat;
+public class Buildr_Runnable_Builder_Cuboid extends Buildr_Runnable_Builder_Super implements Runnable {
 	
 	public Buildr_Runnable_Builder_Cuboid(Block position1, Block position2,Material material, boolean replace, Material replace_mat, boolean hollow,Buildr plugin, Player player, byte material_data) {
 		this.position1 = position1;
@@ -81,50 +74,5 @@ public class Buildr_Runnable_Builder_Cuboid implements Runnable {
 		}
 		return undo;
 	}
-	
-	private int calcStartPoint(int coordinate1, int coordinate2){
-		if (coordinate1<=coordinate2) {
-			return coordinate1;
-		}
-		else {
-			return coordinate2;
-		}
-	}
-	
-	private int calcEndPoint(int coordinate1, int coordinate2){
-		if (coordinate1>coordinate2) {
-			return coordinate1;
-		}
-		else {
-			return coordinate2;
-		}
-	}
-	
-	private boolean checkBlockIsOutside(Block block){
-		if (block.getX() == position1.getX() ||
-			block.getX() == position2.getX() ||
-			block.getY() == position1.getY() ||
-			block.getY() == position2.getY() ||
-			block.getZ() == position1.getZ() ||
-			block.getZ() == position2.getZ()) {
-			return true;
-		}
-		else {
-			return false;
-		}
-	}
-	
-	private void changeBlock(Block block_handle, HashMap<Block, Buildr_Container_UndoBlock> undo){
-		undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
-		if (!plugin.checkPermission(player, "buildr.feature.break_bedrock")) {
-			if (!block_handle.getType().equals(Material.BEDROCK)) {
-				block_handle.setType(material);
-				block_handle.setData(material_data);
-			}
-		}
-		else {
-			block_handle.setType(material);
-			block_handle.setData(material_data);
-		}
-	}
+		
 }
