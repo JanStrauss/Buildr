@@ -24,7 +24,7 @@ public class Buildr_Manager_Command_Allowbuild extends Buildr_Manager_Command_Su
 					this.cmd_allowbuild(sender);
 				}
 				else {
-					sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
+					sendTo(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 				}
 				return true;
 			}
@@ -42,13 +42,13 @@ public class Buildr_Manager_Command_Allowbuild extends Buildr_Manager_Command_Su
 				if (plugin.checkPlayerBuildMode(player)) {
 					plugin.leaveBuildmode(player);
 				}
-				SendToPlayer(player, MsgType.INFO, ((Player)sender).getName()+" locked the Buildmode in this world");
+				sendTo(player, MsgType.INFO, ((Player)sender).getName()+" locked the Buildmode in this world");
 			}
 		}
 		else {
 			plugin.getWorldBuildmodeAllowed().add(world);
 			for (Player player : world.getPlayers()) {
-				SendToPlayer(player, MsgType.INFO, ((Player)sender).getName()+" unlocked the Buildmode in this world");
+				sendTo(player, MsgType.INFO, ((Player)sender).getName()+" unlocked the Buildmode in this world");
 			}
 		}
 	}

@@ -23,7 +23,7 @@ public class Buildr_Manager_Command_Build extends Buildr_Manager_Command_Super {
 				this.cmd_build(sender);
 			}
 			else {
-				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
+				sendTo(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -36,14 +36,14 @@ public class Buildr_Manager_Command_Build extends Buildr_Manager_Command_Super {
 		}
 		if (plugin.checkPlayerBuildMode((Player)sender)) {
 			if (plugin.getConfigValue("GLOBALBUILD_FORCE_BUILDMODE") && plugin.checkWorldBuildMode(((Player)sender).getWorld())) {
-				sendToSender(sender, MsgType.WARNING, "Buildmode is forced in this world. You can't disable it here.");
+				sendTo(sender, MsgType.WARNING, "Buildmode is forced in this world. You can't disable it here.");
 				return;
 			}
-			sendToSender(sender, MsgType.INFO, "Buildmode disabled");
+			sendTo(sender, MsgType.INFO, "Buildmode disabled");
 			plugin.leaveBuildmode((Player)sender);
 		}
 		else {
-			sendToSender(sender, MsgType.INFO, "Buildmode enabled");
+			sendTo(sender, MsgType.INFO, "Buildmode enabled");
 			plugin.enterBuildmode((Player)sender);
 		}
 	}

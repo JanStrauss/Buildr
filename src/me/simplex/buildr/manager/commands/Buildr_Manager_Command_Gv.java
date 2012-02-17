@@ -34,7 +34,7 @@ public class Buildr_Manager_Command_Gv extends Buildr_Manager_Command_Super {
 							amount = 64;
 						}
 					} catch (NumberFormatException e) {
-						sendToSender(sender, MsgType.ERROR, "Wrong format");
+						sendTo(sender, MsgType.ERROR, "Wrong format");
 						return true;
 					}
 					this.cmd_give(sender,args[0],amount,null);
@@ -47,7 +47,7 @@ public class Buildr_Manager_Command_Gv extends Buildr_Manager_Command_Super {
 							amount = 64;
 						}
 					} catch (NumberFormatException e) {
-						sendToSender(sender, MsgType.ERROR, "Wrong format");
+						sendTo(sender, MsgType.ERROR, "Wrong format");
 						return true;
 					}
 					this.cmd_give(sender,args[1],amount,args[0]);
@@ -55,7 +55,7 @@ public class Buildr_Manager_Command_Gv extends Buildr_Manager_Command_Super {
 				
 			}
 			else {
-				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
+				sendTo(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -73,7 +73,7 @@ public class Buildr_Manager_Command_Gv extends Buildr_Manager_Command_Super {
 			give_mat = Material.matchMaterial(material);
 		}
 		if (give_mat == null) {
-			sendToSender(sender, MsgType.ERROR, "No such item found");
+			sendTo(sender, MsgType.ERROR, "No such item found");
 			return;
 		}
 		if (amount ==-1 || amount == 0) {
@@ -85,11 +85,11 @@ public class Buildr_Manager_Command_Gv extends Buildr_Manager_Command_Super {
 		}
 		if (giveto == null) {
 			sender.sendMessage(ChatColor.RED+"Player not found");
-			sendToSender(sender, MsgType.ERROR, "Player not found");
+			sendTo(sender, MsgType.ERROR, "Player not found");
 			return;
 		}
 		if (give_mat.getId() == 0) {
-			sendToSender(sender, MsgType.ERROR, "You can't give air");
+			sendTo(sender, MsgType.ERROR, "You can't give air");
 			return;
 		}
 		giveto.getInventory().addItem(new ItemStack(give_mat,amount));

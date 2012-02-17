@@ -24,7 +24,7 @@ public class Buildr_Manager_Command_Top extends Buildr_Manager_Command_Super {
 				this.cmd_top(sender);
 			}
 			else {
-				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
+				sendTo(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -38,10 +38,10 @@ public class Buildr_Manager_Command_Top extends Buildr_Manager_Command_Super {
 		Player player = (Player)sender;
 		if (player.teleport(new Location(player.getWorld(), player.getLocation().getX(), player.getWorld().getHighestBlockYAt(player.getLocation()), player.getLocation().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()))) 
 		{
-			sendToSender(sender, MsgType.INFO, "Ported to top at height " + player.getLocation().getBlockY());
+			sendTo(sender, MsgType.INFO, "Ported to top at height " + player.getLocation().getBlockY());
 		}
 		else {
-			sendToSender(sender, MsgType.WARNING, "Something went wrong..");
+			sendTo(sender, MsgType.WARNING, "Something went wrong..");
 		}
 	}
 }

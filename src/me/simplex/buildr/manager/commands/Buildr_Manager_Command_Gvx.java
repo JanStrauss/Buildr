@@ -33,14 +33,14 @@ public class Buildr_Manager_Command_Gvx extends Buildr_Manager_Command_Super {
 							amount = 64;
 						}
 					} catch (NumberFormatException e) {
-						sendToSender(sender, MsgType.ERROR, "Wrong format");
+						sendTo(sender, MsgType.ERROR, "Wrong format");
 						return true;
 					}
 					this.cmd_givex(sender,args[0],amount,null);
 				}
 			}
 			else {
-				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
+				sendTo(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -67,7 +67,7 @@ public class Buildr_Manager_Command_Gvx extends Buildr_Manager_Command_Super {
 			give_data = 0;
 		}
 		if (give_mat == null) {
-			sendToSender(sender, MsgType.ERROR, "No such item found");
+			sendTo(sender, MsgType.ERROR, "No such item found");
 			return;
 		}
 		if (amount ==-1 || amount == 0) {
@@ -76,7 +76,7 @@ public class Buildr_Manager_Command_Gvx extends Buildr_Manager_Command_Super {
 		Player giveto = ((Player)sender);
 
 		if (give_mat.getId() == 0) {
-			sendToSender(sender, MsgType.ERROR, "You can't give air");
+			sendTo(sender, MsgType.ERROR, "You can't give air");
 			return;
 		}
 		giveto.getInventory().addItem(new ItemStack(give_mat, amount, give_data, give_data));

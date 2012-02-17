@@ -47,7 +47,7 @@ public class Buildr_Manager_Command_Airfloor extends Buildr_Manager_Command_Supe
 							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase().substring(5));
 							mat_data = woolcolor.getBlockDataValue();
 						} catch (IllegalArgumentException e) {
-							sendToSender(sender, MsgType.ERROR, "No such wool");
+							sendTo(sender, MsgType.ERROR, "No such wool");
 							return true;
 						}
 					}
@@ -59,24 +59,24 @@ public class Buildr_Manager_Command_Airfloor extends Buildr_Manager_Command_Supe
 								material = Material.matchMaterial(args[0]).getId();
 							} catch (NullPointerException e2) {
 
-								sendToSender(sender, MsgType.ERROR, "wrong format");
+								sendTo(sender, MsgType.ERROR, "wrong format");
 								return true;
 							}
 
 						}
 					}
 					if (Material.getMaterial(material)== null) {
-						sendToSender(sender, MsgType.ERROR, "invalid material");
+						sendTo(sender, MsgType.ERROR, "invalid material");
 						return true;
 					}
 					this.cmd_airfloor(sender, material, mat_data, height, size);
 					} 
 				catch (NumberFormatException e) {
-					sendToSender(sender, MsgType.WARNING, "Wrong format, usage: /airfloor <material> <height> <size>");
+					sendTo(sender, MsgType.WARNING, "Wrong format, usage: /airfloor <material> <height> <size>");
 				}
 			}
 			else {
-				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
+				sendTo(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -132,7 +132,7 @@ public class Buildr_Manager_Command_Airfloor extends Buildr_Manager_Command_Supe
 				x++;
 			}
 		}
-		sendToSender(sender, MsgType.INFO, "Block(s) placed");
+		sendTo(sender, MsgType.INFO, "Block(s) placed");
 		plugin.getUndoList().addToStack(UnDoList, player);
 		plugin.log(player.getName()+" used /airfloor: "+UnDoList.size()+" blocks affected");
 	}

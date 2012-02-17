@@ -19,17 +19,17 @@ public abstract class Buildr_Manager_Command_Super implements CommandExecutor {
 		return (s instanceof Player); //disable console 
 	}
 	
-	protected enum MsgType {INFO, WARNING, ERROR};
+	public enum MsgType {INFO, WARNING, ERROR};
 	
-	protected void SendToPlayer(Player player, MsgType type, String msg){
+	public static void sendTo(Player player, MsgType type, String msg){
 		player.sendMessage(BuildMsg(type, msg));
 	}
 	
-	protected void sendToSender(CommandSender sender, MsgType type, String msg){
+	public static void sendTo(CommandSender sender, MsgType type, String msg){
 		sender.sendMessage(BuildMsg(type, msg));
 	}
 	
-	private String BuildMsg(MsgType type, String msg){
+	private static String BuildMsg(MsgType type, String msg){
 		String PREFIX = "[Buildr] ";
 		ChatColor MsgColor = ChatColor.WHITE;
 

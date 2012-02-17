@@ -35,7 +35,7 @@ public class Buildr_Manager_Command_Halfsphere extends Buildr_Manager_Command_Su
 							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase().substring(5));
 							mat_data = woolcolor.getBlockDataValue();
 						} catch (IllegalArgumentException e) {
-							sendToSender(sender, MsgType.ERROR, "No such wool");
+							sendTo(sender, MsgType.ERROR, "No such wool");
 							return true;
 						}
 					}
@@ -46,7 +46,7 @@ public class Buildr_Manager_Command_Halfsphere extends Buildr_Manager_Command_Su
 							try {
 								id = Material.matchMaterial(args[0]).getId();
 							} catch (NullPointerException e2) {
-								sendToSender(sender, MsgType.ERROR, "Wrong format");
+								sendTo(sender, MsgType.ERROR, "Wrong format");
 								return true;
 							}
 
@@ -56,7 +56,7 @@ public class Buildr_Manager_Command_Halfsphere extends Buildr_Manager_Command_Su
 						material = Material.getMaterial(id);
 					}
 					else {
-						sendToSender(sender, MsgType.ERROR, "invalid blocktype");
+						sendTo(sender, MsgType.ERROR, "invalid blocktype");
 						return true;
 					}
 					if (args.length==1) {
@@ -98,7 +98,7 @@ public class Buildr_Manager_Command_Halfsphere extends Buildr_Manager_Command_Su
 
 			}
 			else {
-				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
+				sendTo(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -111,7 +111,7 @@ public class Buildr_Manager_Command_Halfsphere extends Buildr_Manager_Command_Su
 		}
 		if (plugin.checkPlayerHasStartedBuilding((Player)sender)) {
 			plugin.removeStartedBuilding((Player)sender);
-			sendToSender(sender, MsgType.WARNING, "previous started building aborted");
+			sendTo(sender, MsgType.WARNING, "previous started building aborted");
 		}
 		String replace_info ="";
 		if (replace) {
@@ -120,7 +120,7 @@ public class Buildr_Manager_Command_Halfsphere extends Buildr_Manager_Command_Su
 		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Sphere((Player)sender, material, replace,replace_mat, hollow, true, plugin,material_data));
 		String buildinfo ="Started new half sphere. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") "+replace_info+ChatColor.WHITE+" Hollow: "+ChatColor.BLUE+hollow;
 	
-		sendToSender(sender, MsgType.INFO, buildinfo);
-		sendToSender(sender, MsgType.INFO, "Rightclick on the center of your sphere while holding a stick to continue");
+		sendTo(sender, MsgType.INFO, buildinfo);
+		sendTo(sender, MsgType.INFO, "Rightclick on the center of your sphere while holding a stick to continue");
 	}
 }

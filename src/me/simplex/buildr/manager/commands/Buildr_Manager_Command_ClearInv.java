@@ -26,7 +26,7 @@ public class Buildr_Manager_Command_ClearInv extends Buildr_Manager_Command_Supe
 				this.cmd_clrInv(sender);
 			}
 			else {
-				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
+				sendTo(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -38,6 +38,6 @@ public class Buildr_Manager_Command_ClearInv extends Buildr_Manager_Command_Supe
 			return;
 		}
 		((Player)sender).getInventory().clear();
-		sendToSender(sender, MsgType.INFO, "Inventory cleared");
+		sendTo(sender, MsgType.INFO, "Inventory cleared");
 	}
 }

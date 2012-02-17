@@ -35,7 +35,7 @@ public class Buildr_Manager_Command_Wallx extends Buildr_Manager_Command_Super {
 							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase().substring(5));
 							mat_data = woolcolor.getBlockDataValue();
 						} catch (IllegalArgumentException e) {
-							sendToSender(sender, MsgType.ERROR, "No such wool");
+							sendTo(sender, MsgType.ERROR, "No such wool");
 							return true;
 						}
 					}
@@ -46,7 +46,7 @@ public class Buildr_Manager_Command_Wallx extends Buildr_Manager_Command_Super {
 							try {
 								id = Material.matchMaterial(args[0]).getId();
 							} catch (NullPointerException e2) {
-								sendToSender(sender, MsgType.ERROR, "Wrong format");
+								sendTo(sender, MsgType.ERROR, "Wrong format");
 								return true;
 							}
 
@@ -56,7 +56,7 @@ public class Buildr_Manager_Command_Wallx extends Buildr_Manager_Command_Super {
 						material = Material.getMaterial(id);
 					}
 					else {
-						sendToSender(sender, MsgType.ERROR, "invalid blocktype");
+						sendTo(sender, MsgType.ERROR, "invalid blocktype");
 						return true;
 					}
 					if (args.length==1) {
@@ -72,7 +72,7 @@ public class Buildr_Manager_Command_Wallx extends Buildr_Manager_Command_Super {
 							try {
 								id = Material.matchMaterial(mat_re).getId();
 							} catch (NullPointerException e2) {
-								sendToSender(sender, MsgType.ERROR, "Wrong format");
+								sendTo(sender, MsgType.ERROR, "Wrong format");
 								return true;
 							}
 
@@ -81,7 +81,7 @@ public class Buildr_Manager_Command_Wallx extends Buildr_Manager_Command_Super {
 							material_re = Material.getMaterial(id);
 						}
 						else {
-							sendToSender(sender, MsgType.ERROR, "invalid blocktype");
+							sendTo(sender, MsgType.ERROR, "invalid blocktype");
 							return true;
 						}
 							this.cmd_wallx(sender, material, mat_data, true, material_re);
@@ -101,7 +101,7 @@ public class Buildr_Manager_Command_Wallx extends Buildr_Manager_Command_Super {
 
 			}
 			else {
-				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
+				sendTo(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 		return false;
 	}
@@ -112,7 +112,7 @@ public class Buildr_Manager_Command_Wallx extends Buildr_Manager_Command_Super {
 		}
 		if (plugin.checkPlayerHasStartedBuilding((Player)sender)) {
 			plugin.removeStartedBuilding((Player)sender);
-			sendToSender(sender, MsgType.WARNING, "previous started building aborted");
+			sendTo(sender, MsgType.WARNING, "previous started building aborted");
 		}
 		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Wallx((Player)sender, material, replace, replace_mat,plugin,material_data));
 		String replace_info ="";
@@ -120,7 +120,7 @@ public class Buildr_Manager_Command_Wallx extends Buildr_Manager_Command_Super {
 			replace_info = "Replace: "+ChatColor.BLUE+replace_mat;
 		}
 		String buildinfo ="Started new WallX. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") "+replace_info;
-		sendToSender(sender, MsgType.INFO, buildinfo);
-		sendToSender(sender, MsgType.INFO, "Rightclick on block 1 while holding a stick to continue");
+		sendTo(sender, MsgType.INFO, buildinfo);
+		sendTo(sender, MsgType.INFO, "Rightclick on block 1 while holding a stick to continue");
 	}
 }

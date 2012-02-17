@@ -25,7 +25,7 @@ public class Buildr_Manager_Command_Location extends Buildr_Manager_Command_Supe
 				this.cmd_location(sender);
 			}
 			else {
-				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
+				sendTo(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -38,7 +38,7 @@ public class Buildr_Manager_Command_Location extends Buildr_Manager_Command_Supe
 		}
 		Block block = ((Player)sender).getLocation().getBlock();
 		String pos = "["+ChatColor.BLUE+block.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+(block.getY()-1)+ChatColor.WHITE+", "+ChatColor.BLUE+block.getZ()+ChatColor.WHITE+"]";
-		sendToSender(sender, MsgType.INFO, "Coordinates of the block beneath you: " + pos);
+		sendTo(sender, MsgType.INFO, "Coordinates of the block beneath you: " + pos);
 		
 	}
 }

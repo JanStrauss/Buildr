@@ -24,7 +24,7 @@ public class Buildr_Manager_Command_Undo extends Buildr_Manager_Command_Super {
 				this.cmd_undo(sender);
 			}
 			else {
-				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
+				sendTo(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}

@@ -326,9 +326,9 @@ public class Buildr extends JavaPlugin {
 		return false;
 	}
 	
-	public void playerClickedBuildingBlock(Player player, Block clickedBlock) {
+	public boolean playerClickedBuildingBlock(Player player, Block clickedBlock) {
 		if (!checkPlayerHasStartedBuilding(player)) {
-			return;
+			return false;
 		}
 		
 		Buildr_Interface_Building wallbuilder = giveBuilderManager(player);
@@ -350,6 +350,7 @@ public class Buildr extends JavaPlugin {
 				player.sendMessage(ChatColor.RED+"ERROR: "+ChatColor.WHITE+wallbuilder.getCoordinateCheckFailed());
 			}
 		}
+		return true;
 	}
 	
 	public void enterBuildmode(Player player) {

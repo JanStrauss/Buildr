@@ -19,7 +19,12 @@ public class Buildr_Manager_Command_Jump extends Buildr_Manager_Command_Super {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (command.getName().equalsIgnoreCase("jump")) {
-			this.cmd_jump(sender);
+			try {
+				this.cmd_jump(sender);
+			} catch (IllegalStateException e) {
+				sendTo(sender, MsgType.WARNING, "move a litte, seems like bukkit doesn't like your current position");
+			}
+			
 			return true;
 		}
 		return false;
@@ -41,7 +46,7 @@ public class Buildr_Manager_Command_Jump extends Buildr_Manager_Command_Super {
 		loc.setY(loc.getY()+1);
 		
 		if (target == null || target.getType().equals(Material.AIR)) {
-			SendToPlayer(player, MsgType.WARNING, "no block in range");
+			sendTo(player, MsgType.WARNING, "no block in range");
 			return;
 		}
 		if (target.getRelative(0, 1, 0).getType().equals(Material.AIR)&& target.getRelative(0, 2, 0).getType().equals(Material.AIR)) {

@@ -24,7 +24,7 @@ public class Buildr_Manager_Command_Wool extends Buildr_Manager_Command_Super {
 				this.cmd_wool(sender, args[0]);
 			}
 			else {
-				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
+				sendTo(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -45,6 +45,6 @@ public class Buildr_Manager_Command_Wool extends Buildr_Manager_Command_Super {
 		}
 		((Player)sender).getInventory().addItem(woolcolor.giveStack());
 		String ret = "Gave yourself a stack of "+woolcolor.toString().toLowerCase()+" wool";
-		sendToSender(sender, MsgType.INFO, ret);
+		sendTo(sender, MsgType.INFO, ret);
 	}
 }
