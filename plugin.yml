@@ -140,3 +140,4 @@ permissions:
             buildr.feature.instantblockbreak: true
             buildr.feature.instantblockbreakall: true
             buildr.feature.break_bedrock: true
+            buildr.feature.block_info: true

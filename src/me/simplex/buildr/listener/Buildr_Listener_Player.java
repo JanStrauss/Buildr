@@ -15,7 +15,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.PlayerFishEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -119,25 +118,27 @@ public class Buildr_Listener_Player implements Listener {
 		// Builders
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsStick(event.getPlayer())) {
 			if (!plugin.playerClickedBuildingBlock(event.getPlayer(),event.getClickedBlock())) {
-				String loc = ChatColor.GOLD + "X: " +  block.getX() +  " Y: " +  block.getY() +  " Z: " +  block.getZ() + ChatColor.WHITE;
-				
-				String drops = "";
-				for (ItemStack is : block.getDrops()) {
-					drops = drops + is.getType().toString() + "(" + is.getTypeId() + "), ";
+				if (player.hasPermission("buildr.feature.block_info")) {
+					String loc = ChatColor.GOLD + "X: " +  block.getX() +  " Y: " +  block.getY() +  " Z: " +  block.getZ() + ChatColor.WHITE;
+					
+					String drops = "";
+					for (ItemStack is : block.getDrops()) {
+						drops = drops + is.getType().toString() + "(" + is.getTypeId() + "), ";
+					}
+					try {
+						drops = drops.substring(0, drops.length() - 2);
+					} catch (IndexOutOfBoundsException e) {
+						drops = "-";
+					}
+								
+					Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Info for block at ["+ loc + "]:");
+					Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Type: " + block.getType().toString() + " (" + block.getTypeId()+ ")");
+					Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Data: " + block.getData());
+					Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Light level: " + block.getLightLevel());
+					Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Biome: " + block.getBiome().toString());
+					Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Chunk: X: " + block.getChunk().getX() + " Z: " + block.getChunk().getZ());
+					Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Drops: " + drops);
 				}
-				try {
-					drops = drops.substring(0, drops.length() - 2);
-				} catch (IndexOutOfBoundsException e) {
-					drops = "-";
-				}
-							
-				Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Info for block at ["+ loc + "]:");
-				Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Type: " + block.getType().toString() + " (" + block.getTypeId()+ ")");
-				Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Data: " + block.getData());
-				Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Light level: " + block.getLightLevel());
-				Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Biome: " + block.getBiome().toString());
-				Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Chunk: X: " + block.getChunk().getX() + " Z: " + block.getChunk().getZ());
-				Buildr_Manager_Command_Super.sendTo(player, MsgType.INFO, "Drops: " + drops);
 			}
 			return;
 		}
