@@ -43,7 +43,7 @@ public abstract class Buildr_Runnable_Builder_Super implements Runnable {
 		BlockState state = block.getState();
 		BlockPlaceEvent event = new BlockPlaceEvent(block, state, block, player.getItemInHand(), player, true);
 		plugin.getServer().getPluginManager().callEvent(event);
-		return event.isCancelled();
+		return !event.isCancelled();
 	}
 	
 	protected int calcStartPoint(int coordinate1, int coordinate2){

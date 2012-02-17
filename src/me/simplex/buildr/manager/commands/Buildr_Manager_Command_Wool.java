@@ -4,7 +4,6 @@ import me.simplex.buildr.Buildr;
 import me.simplex.buildr.util.Buildr_Manager_Command_Super;
 import me.simplex.buildr.util.Buildr_Type_Wool;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,7 +24,7 @@ public class Buildr_Manager_Command_Wool extends Buildr_Manager_Command_Super {
 				this.cmd_wool(sender, args[0]);
 			}
 			else {
-				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -46,6 +45,6 @@ public class Buildr_Manager_Command_Wool extends Buildr_Manager_Command_Super {
 		}
 		((Player)sender).getInventory().addItem(woolcolor.giveStack());
 		String ret = "Gave yourself a stack of "+woolcolor.toString().toLowerCase()+" wool";
-		sender.sendMessage(ret);
+		sendToSender(sender, MsgType.INFO, ret);
 	}
 }

@@ -4,7 +4,6 @@ import me.simplex.buildr.Buildr;
 import me.simplex.buildr.runnable.Buildr_Runnable_Undo;
 import me.simplex.buildr.util.Buildr_Manager_Command_Super;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,7 +24,7 @@ public class Buildr_Manager_Command_Undo extends Buildr_Manager_Command_Super {
 				this.cmd_undo(sender);
 			}
 			else {
-				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}

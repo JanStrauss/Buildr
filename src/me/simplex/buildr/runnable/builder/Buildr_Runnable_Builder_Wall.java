@@ -11,7 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_Runnable_Builder_Wall extends Buildr_Runnable_Builder_Super implements Runnable {
+public class Buildr_Runnable_Builder_Wall extends Buildr_Runnable_Builder_Super{
 	private Buildr_Type_Wall type;
 	private boolean replace;
 

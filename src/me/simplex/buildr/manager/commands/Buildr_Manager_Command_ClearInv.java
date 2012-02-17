@@ -3,7 +3,6 @@ package me.simplex.buildr.manager.commands;
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.util.Buildr_Manager_Command_Super;
 
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,7 +26,7 @@ public class Buildr_Manager_Command_ClearInv extends Buildr_Manager_Command_Supe
 				this.cmd_clrInv(sender);
 			}
 			else {
-				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -39,6 +38,6 @@ public class Buildr_Manager_Command_ClearInv extends Buildr_Manager_Command_Supe
 			return;
 		}
 		((Player)sender).getInventory().clear();
-		sender.sendMessage("Inventory cleared");
+		sendToSender(sender, MsgType.INFO, "Inventory cleared");
 	}
 }

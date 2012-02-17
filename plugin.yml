@@ -47,7 +47,7 @@ commands:
            /<command> <material #>  {rReplace} {h|hollow}
   halfsphere:
     description: Starts the half sphere building function
-    aliases: [hball,hsp]
+    aliases: [hball,hsp,hsphere]
     usage: |
            /<command> <material #>  {rReplace} {h|hollow}
   cylinder:

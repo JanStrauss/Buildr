@@ -10,7 +10,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_Runnable_Builder_Cuboid extends Buildr_Runnable_Builder_Super implements Runnable {
+public class Buildr_Runnable_Builder_Cuboid extends Buildr_Runnable_Builder_Super{
 	
 	public Buildr_Runnable_Builder_Cuboid(Block position1, Block position2,Material material, boolean replace, Material replace_mat, boolean hollow,Buildr plugin, Player player, byte material_data) {
 		this.position1 = position1;

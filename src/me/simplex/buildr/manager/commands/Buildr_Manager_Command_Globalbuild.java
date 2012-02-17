@@ -34,12 +34,12 @@ public class Buildr_Manager_Command_Globalbuild extends Buildr_Manager_Command_S
 					this.cmd_globalbuild(sender, world);
 				}
 				else {
-					sender.sendMessage(ChatColor.RED+"There is no world with this name");
+					sendToSender(sender, MsgType.ERROR, "There is no world with this name");
 				}
 				return true;
 			}
 			else {
-				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 				return true;
 			}
 			
@@ -55,14 +55,14 @@ public class Buildr_Manager_Command_Globalbuild extends Buildr_Manager_Command_S
 			plugin.leaveGlobalbuildmode(world);
 			sender.sendMessage(ChatColor.YELLOW+"Globalbuildmode disabled");
 			for (Player inhab : world.getPlayers()) {
-				inhab.sendMessage(ChatColor.AQUA+((Player)sender).getName()+" disabled the Globalbuildmode on the world you are currently in");
+				SendToPlayer(inhab, MsgType.INFO, ((Player)sender).getName()+" disabled the Globalbuildmode on the world you are currently in");
 			}
 			plugin.log("Globalbuildmode disabled in World "+world.getName());
 		}
 		else {
 			sender.sendMessage(ChatColor.YELLOW+"Globalbuildmode enabled");
 			for (Player inhab : world.getPlayers()) {
-				inhab.sendMessage(ChatColor.AQUA+((Player)sender).getName()+" enabled the Globalbuildmode on the world you are currently in");
+				SendToPlayer(inhab, MsgType.INFO, ((Player)sender).getName()+" ensabled the Globalbuildmode on the world you are currently in");
 			}
 			plugin.enterGlobalbuildmode(world);
 			plugin.log("Globalbuildmode enabled in World "+world.getName());

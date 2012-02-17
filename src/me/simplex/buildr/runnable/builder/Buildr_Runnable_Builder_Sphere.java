@@ -11,7 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_Runnable_Builder_Sphere extends Buildr_Runnable_Builder_Super implements Runnable {
+public class Buildr_Runnable_Builder_Sphere extends Buildr_Runnable_Builder_Super{
 	private Block centerblock,radius_marker;
 	private boolean replace;
 	private boolean halfcube;

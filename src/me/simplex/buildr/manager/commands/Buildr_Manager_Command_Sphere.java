@@ -35,7 +35,7 @@ public class Buildr_Manager_Command_Sphere extends Buildr_Manager_Command_Super 
 							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase().substring(5));
 							mat_data = woolcolor.getBlockDataValue();
 						} catch (IllegalArgumentException e) {
-							sender.sendMessage("No such wool");
+							sendToSender(sender, MsgType.ERROR, "No such wool");
 							return true;
 						}
 					}
@@ -46,7 +46,7 @@ public class Buildr_Manager_Command_Sphere extends Buildr_Manager_Command_Super 
 							try {
 								id = Material.matchMaterial(args[0]).getId();
 							} catch (NullPointerException e2) {
-								sender.sendMessage(ChatColor.RED+"wrong format");
+								sendToSender(sender, MsgType.ERROR, "Wrong format");
 								return true;
 							}
 
@@ -56,7 +56,7 @@ public class Buildr_Manager_Command_Sphere extends Buildr_Manager_Command_Super 
 						material = Material.getMaterial(id);
 					}
 					else {
-						sender.sendMessage(ChatColor.RED+"unvalid blocktype");
+						sendToSender(sender, MsgType.ERROR, "invalid blocktype");
 						return true;
 					}
 					if (args.length==1) {
@@ -98,7 +98,7 @@ public class Buildr_Manager_Command_Sphere extends Buildr_Manager_Command_Super 
 
 			}
 			else {
-				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -111,7 +111,7 @@ public class Buildr_Manager_Command_Sphere extends Buildr_Manager_Command_Super 
 		}
 		if (plugin.checkPlayerHasStartedBuilding((Player)sender)) {
 			plugin.removeStartedBuilding((Player)sender);
-			sender.sendMessage(ChatColor.YELLOW+"previous started building aborted.");
+			sendToSender(sender, MsgType.WARNING, "previous started building aborted");
 		}
 		String replace_info ="";
 		if (replace) {
@@ -119,27 +119,8 @@ public class Buildr_Manager_Command_Sphere extends Buildr_Manager_Command_Super 
 		}
 		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Sphere((Player)sender, material, replace,replace_mat, hollow, false, plugin,material_data));
 		String buildinfo ="Started new Sphere. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") "+replace_info+ChatColor.WHITE+" Hollow: "+ChatColor.BLUE+hollow;
-		sender.sendMessage(buildinfo);
-		sender.sendMessage("Rightclick on the center of your sphere while holding a stick to continue");
-	}
-	
-	private Material parseMaterial(String mat_re){
-		int id = -1;
-		try {
-			id = Integer.parseInt(mat_re);
-		} 
-		catch (NumberFormatException e) {
-			try {
-				id = Material.matchMaterial(mat_re).getId();
-			} 
-			catch (NullPointerException e2) {
-			}
-		}
-		if (id != -1 && Material.getMaterial(id).isBlock()) {
-			return Material.getMaterial(id);
-		}
-		else {
-			return null;
-		}
+
+		sendToSender(sender, MsgType.INFO, buildinfo);
+		sendToSender(sender, MsgType.INFO, "Rightclick on the center of your sphere while holding a stick to continue");
 	}
 }

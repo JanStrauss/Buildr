@@ -7,7 +7,6 @@ import me.simplex.buildr.util.Buildr_Container_UndoBlock;
 import me.simplex.buildr.util.Buildr_Manager_Command_Super;
 import me.simplex.buildr.util.Buildr_Type_Wool;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -48,7 +47,7 @@ public class Buildr_Manager_Command_Airfloor extends Buildr_Manager_Command_Supe
 							woolcolor = Enum.valueOf(Buildr_Type_Wool.class, args[0].toUpperCase().substring(5));
 							mat_data = woolcolor.getBlockDataValue();
 						} catch (IllegalArgumentException e) {
-							sender.sendMessage("No such wool");
+							sendToSender(sender, MsgType.ERROR, "No such wool");
 							return true;
 						}
 					}
@@ -59,24 +58,25 @@ public class Buildr_Manager_Command_Airfloor extends Buildr_Manager_Command_Supe
 							try {
 								material = Material.matchMaterial(args[0]).getId();
 							} catch (NullPointerException e2) {
-								sender.sendMessage(ChatColor.RED+"wrong format");
+
+								sendToSender(sender, MsgType.ERROR, "wrong format");
 								return true;
 							}
 
 						}
 					}
 					if (Material.getMaterial(material)== null) {
-						sender.sendMessage("Invalid Material");
+						sendToSender(sender, MsgType.ERROR, "invalid material");
 						return true;
 					}
 					this.cmd_airfloor(sender, material, mat_data, height, size);
 					} 
 				catch (NumberFormatException e) {
-					sender.sendMessage("Wrong format, usage: /airfloor <material> <height> <size>");
+					sendToSender(sender, MsgType.WARNING, "Wrong format, usage: /airfloor <material> <height> <size>");
 				}
 			}
 			else {
-				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -132,7 +132,7 @@ public class Buildr_Manager_Command_Airfloor extends Buildr_Manager_Command_Supe
 				x++;
 			}
 		}
-		sender.sendMessage("Block(s) placed");
+		sendToSender(sender, MsgType.INFO, "Block(s) placed");
 		plugin.getUndoList().addToStack(UnDoList, player);
 		plugin.log(player.getName()+" used /airfloor: "+UnDoList.size()+" blocks affected");
 	}

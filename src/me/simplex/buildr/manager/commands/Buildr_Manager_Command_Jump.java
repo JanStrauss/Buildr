@@ -41,7 +41,7 @@ public class Buildr_Manager_Command_Jump extends Buildr_Manager_Command_Super {
 		loc.setY(loc.getY()+1);
 		
 		if (target == null || target.getType().equals(Material.AIR)) {
-			player.sendMessage("No block in range");
+			SendToPlayer(player, MsgType.WARNING, "no block in range");
 			return;
 		}
 		if (target.getRelative(0, 1, 0).getType().equals(Material.AIR)&& target.getRelative(0, 2, 0).getType().equals(Material.AIR)) {

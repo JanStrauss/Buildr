@@ -3,7 +3,6 @@ package me.simplex.buildr.manager.commands;
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.util.Buildr_Manager_Command_Super;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -25,7 +24,7 @@ public class Buildr_Manager_Command_Top extends Buildr_Manager_Command_Super {
 				this.cmd_top(sender);
 			}
 			else {
-				sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+				sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 			}
 			return true;
 		}
@@ -39,10 +38,10 @@ public class Buildr_Manager_Command_Top extends Buildr_Manager_Command_Super {
 		Player player = (Player)sender;
 		if (player.teleport(new Location(player.getWorld(), player.getLocation().getX(), player.getWorld().getHighestBlockYAt(player.getLocation()), player.getLocation().getZ(),player.getLocation().getYaw(),player.getLocation().getPitch()))) 
 		{
-			player.sendMessage("Ported to Top.");
+			sendToSender(sender, MsgType.INFO, "Ported to top at height " + player.getLocation().getBlockY());
 		}
 		else {
-			player.sendMessage("Something went wrong");
+			sendToSender(sender, MsgType.WARNING, "Something went wrong..");
 		}
 	}
 }

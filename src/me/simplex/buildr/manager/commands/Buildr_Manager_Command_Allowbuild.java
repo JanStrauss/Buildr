@@ -3,7 +3,6 @@ package me.simplex.buildr.manager.commands;
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.util.Buildr_Manager_Command_Super;
 
-import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -25,7 +24,7 @@ public class Buildr_Manager_Command_Allowbuild extends Buildr_Manager_Command_Su
 					this.cmd_allowbuild(sender);
 				}
 				else {
-					sender.sendMessage(ChatColor.RED+"You dont have the permission to perform this action");
+					sendToSender(sender, MsgType.ERROR, "You dont have the permission to perform this action");
 				}
 				return true;
 			}
@@ -43,13 +42,13 @@ public class Buildr_Manager_Command_Allowbuild extends Buildr_Manager_Command_Su
 				if (plugin.checkPlayerBuildMode(player)) {
 					plugin.leaveBuildmode(player);
 				}
-				player.sendMessage(((Player)sender).getName()+" locked the Buildmode in this world");
+				SendToPlayer(player, MsgType.INFO, ((Player)sender).getName()+" locked the Buildmode in this world");
 			}
 		}
 		else {
 			plugin.getWorldBuildmodeAllowed().add(world);
 			for (Player player : world.getPlayers()) {
-				player.sendMessage(((Player)sender).getName()+" unlocked the Buildmode in this world");
+				SendToPlayer(player, MsgType.INFO, ((Player)sender).getName()+" unlocked the Buildmode in this world");
 			}
 		}
 	}

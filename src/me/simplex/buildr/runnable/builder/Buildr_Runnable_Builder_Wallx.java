@@ -12,7 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_Runnable_Builder_Wallx extends Buildr_Runnable_Builder_Super implements Runnable {
+public class Buildr_Runnable_Builder_Wallx extends Buildr_Runnable_Builder_Super{
 	private boolean replace;
 
 	
@@ -83,7 +83,6 @@ public class Buildr_Runnable_Builder_Wallx extends Buildr_Runnable_Builder_Super
 					else {
 						changeBlock(toChange, undo);
 					}
-					
 				}
 			}
 			i=i+(mod);
