@@ -68,10 +68,10 @@ public class Buildr_Manager_Configuration {
 			writer.write("#                                                          #");writer.newLine();
 			writer.write("#                    BUILDR CONFIGURATION                  #");writer.newLine();
 			writer.write("#                                                          #");writer.newLine();
-			writer.write("#                             v0.6                         #");writer.newLine();
+			writer.write("#                             v0.7                         #");writer.newLine();
 			writer.write("############################################################");writer.newLine();
 			writer.newLine();
-			writer.write("CFG=0.6");writer.newLine();
+			writer.write("CFG=0.7");writer.newLine();
 			writer.newLine();
 			writer.write("##### General settings: ####################################");writer.newLine();
 			writer.newLine();
@@ -119,9 +119,6 @@ public class Buildr_Manager_Configuration {
 			writer.write("# Enable godmode while in buildmode");writer.newLine(); //done
 			writer.write("BUILDMODE_GODMODE=true");writer.newLine();
 			writer.newLine();
-			writer.write("# Enable the buildmode inventory");writer.newLine(); //done
-			writer.write("BUILDMODE_INVENTORY=true");writer.newLine();
-			writer.newLine();
 			writer.write("# Enable Instant block break with a Pickaxe");writer.newLine(); //done
 			writer.write("BUILDMODE_INSTANT_BLOCK_BREAK=true");writer.newLine();
 			writer.newLine();
@@ -139,6 +136,9 @@ public class Buildr_Manager_Configuration {
 			writer.newLine();
 			writer.write("# Enable the jump command");writer.newLine(); //done
 			writer.write("BUILDMODE_JUMP=true");writer.newLine();
+			writer.newLine();
+			writer.write("# Toggle the gamemode if a player enters/leaves buildmode");writer.newLine(); //done
+			writer.write("BUILDMODE__TOGGLE_GAMEMODE=false");writer.newLine();
 			writer.newLine();
 			writer.newLine();
 			

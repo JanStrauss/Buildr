@@ -10,7 +10,6 @@ import me.simplex.buildr.listener.Buildr_Listener_Player;
 import me.simplex.buildr.listener.Buildr_Listener_Weather;
 import me.simplex.buildr.listener.Buildr_Listener_World;
 import me.simplex.buildr.manager.Buildr_Manager_Configuration;
-import me.simplex.buildr.manager.Buildr_Manager_Inventory;
 import me.simplex.buildr.manager.Buildr_Manager_UndoStack;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Airfloor;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Allowbuild;
@@ -34,6 +33,7 @@ import me.simplex.buildr.runnable.Buildr_Runnable_TimeChecker;
 import me.simplex.buildr.util.Buildr_Interface_Building;
 
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.World;
@@ -59,7 +59,6 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_Listener_Block blockListener;
 	  private Buildr_Listener_World worldListener;
 	  
-	  private Buildr_Manager_Inventory invManager;
 	  private Buildr_Manager_Configuration cfgManager;
 	  private Buildr_Manager_UndoStack unDoStack;
 	  
@@ -90,7 +89,6 @@ public class Buildr extends JavaPlugin {
 	  private ArrayList<World> worldBuildMode;
 	  private ArrayList<World> worldBuildAllowed;
 	  private ArrayList<Player> playerBuildMode;
-	  private ArrayList<String> toProcessPlayers;
 	  private ArrayList<Buildr_Interface_Building> startedBuildings;
 	  
 	  private LinkedList<Player> playerCuttingTree;
@@ -98,9 +96,6 @@ public class Buildr extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		if (!toProcessPlayers.isEmpty()) {
-			invManager.updateInventoryStateFile(buildInvStateList());
-		}
 		importantLog("Buildr v"+version+" stopped.");
 	}
 
@@ -111,10 +106,9 @@ public class Buildr extends JavaPlugin {
 		
 		pluginDirectory 	=  "plugins/Buildr";
 		version 			= getDescription().getVersion();
-		version_cfg			= "0.6";
+		version_cfg			= "0.7";
 		prefix 				= "[Buildr] ";
 		
-		invManager 			= new Buildr_Manager_Inventory(this);
 		cfgManager 			= new Buildr_Manager_Configuration(this);
 		unDoStack 			= new Buildr_Manager_UndoStack();
 
@@ -146,7 +140,6 @@ public class Buildr extends JavaPlugin {
 		worldBuildMode 		= new ArrayList<World>();
 		worldBuildAllowed 	= new ArrayList<World>();
 		playerBuildMode 	= new ArrayList<Player>();
-		toProcessPlayers 	= new ArrayList<String>();
 		startedBuildings 	= new ArrayList<Buildr_Interface_Building>();
 		playerCuttingTree 	= new LinkedList<Player>();
 
@@ -171,29 +164,9 @@ public class Buildr extends JavaPlugin {
 			}
 		}
 		
-		//check Inventory directory
-		if (invManager.startupCheck()) {
-			importantLog("created Inventory directory");
-		}
-
 		//permissions
 		setupPermissions();
-			
-		// check for InventoryStateFile
-		if (invManager.checkInventoryStateFile()) {
-			importantLog("loading InventoyStateFile..");
-			toProcessPlayers.addAll(invManager.loadInventoryStateFile());
-			importantLog("found "+toProcessPlayers.size()+" builder(s) to treat on login");
-		}
 		
-		//check if /reload and if so remove players from toProcessPlayers list
-		Player[] online = getServer().getOnlinePlayers();
-		if (online.length > 0) {
-			for (Player player : online) {
-				handlePlayerOnLogin(player);
-			}
-		}
-
 		//register Listener
 		pm.registerEvents(worldListener, this);
 		pm.registerEvents(weatherListener, this);
@@ -274,15 +247,6 @@ public class Buildr extends JavaPlugin {
 	}
 	
 	public void handlePlayerOnLogin(Player player){
-		//System.out.println("login handle");
-		for (String name : toProcessPlayers) {
-			if (name.equals(player.getName())) {
-				if (!playerBuildMode.contains(player)) {
-					playerBuildMode.add(player);
-					System.out.println("added ");
-				}
-			}
-		}
 		//System.out.println("BM_STAY_AFTR_LGOUT"+getConfigValue("BUILDMODE_STAY_AFTER_LOGOUT"));
 		if (!getConfigValue("BUILDMODE_STAY_AFTER_LOGOUT") && checkPlayerBuildMode(player)) {
 			importantLog("Treated "+player.getName()+". Inventory restored.");
@@ -403,28 +367,19 @@ public class Buildr extends JavaPlugin {
 			return;
 		}
 		
-		getPlayerBuildMode().add(player);
-		if (getConfigValue("BUILDMODE_INVENTORY")) {
-			invManager.switchInventory(player);
-			invManager.updateInventoryStateFile(buildInvStateList());
+		
+		if (getConfigValue("BUILDMODE_TOGGLE_GAMEMODE")) {
+			player.setGameMode(GameMode.CREATIVE);
 		}
 		
+		getPlayerBuildMode().add(player);
 	}
 	
 	public void leaveBuildmode(Player player) {
-		boolean wasIn = getPlayerBuildMode().remove(player);
-		if (wasIn) {
-			toProcessPlayers.remove(player.getName());
-			if (getConfigValue("BUILDMODE_INVENTORY")) {
-				invManager.switchInventory(player);
-				if (playerBuildMode.isEmpty()) {
-					invManager.updateInventoryStateFile(null);
-				}
-				else {
-					invManager.updateInventoryStateFile(buildInvStateList());
-				}
-			}
+		if (getConfigValue("BUILDMODE_TOGGLE_GAMEMODE")) {
+			player.setGameMode(GameMode.SURVIVAL);
 		}
+		getPlayerBuildMode().remove(player);
 	}
 	
 	public void enterGlobalbuildmode(World world) {
@@ -451,21 +406,7 @@ public class Buildr extends JavaPlugin {
 	public void leaveGlobalbuildmode(World world) {
 		getWorldBuildMode().remove(world);
 	}
-	
-	private ArrayList<String> buildInvStateList(){
-		ArrayList<String> toProcess = toProcessPlayers;
-		for (Player player : playerBuildMode) {
-			if (!toProcess.contains(player.getName())) {
-				toProcess.add(player.getName());
-			}
-		}
-		return toProcess;
-	}
-	//get+set 
-	
-	/**
-	 * @return the settings HashMap of Buildr
-	 */
+		
 
 	public boolean getConfigValue(String key){
 		return cfgManager.getConfigValue(key);
