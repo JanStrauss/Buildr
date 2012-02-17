@@ -19,7 +19,7 @@ public class Buildr_Manager_Command_Gv extends Buildr_Manager_Command_Super {
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 		if (command.getName().equalsIgnoreCase("gv")) {
-			if (plugin.checkPermission((Player)sender, "buildr.cmd.give")) {
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.gv")) {
 				if (args.length == 0 ||args.length > 3) {
 					return false;
 				}

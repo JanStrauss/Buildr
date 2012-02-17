@@ -4,6 +4,7 @@ import me.simplex.buildr.Buildr;
 
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -28,4 +29,9 @@ public class Buildr_Listener_Block implements Listener {
 			}
 		}
 	}
+	
+	//@EventHandler
+	//public void onBlockBreak(BlockBreakEvent event) {
+	//	System.out.println("BlockBreak");
+	//}
 }

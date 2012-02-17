@@ -127,8 +127,8 @@ permissions:
             buildr.cmd.airfloor: true
             buildr.cmd.top: true
             buildr.cmd.undo: true
-            buildr.cmd.give: true
-            buildr.cmd.givex: true
+            buildr.cmd.gv: true
+            buildr.cmd.gvx: true
             buildr.cmd.clearinv: true
             buildr.cmd.location: true
     buildr.feature.*:

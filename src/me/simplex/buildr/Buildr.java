@@ -142,20 +142,17 @@ public class Buildr extends JavaPlugin {
 		playerBuildMode 	= new ArrayList<Player>();
 		startedBuildings 	= new ArrayList<Buildr_Interface_Building>();
 		playerCuttingTree 	= new LinkedList<Player>();
-
-		//load settings
-		importantLog("Buildr v"+version+" loading..");
-			
+	
 		if (cfgManager.checkDirectory()) {
-			importantLog("created Buildr directory");
+			importantLog("created Buildr directory..");
 		}
 		if (!cfgManager.checkConfigFile()) {
 			cfgManager.createSettings();
-			importantLog("created Buildr Configfile settings.cfg");
+			importantLog("created configurationfile settings.cfg..");
 		}
 		cfgManager.loadSettings();
 		cfgManager.checkVersion();
-		importantLog("loaded settings.cfg");
+		importantLog("loaded settings.cfg..");
 
 		//print settings to console
 		if (getConfigValue("GENERAL_DISPLAY_SETTINGS_ON_LOAD")) {
@@ -174,7 +171,7 @@ public class Buildr extends JavaPlugin {
 		pm.registerEvents(playerListener, this);
 		pm.registerEvents(blockListener, this);
 		
-		log("Listener registered");
+		log("Listener registered..");
 		
 		//set command executors
 		getCommand("airfloor").setExecutor(cmdAirfloor);
@@ -195,7 +192,7 @@ public class Buildr extends JavaPlugin {
 		getCommand("wall").setExecutor(cmdWall);
 		getCommand("wallx").setExecutor(cmdWallx);
 		getCommand("wool").setExecutor(cmdWool);
-		log("command executors set");
+		log("command executors set..");
 		 
 		// TimeThread 
 		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Buildr_Runnable_TimeChecker(this), 20*30, 20*30);

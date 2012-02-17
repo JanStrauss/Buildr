@@ -2,8 +2,6 @@ package me.simplex.buildr.listener;
 
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.runnable.Buildr_Runnable_TreeFeller_Collect;
-import me.simplex.buildr.util.Buildr_Converter_BlockToDrop;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -13,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -23,42 +22,52 @@ import org.bukkit.inventory.ItemStack;
 public class Buildr_Listener_Player implements Listener {
 	
 	private Buildr plugin;
-	private Buildr_Converter_BlockToDrop converter;
 	
 	public Buildr_Listener_Player(Buildr plugin) {
 		super();
 		this.plugin = plugin;
-		this.converter = new Buildr_Converter_BlockToDrop();
 	}
-
+	
+	private void breakBlock(Block block, boolean drops){
+		if (drops) {
+			block.breakNaturally();
+		}
+		else {
+			block.setType(Material.AIR);
+		}
+	}
+	
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent event) {
+		Player player = event.getPlayer();
+		Block block = event.getClickedBlock();
+		
 		//block break pickaxe
-		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsPickaxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
-			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreak")) {
-				// Check for Drops
-				if (!(plugin.checkWorldBuildMode(event.getClickedBlock().getWorld()))) {
-					for (ItemStack stk : converter.convert(event.getClickedBlock())) {
-						if (stk != null) {
-							event.getClickedBlock().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(), stk);
+		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsPickaxe(player) && plugin.checkPlayerBuildMode(player)) {
+			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK") && plugin.checkPermission(player, "buildr.feature.instantblockbreak")) {
+				
+				BlockBreakEvent brk_event = new BlockBreakEvent(block, player);
+				plugin.getServer().getPluginManager().callEvent(brk_event);
+				
+				if (!brk_event.isCancelled()) {
+					if (!(plugin.checkWorldBuildMode(block.getWorld()))) {
+						if (block.getType().equals(Material.BEDROCK)) {
+							if (plugin.checkPermission(player, "buildr.feature.break_bedrock")) {
+								breakBlock(block, true);
+							}
+						}
+						else {
+							breakBlock(block, true);
 						}
 					}
-				}
-				
-				if (event.getClickedBlock().getType().equals(Material.BEDROCK)) {
-					if (plugin.checkPermission(event.getPlayer(), "buildr.feature.break_bedrock")) {
-						event.getClickedBlock().setType(Material.AIR);
+					else {
+						breakBlock(block, false);
 					}
 				}
-				else {
-					event.getClickedBlock().setType(Material.AIR);
-				}
-					
-				
-				event.setCancelled(true);
 				return;
 			}
 		}
+		
 		
 		//Tree feller
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsAxe(event.getPlayer()) && plugin.checkPlayerBuildMode(event.getPlayer())) {
@@ -79,21 +88,25 @@ public class Buildr_Listener_Player implements Listener {
 		//Block Break all
 		if (event.getAction() == Action.LEFT_CLICK_BLOCK && plugin.checkPlayerBuildMode(event.getPlayer())) {
 			if (plugin.getConfigValue("BUILDMODE_INSTANT_BLOCK_BREAK_ALL") && plugin.checkPermission(event.getPlayer(), "buildr.feature.instantblockbreakall")) {
-				// Check for Drops
-				if (!(plugin.checkWorldBuildMode(event.getClickedBlock().getWorld()))) {
-					for (ItemStack stk : converter.convert(event.getClickedBlock())) {
-						if (stk != null) {
-							event.getClickedBlock().getWorld().dropItemNaturally(event.getClickedBlock().getLocation(), stk);
+				
+				BlockBreakEvent brk_event = new BlockBreakEvent(block, player);
+				plugin.getServer().getPluginManager().callEvent(brk_event);
+				
+				if (!brk_event.isCancelled()) {
+					if (!(plugin.checkWorldBuildMode(block.getWorld()))) {
+						if (block.getType().equals(Material.BEDROCK)) {
+							if (plugin.checkPermission(player, "buildr.feature.break_bedrock")) {
+								breakBlock(block, true);
+							}
 						}
-						
+						else {
+							breakBlock(block, true);
+						}
+					}
+					else {
+						breakBlock(block, false);
 					}
 				}
-
-					
-				if (!event.getClickedBlock().getType().equals(Material.BEDROCK)) {
-					event.getClickedBlock().setType(Material.AIR);
-				}
-				event.setCancelled(true);
 				return;
 			}
 			
@@ -107,7 +120,6 @@ public class Buildr_Listener_Player implements Listener {
 		
 		// Compass jmp
 		ItemStack compassjumpitem = event.getPlayer().getItemInHand();
-		Player player = event.getPlayer();
 
 		if (compassjumpitem.getType() == Material.COMPASS) {
 
@@ -172,6 +184,7 @@ public class Buildr_Listener_Player implements Listener {
 			}
 		}
 	}
+	
 	@EventHandler
 	public void onPlayerPortal(PlayerPortalEvent event) {
 		Location loc_to = event.getTo();
