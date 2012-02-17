@@ -10,16 +10,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class Buildr_Manager_Command_Givex extends Buildr_Manager_Command_Super {
+public class Buildr_Manager_Command_Gvx extends Buildr_Manager_Command_Super {
 
-	public Buildr_Manager_Command_Givex(Buildr plugin) {
+	public Buildr_Manager_Command_Gvx(Buildr plugin) {
 		super(plugin);
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (command.getName().equalsIgnoreCase("givex")) {
-			if (plugin.checkPermission((Player)sender, "buildr.cmd.givex")) {
+		if (command.getName().equalsIgnoreCase("gvx")) {
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.gvx")) {
 				if (args.length == 0 ||args.length > 2) {
 					return false;
 				}

@@ -73,17 +73,17 @@ commands:
            Example: /<command> 
   undo:
     description: Undoes the lastest action the player used (airfloor, wall)
-    aliases: [bu,buildrundo]
+    aliases: [bu,buildr_undo]
     usage: |
            /<command> 
            Example: /<command> 
-  give:
+  gv:
     description: gives a Stack of items to the player
-    aliases: [gv,g]
+    aliases: [gv,buildr_gv]
     usage: |
            /<command> <player> <itemid #|itemname> <amount #>
            Example: /<command> 20 50 gives a stack of 50 Glass to the player
-  givex:
+  gvx:
     description: gives a Stack of items with the specified datavalue to yourself
     aliases: [gvx,gx]
     usage: |

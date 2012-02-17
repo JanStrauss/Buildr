@@ -10,15 +10,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-public class Buildr_Manager_Command_Give extends Buildr_Manager_Command_Super {
+public class Buildr_Manager_Command_Gv extends Buildr_Manager_Command_Super {
 
-	public Buildr_Manager_Command_Give(Buildr plugin) {
+	public Buildr_Manager_Command_Gv(Buildr plugin) {
 		super(plugin);
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (command.getName().equalsIgnoreCase("give")) {
+		if (command.getName().equalsIgnoreCase("gv")) {
 			if (plugin.checkPermission((Player)sender, "buildr.cmd.give")) {
 				if (args.length == 0 ||args.length > 3) {
 					return false;
