@@ -28,11 +28,10 @@ public class Buildr_Listener_Block implements Listener {
 				event.getPlayer().setItemInHand(give);
 			}
 		}
-		System.out.println("BlockPlace");
+//		System.out.println("BlockPlace");
 	}
 	
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
-		System.out.println("BlockBreak");
 	}
 }

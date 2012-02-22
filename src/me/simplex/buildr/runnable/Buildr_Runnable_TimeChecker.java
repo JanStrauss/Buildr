@@ -13,14 +13,16 @@ public class Buildr_Runnable_TimeChecker implements Runnable {
 
 	@Override
 	public void run() {
-			for (World world : plugin.getWorldBuildMode()) {
-				if (plugin.getConfigValue("GLOBALBUILD_TIME")) {
-					if (world.getTime()>=10000) {
-						world.setTime(0);
-						plugin.log("time reset");
-					}
+		for (World world : plugin.getWorldBuildMode()) {
+			plugin.log("Time: " + world.getTime());
+			plugin.log("FullTime: " + world.getFullTime());
+			if (plugin.getConfigValue("GLOBALBUILD_TIME")) {
+				if (world.getTime() >= 9000) {
+					world.setTime(0);
+					plugin.log("time reset");
 				}
 			}
-		//System.out.println("time checked");
+		}
+		plugin.log("time checked");
 	}
 }

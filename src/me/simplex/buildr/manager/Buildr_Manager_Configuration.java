@@ -59,147 +59,146 @@ public class Buildr_Manager_Configuration {
 			}
 	}
 	
-	
 	public void createSettings(){
 		try {
 			FileWriter stream = new FileWriter(configfile);
-			BufferedWriter writer = new BufferedWriter(stream);
-			writer.write("############################################################");writer.newLine();
-			writer.write("#                                                          #");writer.newLine();
-			writer.write("#                    BUILDR CONFIGURATION                  #");writer.newLine();
-			writer.write("#                                                          #");writer.newLine();
-			writer.write("#                             v0.7                         #");writer.newLine();
-			writer.write("############################################################");writer.newLine();
-			writer.newLine();
-			writer.write("CFG=0.7");writer.newLine();
-			writer.newLine();
-			writer.write("##### General settings: ####################################");writer.newLine();
-			writer.newLine();
-			writer.write("# Print the settings while Buildr loads");writer.newLine();//done
-			writer.write("GENERAL_DISPLAY_SETTINGS_ON_LOAD=false");writer.newLine(); 
-			writer.newLine();
-			writer.write("# Enable Permissions, if false Buildr checks for OP");writer.newLine();
-			writer.write("GENERAL_USE_PERMISSIONS=true");writer.newLine();
-			writer.newLine();
-			writer.write("# If set, will log quite alot in the server console (mostly debug)");writer.newLine();
-			writer.write("GENERAL_DETAILED_LOG=false");writer.newLine();
-			writer.newLine();
-			writer.newLine();
+			BufferedWriter w = new BufferedWriter(stream);
+			w.write("############################################################");w.newLine();
+			w.write("#                                                          #");w.newLine();
+			w.write("#                    BUILDR CONFIGURATION                  #");w.newLine();
+			w.write("#                                                          #");w.newLine();
+			w.write("#                             v0.7.1                       #");w.newLine();
+			w.write("############################################################");w.newLine();
+			w.newLine();
+			w.write("CFG=0.7.1");w.newLine();
+			w.newLine();
+			w.write("##### General settings: ####################################");w.newLine();
+			w.newLine();
+			w.write("# Print the settings while Buildr loads");w.newLine();//done
+			w.write("GENERAL_DISPLAY_SETTINGS_ON_LOAD=false");w.newLine(); 
+			w.newLine();
+			w.write("# Enable Permissions, if false Buildr checks for OP");w.newLine();
+			w.write("GENERAL_USE_PERMISSIONS=true");w.newLine();
+			w.newLine();
+			w.write("# If set, will log quite alot in the server console (mostly debug)");w.newLine();
+			w.write("GENERAL_DETAILED_LOG=false");w.newLine();
+			w.newLine();
+			w.newLine();
 			
-			writer.write("##### Globalbuildmode settings: ############################");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the Globalbuildmode");writer.newLine(); //done
-			writer.write("GLOBALBUILD_ENABLE=true");writer.newLine(); 
-			writer.newLine();
-			writer.write("# Enable weathercheck (always sun)");writer.newLine(); //done
-			writer.write("GLOBALBUILD_WEATHER=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable timecheck (always day)");writer.newLine(); //done
-			writer.write("GLOBALBUILD_TIME=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable Dropblocker");writer.newLine(); //done
-			writer.write("GLOBALBUILD_NODROPS=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Force Players to Buildmode if the world they are in is in Globalbuildmode");writer.newLine(); //done
-			writer.write("GLOBALBUILD_FORCE_BUILDMODE=false");writer.newLine();
-			writer.newLine();
-			writer.newLine();
+			w.write("##### Globalbuildmode settings: ############################");w.newLine();
+			w.newLine();
+			w.write("# Enable the Globalbuildmode");w.newLine(); //done
+			w.write("GLOBALBUILD_ENABLE=true");w.newLine(); 
+			w.newLine();
+			w.write("# Enable weathercheck (always sun)");w.newLine(); //done
+			w.write("GLOBALBUILD_WEATHER=true");w.newLine();
+			w.newLine();
+			w.write("# Enable timecheck (always day)");w.newLine(); //done
+			w.write("GLOBALBUILD_TIME=true");w.newLine();
+			w.newLine();
+			w.write("# Enable Dropblocker");w.newLine(); //done
+			w.write("GLOBALBUILD_NODROPS=true");w.newLine();
+			w.newLine();
+			w.write("# Force Players to Buildmode if the world they are in is in Globalbuildmode");w.newLine(); //done
+			w.write("GLOBALBUILD_FORCE_BUILDMODE=false");w.newLine();
+			w.newLine();
+			w.newLine();
 			
-			writer.write("##### Buildmode settings: ##################################");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the buildmode");writer.newLine(); //done
-			writer.write("BUILDMODE_ENABLE=true");writer.newLine(); 
-			writer.newLine();
-			writer.write("# If set, users won't be switched out of buildmode after a reconnect/login");writer.newLine(); //done
-			writer.write("BUILDMODE_STAY_AFTER_LOGOUT=false");writer.newLine(); 
-			writer.newLine();
-			writer.write("# If set, users are only able to activate the buildmode if the mode is allowed in the world they are in");writer.newLine(); //done
-			writer.write("BUILDMODE_REQUIRE_ALLOW=false");writer.newLine(); 
-			writer.newLine();
-			writer.write("# Enable godmode while in buildmode");writer.newLine(); //done
-			writer.write("BUILDMODE_GODMODE=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable Instant block break with a Pickaxe");writer.newLine(); //done
-			writer.write("BUILDMODE_INSTANT_BLOCK_BREAK=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable Instant block break with every item");writer.newLine(); //done
-			writer.write("BUILDMODE_INSTANT_BLOCK_BREAK_ALL=false");writer.newLine();
-			writer.newLine();
-			writer.write("# Disable item pickup");writer.newLine(); //done
-			writer.write("BUILDMODE_DISABLEPICKUP=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the unlimited itemstacks");writer.newLine(); //done
-			writer.write("BUILDMODE_UNLIMITED_ITEMSTACK=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the treecutter (axe)");writer.newLine(); //done
-			writer.write("BUILDMODE_TREECUTTER=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the jump command");writer.newLine(); //done
-			writer.write("BUILDMODE_JUMP=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Toggle the gamemode if a player enters/leaves buildmode");writer.newLine(); //done
-			writer.write("BUILDMODE__TOGGLE_GAMEMODE=false");writer.newLine();
-			writer.newLine();
-			writer.newLine();
+			w.write("##### Buildmode settings: ##################################");w.newLine();
+			w.newLine();
+			w.write("# Enable the buildmode");w.newLine(); //done
+			w.write("BUILDMODE_ENABLE=true");w.newLine(); 
+			w.newLine();
+			w.write("# If set, users won't be switched out of buildmode after a reconnect/login");w.newLine(); //done
+			w.write("BUILDMODE_STAY_AFTER_LOGOUT=false");w.newLine(); 
+			w.newLine();
+			w.write("# If set, users are only able to activate the buildmode if the mode is allowed in the world they are in");w.newLine(); //done
+			w.write("BUILDMODE_REQUIRE_ALLOW=false");w.newLine(); 
+			w.newLine();
+			w.write("# Enable godmode while in buildmode");w.newLine(); //done
+			w.write("BUILDMODE_GODMODE=true");w.newLine();
+			w.newLine();
+			w.write("# Enable Instant block break with a Pickaxe");w.newLine(); //done
+			w.write("BUILDMODE_INSTANT_BLOCK_BREAK=true");w.newLine();
+			w.newLine();
+			w.write("# Enable Instant block break with every item");w.newLine(); //done
+			w.write("BUILDMODE_INSTANT_BLOCK_BREAK_ALL=false");w.newLine();
+			w.newLine();
+			w.write("# Disable item pickup");w.newLine(); //done
+			w.write("BUILDMODE_DISABLEPICKUP=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the unlimited itemstacks");w.newLine(); //done
+			w.write("BUILDMODE_UNLIMITED_ITEMSTACK=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the treecutter (axe)");w.newLine(); //done
+			w.write("BUILDMODE_TREECUTTER=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the jump command");w.newLine(); //done
+			w.write("BUILDMODE_JUMP=true");w.newLine();
+			w.newLine();
+			w.write("# Toggle the gamemode if a player enters/leaves buildmode");w.newLine(); //done
+			w.write("BUILDMODE_TOGGLE_GAMEMODE=false");w.newLine();
+			w.newLine();
+			w.newLine();
 			
-			writer.write("##### Feature settings: ####################################");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the airfloor command");writer.newLine(); //done
-			writer.write("FEATURE_AIRFLOOR=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the wall command");writer.newLine(); //done
-			writer.write("FEATURE_BUILDER_WALL=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the wallx command");writer.newLine(); //done
-			writer.write("FEATURE_BUILDER_WALLX=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the cuboid command");writer.newLine(); //done
-			writer.write("FEATURE_BUILDER_CUBOID=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the sphere command");writer.newLine(); //done
-			writer.write("FEATURE_BUILDER_SPHERE=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the cylinder command");writer.newLine(); //done
-			writer.write("FEATURE_BUILDER_CYLINDER=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the top command");writer.newLine(); //done
-			writer.write("FEATURE_TOP=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the give command");writer.newLine(); //done
-			writer.write("FEATURE_GIVE=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the givex command");writer.newLine(); //done
-			writer.write("FEATURE_GIVEX=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the wool command");writer.newLine(); //done
-			writer.write("FEATURE_WOOL=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the clearinventory command");writer.newLine(); //done
-			writer.write("FEATURE_CLEAR_INVENTORY=true");writer.newLine();
-			writer.newLine();
-			writer.write("# Enable the location command");writer.newLine(); //done
-			writer.write("FEATURE_LOCATION=true");writer.newLine();
-			writer.newLine();
-			writer.newLine();
+			w.write("##### Feature settings: ####################################");w.newLine();
+			w.newLine();
+			w.write("# Enable the airfloor command");w.newLine(); //done
+			w.write("FEATURE_AIRFLOOR=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the wall command");w.newLine(); //done
+			w.write("FEATURE_BUILDER_WALL=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the wallx command");w.newLine(); //done
+			w.write("FEATURE_BUILDER_WALLX=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the cuboid command");w.newLine(); //done
+			w.write("FEATURE_BUILDER_CUBOID=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the sphere command");w.newLine(); //done
+			w.write("FEATURE_BUILDER_SPHERE=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the cylinder command");w.newLine(); //done
+			w.write("FEATURE_BUILDER_CYLINDER=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the top command");w.newLine(); //done
+			w.write("FEATURE_TOP=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the give command");w.newLine(); //done
+			w.write("FEATURE_GIVE=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the givex command");w.newLine(); //done
+			w.write("FEATURE_GIVEX=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the wool command");w.newLine(); //done
+			w.write("FEATURE_WOOL=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the clearinventory command");w.newLine(); //done
+			w.write("FEATURE_CLEAR_INVENTORY=true");w.newLine();
+			w.newLine();
+			w.write("# Enable the location command");w.newLine(); //done
+			w.write("FEATURE_LOCATION=true");w.newLine();
+			w.newLine();
+			w.newLine();
 			
-			writer.write("##### Treecutter settings: ####################################");writer.newLine();
-			writer.newLine();
-			writer.write("# Remove leaves on treecut, will cut more than one tree at once if their leaves are connected");writer.newLine(); //done
-			writer.write("TREECUTTER_CUT_LEAVES=true");writer.newLine();
-			writer.newLine();
-			writer.write("# if set, a tree can be felt if you hit its leaves, else you can only fell it by hitting log");writer.newLine(); //done
-			writer.write("TREECUTTER_ACTIVATE_ON_LEAVES=true");writer.newLine();
-			writer.newLine();
-			writer.newLine();
+			w.write("##### Treecutter settings: ####################################");w.newLine();
+			w.newLine();
+			w.write("# Remove leaves on treecut, will cut more than one tree at once if their leaves are connected");w.newLine(); //done
+			w.write("TREECUTTER_CUT_LEAVES=true");w.newLine();
+			w.newLine();
+			w.write("# if set, a tree can be felt if you hit its leaves, else you can only fell it by hitting log");w.newLine(); //done
+			w.write("TREECUTTER_ACTIVATE_ON_LEAVES=true");w.newLine();
+			w.newLine();
+			w.newLine();
 			
-			writer.write("##### World settings  ####################################");writer.newLine();
-			writer.newLine();
-			writer.write("# Worlds below here will have globalbuild enabled startup");writer.newLine();
-			writer.write("# e.g. world=true");writer.newLine();
-			writer.newLine();
-			writer.newLine();
+			w.write("##### World settings  ####################################");w.newLine();
+			w.newLine();
+			w.write("# Worlds below here will have globalbuild enabled startup");w.newLine();
+			w.write("# e.g. world=true");w.newLine();
+			w.newLine();
+			w.newLine();
 			
-			writer.close();
+			w.close();
 			stream.close();
 			
 		} catch (Exception e) {

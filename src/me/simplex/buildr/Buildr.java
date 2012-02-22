@@ -17,9 +17,9 @@ import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Build;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_ClearInv;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Cuboid;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Cylinder;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Globalbuild;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Gv;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Gvx;
-import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Globalbuild;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Halfsphere;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Jump;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Location;
@@ -106,7 +106,7 @@ public class Buildr extends JavaPlugin {
 		
 		pluginDirectory 	=  "plugins/Buildr";
 		version 			= getDescription().getVersion();
-		version_cfg			= "0.7";
+		version_cfg			= "0.7.1";
 		prefix 				= "[Buildr] ";
 		
 		cfgManager 			= new Buildr_Manager_Configuration(this);
@@ -148,11 +148,11 @@ public class Buildr extends JavaPlugin {
 		}
 		if (!cfgManager.checkConfigFile()) {
 			cfgManager.createSettings();
-			importantLog("created configurationfile settings.cfg..");
+			importantLog("created configuration file..");
 		}
 		cfgManager.loadSettings();
 		cfgManager.checkVersion();
-		importantLog("loaded settings.cfg..");
+		importantLog("loaded settings..");
 
 		//print settings to console
 		if (getConfigValue("GENERAL_DISPLAY_SETTINGS_ON_LOAD")) {
@@ -193,7 +193,7 @@ public class Buildr extends JavaPlugin {
 		getCommand("wallx").setExecutor(cmdWallx);
 		getCommand("wool").setExecutor(cmdWool);
 		log("command executors set..");
-		 
+		
 		// TimeThread 
 		getServer().getScheduler().scheduleAsyncRepeatingTask(this, new Buildr_Runnable_TimeChecker(this), 20*30, 20*30);
 		
