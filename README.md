@@ -1,24 +1,11 @@
-Buildr v0.5 - Toolbox for creative players/servers
-=============================================
+Buildr
+======
+Copyright 2012 s1mpl3x
 
-License:
-/*
- * Copyright 2012 s1mpl3x
- * 
- * This file is part of Buildr.
- * 
- * Buildr is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * Buildr is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with Buildr  If not, see <http://www.gnu.org/licenses/>.
- */
+This file is part of Buildr.
 
-fuck this shit, read shit here: http://forums.bukkit.org/threads/25644/
+Buildr is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
+Buildr is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along with Hawk If not, see http://www.gnu.org/licenses/.
