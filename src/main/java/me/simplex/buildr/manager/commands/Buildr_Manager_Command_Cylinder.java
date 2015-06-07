@@ -58,17 +58,38 @@ public class Buildr_Manager_Command_Cylinder extends Buildr_Manager_Command_Supe
 						}
 					}
 					else {
-						try {
-							id = Integer.parseInt(args[0]);
-						} catch (NumberFormatException e) {
-							try {
-								id = Material.matchMaterial(args[0]).getId();
-							} catch (NullPointerException e2) {
-								sendTo(sender, MsgType.ERROR, "wrong format");
-								return true;
-							}
-
-						}
+                        String blockIDParam = args[0];
+                        String dataIDParam = null;
+                        if (args[0].contains(":")) {
+                            String[] parts = args[0].split(":");
+                            blockIDParam = parts[0];
+                            if (parts.length == 2)
+                                dataIDParam = parts[1];
+                            else if (parts.length > 2) {
+                                sendTo(sender, MsgType.ERROR, "Wrong format");
+                                return true;
+                            }
+                        }
+                        try {
+                            id = Integer.parseInt(blockIDParam);
+                        } catch (NumberFormatException e) {
+                            try {
+                                id = Material.matchMaterial(blockIDParam).getId();
+                            } catch (NullPointerException e2) {
+                                sendTo(sender, MsgType.ERROR, "Wrong format");
+                                return true;
+                            }
+                        }
+                        if (null != dataIDParam && !dataIDParam.isEmpty()) {
+                            try {
+                                mat_data = Byte.parseByte(dataIDParam);
+                                // TODO ideally validate mat_data is a valid data value for the specified block type.
+                            } catch (NumberFormatException e) {
+                                // TODO ideally try to match by name since we know the block ID.
+                                sendTo(sender, MsgType.ERROR, "Wrong format");
+                                return true;
+                            }
+                        }
 					}
 					if (Material.getMaterial(id).isBlock()) {
 						material = Material.getMaterial(id);

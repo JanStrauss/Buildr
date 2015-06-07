@@ -19,7 +19,7 @@
 package me.simplex.buildr.manager.commands;
 
 import me.simplex.buildr.Buildr;
-import me.simplex.buildr.manager.builder.Buildr_Manager_Builder_Sphere;
+import me.simplex.buildr.manager.builder.Buildr_Manager_Builder_Cuboid;
 import me.simplex.buildr.util.Buildr_Manager_Command_Super;
 import me.simplex.buildr.util.Buildr_Type_Wool;
 
@@ -29,19 +29,19 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Buildr_Manager_Command_Sphere extends Buildr_Manager_Command_Super {
+public class Buildr_Manager_Command_Cuboid extends Buildr_Manager_Command_Super {
 
-	public Buildr_Manager_Command_Sphere(Buildr plugin) {
+	public Buildr_Manager_Command_Cuboid(Buildr plugin) {
 		super(plugin);
 	}
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-		if (command.getName().equalsIgnoreCase("sphere")) {
+		if (command.getName().equalsIgnoreCase("cuboid")) {
 			if (args.length < 1 || args.length > 3) {
 				return false;
 			}
-			if (plugin.checkPermission((Player)sender, "buildr.cmd.sphere")) {
+			if (plugin.checkPermission((Player)sender, "buildr.cmd.cuboid")) {
 				if (args.length >=1 && args.length <=3) {
 					Material material;
 					int id;
@@ -58,17 +58,38 @@ public class Buildr_Manager_Command_Sphere extends Buildr_Manager_Command_Super 
 						}
 					}
 					else {
-						try {
-							id = Integer.parseInt(args[0]);
-						} catch (NumberFormatException e) {
-							try {
-								id = Material.matchMaterial(args[0]).getId();
-							} catch (NullPointerException e2) {
-								sendTo(sender, MsgType.ERROR, "Wrong format");
-								return true;
-							}
-
-						}
+                        String blockIDParam = args[0];
+                        String dataIDParam = null;
+                        if (args[0].contains(":")) {
+                            String[] parts = args[0].split(":");
+                            blockIDParam = parts[0];
+                            if (parts.length == 2)
+                                dataIDParam = parts[1];
+                            else if (parts.length > 2) {
+                                sendTo(sender, MsgType.ERROR, "Wrong format");
+                                return true;
+                            }
+                        }
+                        try {
+                            id = Integer.parseInt(blockIDParam);
+                        } catch (NumberFormatException e) {
+                            try {
+                                id = Material.matchMaterial(blockIDParam).getId();
+                            } catch (NullPointerException e2) {
+                                sendTo(sender, MsgType.ERROR, "Wrong format");
+                                return true;
+                            }
+                        }
+                        if (null != dataIDParam && !dataIDParam.isEmpty()) {
+                            try {
+                                mat_data = Byte.parseByte(dataIDParam);
+                                // TODO ideally validate mat_data is a valid data value for the specified block type.
+                            } catch (NumberFormatException e) {
+                                // TODO ideally try to match by name since we know the block ID.
+                                sendTo(sender, MsgType.ERROR, "Wrong format");
+                                return true;
+                            }
+                        }
 					}
 					if (Material.getMaterial(id).isBlock()) {
 						material = Material.getMaterial(id);
@@ -78,17 +99,17 @@ public class Buildr_Manager_Command_Sphere extends Buildr_Manager_Command_Super 
 						return true;
 					}
 					if (args.length==1) {
-							this.cmd_sphere(sender, material, mat_data, false, false, null);
+							this.cmd_cuboid(sender, material, mat_data, false, false, null);
 							return true;
 					}
 					else if (args.length == 2) {
 						if (args[1].startsWith("r")) {
 							Material rep = parseMaterial(args[1].substring(1));
-							this.cmd_sphere(sender, material, mat_data, true,false, rep);
+							this.cmd_cuboid(sender, material, mat_data, true,false, rep);
 							return true;
 						}
 						else if(args[1].equalsIgnoreCase("h") || args[1].equalsIgnoreCase("hollow")) {
-							this.cmd_sphere(sender, material, mat_data, false, true, null);
+							this.cmd_cuboid(sender, material, mat_data, false, true, null);
 							return true;
 						}
 						else {
@@ -103,7 +124,7 @@ public class Buildr_Manager_Command_Sphere extends Buildr_Manager_Command_Super 
 						if (!args[2].equalsIgnoreCase("h") || !args[2].equalsIgnoreCase("hollow")) {
 							return false;
 						}
-						this.cmd_sphere(sender, material, mat_data, true, true, rep);
+						this.cmd_cuboid(sender, material, mat_data, true, true, rep);
 						return true;
 					}
 					else {
@@ -123,8 +144,8 @@ public class Buildr_Manager_Command_Sphere extends Buildr_Manager_Command_Super 
 		return false;
 	}
 	
-	public void cmd_sphere(CommandSender sender, Material material, byte material_data, boolean replace,boolean hollow, Material replace_mat) {
-		if (!plugin.getConfigValue("FEATURE_BUILDER_SPHERE")) {
+	public void cmd_cuboid(CommandSender sender, Material material, byte material_data, boolean replace,boolean hollow, Material replace_mat) {
+		if (!plugin.getConfigValue("FEATURE_BUILDER_CUBOID")) {
 			return;
 		}
 		if (plugin.checkPlayerHasStartedBuilding((Player)sender)) {
@@ -135,10 +156,9 @@ public class Buildr_Manager_Command_Sphere extends Buildr_Manager_Command_Super 
 		if (replace) {
 			replace_info = "Replace: "+ChatColor.BLUE+replace_mat;
 		}
-		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Sphere((Player)sender, material, replace,replace_mat, hollow, false, plugin,material_data));
-		String buildinfo ="Started new Sphere. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") "+replace_info+ChatColor.WHITE+" Hollow: "+ChatColor.BLUE+hollow;
-
+		plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Cuboid((Player)sender, material, replace, replace_mat, hollow, plugin,material_data));
+		String buildinfo = "Started new Cuboid. Info: Blocktype: "+ChatColor.BLUE+material.toString()+ChatColor.WHITE+" (ID:"+ChatColor.BLUE+material.getId()+ChatColor.WHITE+") "+replace_info+ChatColor.WHITE+" Hollow: "+ChatColor.BLUE+hollow;
 		sendTo(sender, MsgType.INFO, buildinfo);
-		sendTo(sender, MsgType.INFO, "Rightclick on the center of your sphere while holding a stick to continue");
+		sendTo(sender, MsgType.INFO, "Rightclick on block 1 while holding a stick to continue");
 	}
 }
