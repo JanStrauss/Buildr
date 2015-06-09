@@ -18,6 +18,7 @@
  */
 package me.simplex.buildr.listener;
 
+import java.util.Set;
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.runnable.Buildr_Runnable_TreeFeller_Collect;
 import me.simplex.buildr.util.Buildr_Manager_Command_Super;
@@ -42,7 +43,8 @@ import org.bukkit.inventory.ItemStack;
 
 public class Buildr_Listener_Player implements Listener {
 	
-	private Buildr plugin;
+	private final Buildr plugin;
+    private final Set<Material> airSet = java.util.EnumSet.of(Material.AIR);
 	
 	public Buildr_Listener_Player(Buildr plugin) {
 		super();
@@ -172,25 +174,24 @@ public class Buildr_Listener_Player implements Listener {
 				if (!plugin.getConfigValue("BUILDMODE_JUMP")){
 					return;
 				}
-				if(!plugin.checkPermission(player, "buildr.feature.compassjump")){
+				if (!plugin.checkPermission(player, "buildr.feature.compassjump")){
 					return;
 				}
-					
-				Block target = player.getTargetBlock(null, 500);
-				Location loc = target.getLocation();
-				loc.setPitch(player.getLocation().getPitch());
-				loc.setYaw(player.getLocation().getYaw());
-				loc.setY(loc.getY()+1);
-				
+
+				Block target = player.getTargetBlock(airSet, 500);
 				if (target == null || target.getType().equals(Material.AIR)) {
 					player.sendMessage("No block in range");
 					return;
 				}
+
+				Location loc = target.getLocation();
+				loc.setPitch(player.getLocation().getPitch());
+				loc.setYaw(player.getLocation().getYaw());
+				loc.setY(loc.getY()+1);
 				if (target.getRelative(0, 1, 0).getType().equals(Material.AIR)&& target.getRelative(0, 2, 0).getType().equals(Material.AIR)) {
 					player.teleport(loc);
 				}
 				else {
-
 					loc.setY(player.getWorld().getHighestBlockYAt(loc));
 					player.teleport(loc);
 				}

@@ -29,6 +29,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class Buildr_Manager_Command_Jump extends Buildr_Manager_Command_Super {
+    private final java.util.Set<Material> airSet = java.util.EnumSet.of(Material.AIR);
 
 	public Buildr_Manager_Command_Jump(Buildr plugin) {
 		super(plugin);
@@ -48,32 +49,31 @@ public class Buildr_Manager_Command_Jump extends Buildr_Manager_Command_Super {
 		return false;
 	}
 	
-	public void cmd_jump(CommandSender sender){
-		Player player = (Player)sender;
-		if (!plugin.getConfigValue("BUILDMODE_JUMP")){
-			return;
-		}
-		if(!plugin.checkPermission(player, "buildr.feature.jump")){
-			return;
-		}
-			
-		Block target = player.getTargetBlock(null, 500);
-		Location loc = target.getLocation();
-		loc.setPitch(player.getLocation().getPitch());
-		loc.setYaw(player.getLocation().getYaw());
-		loc.setY(loc.getY()+1);
-		
-		if (target == null || target.getType().equals(Material.AIR)) {
-			sendTo(player, MsgType.WARNING, "no block in range");
-			return;
-		}
-		if (target.getRelative(0, 1, 0).getType().equals(Material.AIR)&& target.getRelative(0, 2, 0).getType().equals(Material.AIR)) {
-			player.teleport(loc);
-		}
-		else {
+    public void cmd_jump(CommandSender sender) {
+        Player player = (Player) sender;
+        if (!plugin.getConfigValue("BUILDMODE_JUMP")) {
+            return;
+        }
+        if (!plugin.checkPermission(player, "buildr.feature.jump")) {
+            return;
+        }
 
-			loc.setY(player.getWorld().getHighestBlockYAt(loc));
-			player.teleport(loc);
-		}
-	}
+        Block target = player.getTargetBlock(airSet, 500);
+        if (target == null || target.getType().equals(Material.AIR)) {
+            sendTo(player, MsgType.WARNING, "no block in range");
+            return;
+        }
+
+        Location loc = target.getLocation();
+        loc.setPitch(player.getLocation().getPitch());
+        loc.setYaw(player.getLocation().getYaw());
+        loc.setY(loc.getY() + 1);
+        if (target.getRelative(0, 1, 0).getType().equals(Material.AIR)
+                && target.getRelative(0, 2, 0).getType().equals(Material.AIR)) {
+            player.teleport(loc);
+        } else {
+            loc.setY(player.getWorld().getHighestBlockYAt(loc));
+            player.teleport(loc);
+        }
+    }
 }
