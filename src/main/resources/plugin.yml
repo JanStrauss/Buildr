@@ -1,6 +1,6 @@
 name: Buildr
 main: me.simplex.buildr.Buildr
-version: 0.7.1
+version: 0.8.0
 website: http://forums.bukkit.org/threads/25644/
 author: simplex
 startup: startup
@@ -55,6 +55,11 @@ commands:
     aliases: [cyl,tube]
     usage: |
            /<command> <material #>  {rReplace} {h|hollow}
+  slope:
+      description: Starts the slope building function
+      aliases: [ramp]
+      usage: |
+            /<command> <material>{:data} {rReplace_material{:data}} {north|east|south|west}
   airfloor:
     description: places a block (area) of material x y blocks above the player
     aliases: [af,airf]
@@ -125,6 +130,7 @@ permissions:
             buildr.cmd.sphere: true
             buildr.cmd.cylinder: true
             buildr.cmd.airfloor: true
+            buildr.cmd.slope: true
             buildr.cmd.top: true
             buildr.cmd.undo: true
             buildr.cmd.gv: true

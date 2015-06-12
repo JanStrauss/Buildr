@@ -1,5 +1,6 @@
 /*
- * Copyright 2012 s1mpl3x
+ * Original work Copyright 2012 s1mpl3x
+ * Modified work Copyright 2015 pdwasson
  * 
  * This file is part of Buildr.
  * 
@@ -16,15 +17,18 @@
  * You should have received a copy of the GNU General Public License
  * along with Buildr  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.simplex.buildr.util;
+package me.simplex.buildr.manager.commands;
 
+import me.simplex.buildr.util.MaterialAndData;
 import me.simplex.buildr.Buildr;
 
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.material.MaterialData;
 
 public abstract class Buildr_Manager_Command_Super implements CommandExecutor {
 	protected Buildr plugin;
@@ -80,4 +84,52 @@ public abstract class Buildr_Manager_Command_Super implements CommandExecutor {
 			return null;
 		}
 	}
+
+
+
+
+    protected MaterialAndData parseMaterialAndData(String param) throws BadFormatException {
+        Material material;
+        MaterialData data = null;
+
+        if (param.toUpperCase().startsWith("WOOL:")) {
+            material = Material.WOOL;
+            try {
+                org.bukkit.DyeColor woolcolor = Enum.valueOf(org.bukkit.DyeColor.class, param.toUpperCase().
+                        substring(5));
+                org.bukkit.material.Wool woolData = new org.bukkit.material.Wool();
+                woolData.setColor(woolcolor);
+                data = woolData;
+            } catch (IllegalArgumentException e) {
+                throw new BadMaterialException("Invalid wool color");
+            }
+        } else {
+            String blockIDParam = param;
+            String dataIDParam = null;
+            if (param.contains(":")) {
+                String[] parts = param.split(":");
+                blockIDParam = parts[0];
+                if (parts.length == 2)
+                    dataIDParam = parts[1];
+                else if (parts.length > 2) {
+                    throw new BadMaterialException("Bad material format");
+                }
+            }
+            material = Material.matchMaterial(blockIDParam);// tries by both int id and name
+            if (null == material) {
+                throw new BadMaterialException("Unknown material name or ID");
+            }
+            if (null != dataIDParam && !dataIDParam.isEmpty()) {
+                try {
+                    data = material.getNewData(Byte.parseByte(dataIDParam));
+                    // TODO ideally validate mat_data is a valid data value for the specified block type.
+                } catch (NumberFormatException e) {
+                    // TODO ideally try to match by name since we know the block ID.
+                    throw new BadMaterialException("Invalid subtype data ID");
+                }
+            }
+        }
+
+        return new MaterialAndData(material, data);
+    }
 }

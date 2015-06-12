@@ -30,9 +30,9 @@ import java.util.HashMap;
 import me.simplex.buildr.Buildr;
 
 public class Buildr_Manager_Configuration {
-	private Buildr plugin;
+	private final Buildr plugin;
 	public static File configfile;
-	private HashMap<String, Boolean> settings;
+	private final HashMap<String, Boolean> settings;
 	private String version;
 	
 	public Buildr_Manager_Configuration(Buildr buildr){
@@ -85,10 +85,10 @@ public class Buildr_Manager_Configuration {
 			w.write("#                                                          #");w.newLine();
 			w.write("#                    BUILDR CONFIGURATION                  #");w.newLine();
 			w.write("#                                                          #");w.newLine();
-			w.write("#                             v0.7.1                       #");w.newLine();
+			w.write("#                             v0.8.0                       #");w.newLine();
 			w.write("############################################################");w.newLine();
 			w.newLine();
-			w.write("CFG=0.7.1");w.newLine();
+			w.write("CFG=0.8.0");w.newLine();
 			w.newLine();
 			w.write("##### General settings: ####################################");w.newLine();
 			w.newLine();
@@ -176,9 +176,12 @@ public class Buildr_Manager_Configuration {
 			w.write("# Enable the sphere command");w.newLine(); //done
 			w.write("FEATURE_BUILDER_SPHERE=true");w.newLine();
 			w.newLine();
-			w.write("# Enable the cylinder command");w.newLine(); //done
-			w.write("FEATURE_BUILDER_CYLINDER=true");w.newLine();
-			w.newLine();
+            w.write("# Enable the cylinder command");w.newLine(); //done
+            w.write("FEATURE_BUILDER_CYLINDER=true");w.newLine();
+            w.newLine();
+            w.write("# Enable the slope command");w.newLine(); //done
+            w.write("FEATURE_BUILDER_SLOPE=true");w.newLine();
+            w.newLine();
 			w.write("# Enable the top command");w.newLine(); //done
 			w.write("FEATURE_TOP=true");w.newLine();
 			w.newLine();

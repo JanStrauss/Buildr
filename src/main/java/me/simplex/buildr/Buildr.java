@@ -47,6 +47,7 @@ import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Undo;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Wall;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Wallx;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Wool;
+import me.simplex.buildr.manager.commands.SlopeCommand;
 import me.simplex.buildr.runnable.Buildr_Runnable_TimeChecker;
 import me.simplex.buildr.util.Buildr_Interface_Building;
 
@@ -97,6 +98,7 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_Manager_Command_Sphere cmdSphere;
 	  private Buildr_Manager_Command_Wall cmdWall;
 	  private Buildr_Manager_Command_Wallx cmdWallx;
+	  private SlopeCommand cmdSlope;
 	  private Buildr_Manager_Command_Wool cmdWool;
 
 	  private String pluginDirectory;
@@ -124,7 +126,7 @@ public class Buildr extends JavaPlugin {
 		
 		pluginDirectory 	=  "plugins/Buildr";
 		version 			= getDescription().getVersion();
-		version_cfg			= "0.7.1";
+		version_cfg			= "0.8.0";
 		prefix 				= "[Buildr] ";
 		
 		cfgManager 			= new Buildr_Manager_Configuration(this);
@@ -153,6 +155,7 @@ public class Buildr extends JavaPlugin {
 		cmdSphere 			= new Buildr_Manager_Command_Sphere(this);
 		cmdWall 			= new Buildr_Manager_Command_Wall(this);
 		cmdWallx 			= new Buildr_Manager_Command_Wallx(this);
+        cmdSlope            = new SlopeCommand(this);
 		cmdWool 			= new Buildr_Manager_Command_Wool(this);
 
 		worldBuildMode 		= new ArrayList<World>();
@@ -209,6 +212,7 @@ public class Buildr extends JavaPlugin {
 		getCommand("undo").setExecutor(cmdUndo);
 		getCommand("wall").setExecutor(cmdWall);
 		getCommand("wallx").setExecutor(cmdWallx);
+        getCommand("slope").setExecutor(cmdSlope);
 		getCommand("wool").setExecutor(cmdWool);
 		log("command executors set..");
 		

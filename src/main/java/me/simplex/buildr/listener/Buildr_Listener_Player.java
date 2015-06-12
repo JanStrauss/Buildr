@@ -21,8 +21,8 @@ package me.simplex.buildr.listener;
 import java.util.Set;
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.runnable.Buildr_Runnable_TreeFeller_Collect;
-import me.simplex.buildr.util.Buildr_Manager_Command_Super;
-import me.simplex.buildr.util.Buildr_Manager_Command_Super.MsgType;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Super;
+import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Super.MsgType;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

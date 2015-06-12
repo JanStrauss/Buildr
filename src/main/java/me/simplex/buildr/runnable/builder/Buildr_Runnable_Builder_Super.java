@@ -16,11 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with Buildr  If not, see <http://www.gnu.org/licenses/>.
  */
-package me.simplex.buildr.util;
+package me.simplex.buildr.runnable.builder;
 
 import java.util.HashMap;
 
 import me.simplex.buildr.Buildr;
+import me.simplex.buildr.util.Buildr_Container_UndoBlock;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
