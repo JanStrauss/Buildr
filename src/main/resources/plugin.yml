@@ -1,0 +1,149 @@
+name: Buildr
+main: me.simplex.buildr.Buildr
+version: 0.8.0
+website: http://forums.bukkit.org/threads/25644/
+author: simplex
+startup: startup
+description: >
+             Collection of tools for faster & more comfortable building
+commands:
+  globalbuild:
+    description: Toggles the Global Buildmode for the world you're in
+    aliases: [gb,gbm]
+    usage: |
+           /<command>
+           Example: /<command>
+  build:
+    description: Toggles the User Buildmode
+    aliases: [ub,bm]
+    usage: |
+           /<command>
+           Example: /<command>
+  allowbuild:
+    description: Unlocks/Locks the activation of the buildmode in the world you're in. Kicks all users out of buildmode on lock. Only has a Effect if BUILDMODE_BUILDMODE_REQUIRE_ALLOW is true
+    aliases: [ab,abm,allowbm]
+    usage: |
+           /<command>
+           Example: /<command>
+  wall:
+    description: Starts the wall building function
+    aliases: [wl]
+    usage: |
+           /<command> <material #> {rReplace}
+  wallx:
+    description: Starts the wallx building function
+    aliases: [wlx]
+    usage: |
+           /<command> <material #> {rReplace}
+  cuboid:
+    description: Starts the cuboid building function
+    aliases: [cube,cu]
+    usage: |
+           /<command> <material #>  {rReplace} {h|hollow}
+  sphere:
+    description: Starts the sphere building function
+    aliases: [ball,sp]
+    usage: |
+           /<command> <material #>  {rReplace} {h|hollow}
+  halfsphere:
+    description: Starts the half sphere building function
+    aliases: [hball,hsp,hsphere]
+    usage: |
+           /<command> <material #>  {rReplace} {h|hollow}
+  cylinder:
+    description: Starts the cylinder building function
+    aliases: [cyl,tube]
+    usage: |
+           /<command> <material #>  {rReplace} {h|hollow}
+  slope:
+      description: Starts the slope building function
+      aliases: [ramp]
+      usage: |
+            /<command> <material>{:data} {rReplace_material{:data}} {north|east|south|west}
+  airfloor:
+    description: places a block (area) of material x y blocks above the player
+    aliases: [af,airf]
+    usage: |
+           /<command> <material #> <height #>
+           Example: /<command> 4 20 3
+  wool:
+    description: gives a Stack of wool in the specified color to the player
+    usage: |
+           /<command> <color>
+           Example: /<command> black
+  top:
+    description: ports the player to the highest block at its current position
+    usage: |
+           /<command> 
+           Example: /<command> 
+  undo:
+    description: Undoes the lastest action the player used (airfloor, wall)
+    aliases: [bu,buildr_undo]
+    usage: |
+           /<command> 
+           Example: /<command> 
+  gv:
+    description: gives a Stack of items to the player
+    aliases: [gv,buildr_gv]
+    usage: |
+           /<command> <player> <itemid #|itemname> <amount #>
+           Example: /<command> 20 50 gives a stack of 50 Glass to the player
+  gvx:
+    description: gives a Stack of items with the specified datavalue to yourself
+    aliases: [gvx,gx]
+    usage: |
+           /<command> <itemid:data> <amount #>
+           Example: /<command> 17:1 50 gives yourself a stack of 50 Redwood Log
+  clearinv:
+    description: clears the inventory of the player
+    aliases: [clrinv,ci,cleari,clear,clearinventory]
+    usage: |
+           /<command> 
+           Example: /<command>
+  location:
+    description: returns the location of the block under the player
+    aliases: [loc,gps]
+    usage: |
+           /<command> 
+           Example: /<command>
+  jump:
+    description: ports the player to the block that he is looking at
+    aliases: [jmp,go]
+    usage: |
+           /<command> 
+           Example: /<command>
+permissions:
+    buildr.*:
+        description: Gives access to all buildr parts
+        children:
+            buildr.cmd.*: true
+            buildr.feature.*: true
+    buildr.cmd.*:
+        description: Gives access to all buildr commands
+        children:
+            buildr.cmd.build: true
+            buildr.cmd.globalbuild: true
+            buildr.cmd.allowbuild: true
+            buildr.cmd.wall: true
+            buildr.cmd.wallx: true
+            buildr.cmd.cuboid: true
+            buildr.cmd.sphere: true
+            buildr.cmd.cylinder: true
+            buildr.cmd.airfloor: true
+            buildr.cmd.slope: true
+            buildr.cmd.top: true
+            buildr.cmd.undo: true
+            buildr.cmd.gv: true
+            buildr.cmd.gvx: true
+            buildr.cmd.clearinv: true
+            buildr.cmd.location: true
+    buildr.feature.*:
+        description: Gives access to all buildr features
+        children:
+            buildr.feature.treecutter: true
+            buildr.feature.jump: true
+            buildr.feature.compassjump: true
+            buildr.feature.instantblockbreak: true
+            buildr.feature.instantblockbreakall: true
+            buildr.feature.break_bedrock: true
+            buildr.feature.block_info: true
