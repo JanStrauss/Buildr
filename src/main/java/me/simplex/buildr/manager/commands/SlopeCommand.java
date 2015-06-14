@@ -1,4 +1,5 @@
 /*
+ * Copyright 2015 s1mpl3x
  * Copyright 2015 pwasson
  * 
  * This file is part of Buildr.
@@ -29,75 +30,85 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class SlopeCommand extends Buildr_Manager_Command_Super {
+public class SlopeCommand extends AbstractBuilderCommand {
 
     public SlopeCommand(Buildr plugin) {
-        super(plugin);
+        super(plugin, "slope", "buildr.cmd.slope", 3);
     }
 
 
     @Override
-    public boolean onCommand(CommandSender sender,
+    public boolean onCommandSelf(CommandSender sender,
             Command command,
             String label,
             String[] args) {
-//TODO support orientation hint without replace material
-        if (command.getName().equalsIgnoreCase("slope")) {
-            if (args.length < 1 || args.length > 3) {
-                return false;
-            }
-            if (plugin.checkPermission((Player) sender, "buildr.cmd.slope")) {
-                MaterialAndData buildMaterial;
-                MaterialAndData replaceMaterial = null;
-                BlockFace orientationHint = null;
-                try {// TODO debug parseMaterialAndData().
-                    buildMaterial = parseMaterialAndData(args[0]);
+        MaterialAndData buildMaterial;
+        MaterialAndData replaceMaterial = null;
+        BlockFace orientationHint = null;
+        try {
+            buildMaterial = parseMaterialAndData(args[0]);
 
-                    if (!buildMaterial.getMaterial().isBlock()) {
-                        sendTo(sender, Buildr_Manager_Command_Super.MsgType.ERROR,
-                                "invalid building blocktype");
-                        return true;
-                    }
-                    if (args.length >= 2) {
-                        replaceMaterial = parseMaterialAndData(args[1]);
-                        if (!replaceMaterial.getMaterial().isBlock()) {
-                            sendTo(sender, Buildr_Manager_Command_Super.MsgType.ERROR,
-                                    "invalid replace blocktype");
-                            return true;
-                        }
-                    }
-                } catch (BadFormatException formatX) {
+            if (!buildMaterial.getMaterial().isBlock()) {
+                sendTo(sender, Buildr_Manager_Command_Super.MsgType.ERROR,
+                        "invalid building blocktype");
+                return true;
+            }
+
+            // might have orientation hint but no replace material, so look for that.
+            if (args.length == 2 && !args[1].startsWith("r")) {
+                orientationHint = parseOrientationHint(args[1]);
+                // will fail if arg1 is replace material, and that's OK.
+            }
+
+            if (args.length >= 2 && null == orientationHint
+                    && args[1].startsWith("r")) {
+                replaceMaterial = parseMaterialAndData(args[1].substring(1));
+                if (!replaceMaterial.getMaterial().isBlock()) {
                     sendTo(sender, Buildr_Manager_Command_Super.MsgType.ERROR,
-                            formatX.getMessage());
+                            "invalid replace blocktype");
                     return true;
                 }
+            }
 
-                if (3 == args.length) {// optional orientation hint
-                    String orientationParam = args[2].toUpperCase();
-                    if ("NORTH".equals(orientationParam))
-                        orientationHint = BlockFace.NORTH;
-                    else if ("EAST".equals(orientationParam))
-                        orientationHint = BlockFace.EAST;
-                    else if ("SOUTH".equals(orientationParam))
-                        orientationHint = BlockFace.SOUTH;
-                    else if ("WEST".equals(orientationParam))
-                        orientationHint = BlockFace.WEST;
-                    else {
+            if (3 == args.length) {// optional orientation hint
+                if (null != orientationHint) {
+                    // already got orientationHint!
+                    sendTo(sender, Buildr_Manager_Command_Super.MsgType.ERROR,
+                            "too many arguments");
+                    return true;
+                } else {
+                    orientationHint = parseOrientationHint(args[2]);
+                    if (null == orientationHint) {
                         sendTo(sender, Buildr_Manager_Command_Super.MsgType.ERROR,
                                 "Invalid orientation hint");
                         return true;
                     }
                 }
-
-                cmd_slope(sender, buildMaterial, replaceMaterial, orientationHint);
-                return true;
-            } else {
-                sendTo(sender, Buildr_Manager_Command_Super.MsgType.ERROR,
-                        "You do not have permission to perform this action");
             }
+
+            cmd_slope(sender, buildMaterial, replaceMaterial, orientationHint);
+            return true;
+        } catch (BadFormatException formatX) {
+            sendTo(sender, Buildr_Manager_Command_Super.MsgType.ERROR,
+                    formatX.getMessage());
             return true;
         }
-        return false;
+    }
+
+
+    private BlockFace parseOrientationHint(String arg) {
+        String orientationParam = arg.toUpperCase();
+        if ("NORTH".equals(orientationParam))
+            return BlockFace.NORTH;
+        else if ("EAST".equals(orientationParam))
+            return BlockFace.EAST;
+        else if ("SOUTH".equals(orientationParam))
+            return BlockFace.SOUTH;
+        else if ("WEST".equals(orientationParam))
+            return BlockFace.WEST;
+        else {
+            return null;
+        }
     }
 
 
@@ -114,8 +125,13 @@ public class SlopeCommand extends Buildr_Manager_Command_Super {
             sendTo(sender, Buildr_Manager_Command_Super.MsgType.WARNING, "previous started building aborted");
         }
 
-        plugin.getStartedBuildings().add(new SlopeBuilderManager(plugin, (Player) sender, buildMaterial,
-                replace_mat, orientationHint));
+        plugin.getStartedBuildings().add(
+                new SlopeBuilderManager((Player) sender,
+                        buildMaterial.getMaterial(),
+                        (null == replace_mat) ? null : replace_mat.getMaterial(),
+                        plugin,
+                        buildMaterial.getDataIDorZero(),
+                        orientationHint));
 
         StringBuilder sb = new StringBuilder("Started new Slope.");
         sb.append(String.format(" Info: Blocktype:%s%s%s", ChatColor.BLUE, buildMaterial.toString(),

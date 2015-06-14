@@ -26,6 +26,7 @@ import me.simplex.buildr.runnable.builder.SlopeBuilderTask;
 import me.simplex.buildr.util.Buildr_Interface_Building;
 import me.simplex.buildr.util.Buildr_Type_Wall;
 import me.simplex.buildr.util.MaterialAndData;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
@@ -35,37 +36,36 @@ import org.bukkit.entity.Player;
  *
  * @author pwasson
  */
-public class SlopeBuilderManager implements Buildr_Interface_Building {
-	private final Buildr plugin;
-	private final Player creator;
-	private final MaterialAndData buildMaterial;
-	private final MaterialAndData replaceMaterial;
+public class SlopeBuilderManager extends AbstractBuilderManager {
+    private static final String COORD_FAIL_MESSAGE_GENERIC = "The slope must be 45 degrees, and if lengths along X and Z are equal, an orientation hint must be provided. Slope building stopped.";
+    private static final String COORD_FAIL_MESSAGE_NO_HEIGHT = "A slope must be more than one block high. Slope building stopped.";
+    private static final String COORD_FAIL_MESSAGE_HINT_REQUIRED = "The orientation is arbitrary; an orientation hint (north, east, south, west) must be provided. Slope building stopped.";
+    private static final String COORD_FAIL_MESSAGE_BAD_HINT = "The orientation hint provided is not valid for the chosen positions. Slope building stopped.";
+    private static final String COORD_FAIL_MESSAGE_ANGLE = "The slope must be 45 degrees, i.e. the width OR depth must equal the height. Slope building stopped.";
+
     private final BlockFace orientationHint;
 
-    private Block position1,position2;
-	private Buildr_Type_Wall type;
-	private boolean coordinate1placed = false;
     private BlockFace decidedOrientation = null;
+    private CoordFail coordReason = null;
 
-    public SlopeBuilderManager(Buildr inPlugin,
+    public SlopeBuilderManager(
             Player inPlayer,
-            MaterialAndData inBuildMaterial,
-            MaterialAndData inReplaceMaterial,
+            Material inBuildMaterial,
+            Material inReplaceMaterial,
+            Buildr inPlugin,
+            byte inBuildMaterialData,
             BlockFace inOrientationHint) {
-        this.plugin = inPlugin;
-        this.creator = inPlayer;
-        this.buildMaterial = inBuildMaterial;
-        this.replaceMaterial = inReplaceMaterial;
+        super("Slope", inPlugin, inPlayer, inBuildMaterial, inBuildMaterialData, inReplaceMaterial);
         this.orientationHint = inOrientationHint;
     }
 
 
-    @Override
-    public void addCoordinate1(Block position1) {
-        this.position1 = position1;
-        coordinate1placed = true;
+    private enum CoordFail {
+        NO_HEIGHT,
+        HINT_REQUIRED,
+        BAD_HINT,
+        ANGLE
     }
-
 
     @Override
     public boolean checkCoordinates() {
@@ -75,8 +75,9 @@ public class SlopeBuilderManager implements Buildr_Interface_Building {
         int deltaY = Math.abs(position1.getY() - position2.getY());
         int deltaX = Math.abs(position1.getX() - position2.getX());
         int deltaZ = Math.abs(position1.getZ() - position2.getZ());
-// TODO set a reason code when we return false that can be used by getCoordinateCheckFailed()
+
         if (deltaY == 0) {
+            coordReason = CoordFail.NO_HEIGHT;
             return false;
         }
         
@@ -91,8 +92,10 @@ public class SlopeBuilderManager implements Buildr_Interface_Building {
 
         if (deltaY == deltaX && deltaY == deltaZ) {// deal with arbitrary
             // TODO we could also maybe use player's orientation as a hint if orientationHint is not provided.
-            if (null == orientationHint)
+            if (null == orientationHint) {
+                coordReason = CoordFail.HINT_REQUIRED;
                 return false;
+            }
             Set<BlockFace> options = new HashSet<BlockFace>();
             options.add(BlockFace.NORTH);
             options.add(BlockFace.EAST);
@@ -108,14 +111,17 @@ public class SlopeBuilderManager implements Buildr_Interface_Building {
                 options.remove(BlockFace.SOUTH);
             if (options.contains(orientationHint))
                 decidedOrientation = orientationHint;
-            else
+            else {
+                coordReason = CoordFail.BAD_HINT;
                 return false;
+            }
         } else if (deltaY == deltaX) {// slope faces EAST or WEST
             decidedOrientation = (highPos.getX() < lowPos.getX()) ? BlockFace.EAST : BlockFace.WEST;
         } else if (deltaY == deltaZ) {
             decidedOrientation = (highPos.getZ() < lowPos.getZ()) ? BlockFace.SOUTH : BlockFace.NORTH;
         } else {
             // not 45 degrees.
+            coordReason = CoordFail.ANGLE;
             return false;
         }
         return true;
@@ -123,39 +129,26 @@ public class SlopeBuilderManager implements Buildr_Interface_Building {
 
 
     @Override
-    public void startBuild() {
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin,
-                new SlopeBuilderTask(plugin, creator, position1, position2, decidedOrientation, 
-                        buildMaterial, replaceMaterial));
+    public String getCoordinateCheckFailed() {
+        if (coordReason != null)
+            switch (coordReason) {
+                case NO_HEIGHT:
+                    return COORD_FAIL_MESSAGE_NO_HEIGHT;
+                case HINT_REQUIRED:
+                    return COORD_FAIL_MESSAGE_HINT_REQUIRED;
+                case BAD_HINT:
+                    return COORD_FAIL_MESSAGE_BAD_HINT;
+                case ANGLE:
+                    return COORD_FAIL_MESSAGE_ANGLE;
+            }
+        return COORD_FAIL_MESSAGE_GENERIC;
     }
 
 
-	@Override
-	public Player getBuildingcreater() {
-		return creator;
-	}
-
-
     @Override
-	public boolean isCoordinate1Placed(){
-		return coordinate1placed;
-	}
-
-
-	@Override
-	public void addCoordinate2(Block position2) {
-		this.position2=position2;
-	}
-
-
-	@Override
-	public String getBuildingName() {
-		return "Slope";
-	}
-
-
-	@Override
-	public String getCoordinateCheckFailed() {
-		return "The slope must be 45 degrees, and if lengths along X and Z are equal, an orientation hint must be provided. Slope building stopped.";
-	}
+    public void startBuild() {
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin,
+                new SlopeBuilderTask(plugin, creator, position1, position2, decidedOrientation,
+                        material, material_data, replace_mat));
+    }
 }

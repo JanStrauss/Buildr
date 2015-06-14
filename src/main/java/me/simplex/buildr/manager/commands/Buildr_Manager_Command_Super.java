@@ -23,7 +23,6 @@ import me.simplex.buildr.util.MaterialAndData;
 import me.simplex.buildr.Buildr;
 
 import org.bukkit.ChatColor;
-import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -64,7 +63,8 @@ public abstract class Buildr_Manager_Command_Super implements CommandExecutor {
 		
 		return ChatColor.BLUE + PREFIX + MsgColor + msg;
 	}
-	
+
+
 	protected Material parseMaterial(String mat_re){
 		int id = -1;
 		try {
@@ -84,8 +84,6 @@ public abstract class Buildr_Manager_Command_Super implements CommandExecutor {
 			return null;
 		}
 	}
-
-
 
 
     protected MaterialAndData parseMaterialAndData(String param) throws BadFormatException {
@@ -131,5 +129,75 @@ public abstract class Buildr_Manager_Command_Super implements CommandExecutor {
         }
 
         return new MaterialAndData(material, data);
+    }
+    
+    
+    protected static class CommonArguments {
+        private final MaterialAndData buildMaterial;
+        private final MaterialAndData replaceMaterial;
+        private final boolean hollow;
+
+        public CommonArguments(MaterialAndData inBuildMaterial,
+                MaterialAndData inReplaceMaterial) {
+            this(inBuildMaterial, inReplaceMaterial, false);
+        }
+
+        public CommonArguments(MaterialAndData inBuildMaterial,
+                MaterialAndData inReplaceMaterial,
+                boolean inHollow) {
+            this.buildMaterial = inBuildMaterial;
+            this.replaceMaterial = inReplaceMaterial;
+            this.hollow = inHollow;
+        }
+
+        public MaterialAndData getBuildMaterial() {
+            return buildMaterial;
+        }
+
+        public MaterialAndData getReplaceMaterial() {
+            return replaceMaterial;
+        }
+
+        public boolean isHollow() {
+            return hollow;
+        }
+    }
+    
+    
+    protected CommonArguments parseCommonArguments(String[] args,
+            boolean supportHollow) throws BadFormatException {
+        MaterialAndData buildMaterial;
+        MaterialAndData replaceMaterial = null;
+        boolean hollow = false;
+
+        buildMaterial = parseMaterialAndData(args[0]);
+        if (!buildMaterial.getMaterial().isBlock())
+            throw new BadMaterialException("invalid building blocktype");
+
+        if (args.length == 2) {
+            if (args[1].startsWith("r")) {
+                replaceMaterial = parseMaterialAndData(args[1].substring(1));
+            } else if (supportHollow && args[1].equalsIgnoreCase("h") || args[1].equalsIgnoreCase("hollow")) {
+                hollow = true;
+            } else {
+                throw new BadFormatException("Invalid argument: " + args[1]);
+            }
+        } else if (supportHollow && args.length == 3) {
+            if (args[1].startsWith("r"))
+                replaceMaterial = parseMaterialAndData(args[1].substring(1));
+            else
+                throw new BadFormatException("Invalid argument: " + args[1]);
+            if (args[2].equalsIgnoreCase("h") || args[2].equalsIgnoreCase("hollow"))
+                hollow = true;
+            else
+                throw new BadFormatException("Too many arguments");
+        } else if (args.length > 3) {
+            throw new BadFormatException("Wrong number of arguments");
+        }
+
+        if (null != replaceMaterial && !replaceMaterial.getMaterial().isBlock())
+            throw new BadMaterialException("invalid replace blocktype");
+
+        return new CommonArguments(buildMaterial, replaceMaterial, hollow);
     }
 }

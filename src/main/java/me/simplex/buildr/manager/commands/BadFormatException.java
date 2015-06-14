@@ -20,7 +20,7 @@
 package me.simplex.buildr.manager.commands;
 
 /**
- *
+ * A base class for exceptions caused by invalid command arguments.
  * @author pwasson
  */
 public class BadFormatException extends IllegalArgumentException {

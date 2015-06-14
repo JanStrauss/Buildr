@@ -20,7 +20,8 @@
 package me.simplex.buildr.manager.commands;
 
 /**
- *
+ * An exception that indicates that a Material specification could not be understood
+ * or was invalid for the situation.
  * @author pwasson
  */
 public class BadMaterialException extends BadFormatException {

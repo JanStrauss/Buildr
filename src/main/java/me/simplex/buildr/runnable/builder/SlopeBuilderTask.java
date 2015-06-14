@@ -22,14 +22,12 @@ package me.simplex.buildr.runnable.builder;
 import java.util.HashMap;
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.util.Buildr_Container_UndoBlock;
-import static me.simplex.buildr.util.Buildr_Type_Wall.WALL_X;
-import static me.simplex.buildr.util.Buildr_Type_Wall.WALL_Y;
-import static me.simplex.buildr.util.Buildr_Type_Wall.WALL_Z;
 import me.simplex.buildr.util.MaterialAndData;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import static org.omg.IOP.CodecPackage.TypeMismatchHelper.type;
+import org.bukkit.material.Stairs;
 
 
 /**
@@ -38,8 +36,8 @@ import static org.omg.IOP.CodecPackage.TypeMismatchHelper.type;
  */
 public class SlopeBuilderTask extends Buildr_Runnable_Builder_Super {
     private final BlockFace orientation;
-    private final MaterialAndData buildMaterial;
-    private final MaterialAndData replaceMaterial;
+//    private final MaterialAndData buildMaterial;
+//    private final MaterialAndData replaceMaterial;
     private final boolean replace;
 
 
@@ -48,19 +46,26 @@ public class SlopeBuilderTask extends Buildr_Runnable_Builder_Super {
             Block position1,
             Block position2,
             BlockFace orientation,
-            MaterialAndData buildMaterial,
-            MaterialAndData replaceMaterial) {
+            Material buildMaterial,
+            byte buildMaterialData,
+            Material replaceMaterial) {
         this.plugin = plugin;
         this.player = player;
         this.position1 = position1;
         this.position2 = position2;
         this.orientation = orientation;
-        this.buildMaterial = buildMaterial;
-        this.replaceMaterial = replaceMaterial;
+//        this.buildMaterial = buildMaterial;
+//        this.replaceMaterial = replaceMaterial;
         this.replace = (null != replaceMaterial);
-        this.material = buildMaterial.getMaterial();
-        this.material_data = (null != buildMaterial.getData())? buildMaterial.getData().getData() : 0;
-        this.replace_mat = (null != replaceMaterial) ? replaceMaterial.getMaterial() : null;
+        this.material = buildMaterial;
+        this.material_data = buildMaterialData;
+        this.replace_mat = replaceMaterial;
+
+        if (Stairs.class.equals(this.material.getData())) {
+            Stairs newData = (Stairs)this.material.getNewData(material_data);
+            newData.setFacingDirection(orientation.getOppositeFace());
+            this.material_data = newData.getData();
+        }
     }
 
     

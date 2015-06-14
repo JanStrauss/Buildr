@@ -1,5 +1,6 @@
 /*
  * Copyright 2012 s1mpl3x
+ * Copyright 2015 pdwasson
  * 
  * This file is part of Buildr.
  * 
@@ -30,7 +31,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class Buildr_Runnable_Builder_Wallx extends Buildr_Runnable_Builder_Super{
-	private boolean replace;
+	private final boolean replace;
 
 	
 	public Buildr_Runnable_Builder_Wallx(Block position1, Block position2,Material material, boolean replace, Material replace_mat ,Buildr plugin, Player player, byte material_data) {
@@ -44,17 +45,18 @@ public class Buildr_Runnable_Builder_Wallx extends Buildr_Runnable_Builder_Super
 		this.material_data = material_data;
 	}
 
-	@Override
-	public void run() {
-		HashMap<Block, Buildr_Container_UndoBlock> undoBlocks= null;
-		undoBlocks = buildWall();
-		
-		plugin.getUndoList().addToStack(undoBlocks, player);
-		player.sendMessage("done! Placed "+undoBlocks.size()+" blocks");
-		plugin.log(player.getName()+" builded a wallx: "+undoBlocks.size()+" blocks affected");
-	}
+
+    @Override
+    public void run() {
+        HashMap<Block, Buildr_Container_UndoBlock> undoBlocks = buildWall();
+
+        plugin.getUndoList().addToStack(undoBlocks, player);
+        player.sendMessage("done! Placed " + undoBlocks.size() + " blocks");
+        plugin.log(player.getName() + " builded a wallx: " + undoBlocks.size() + " blocks affected");
+    }
 	
-	private HashMap<Block, Buildr_Container_UndoBlock> buildWall(){
+
+    private HashMap<Block, Buildr_Container_UndoBlock> buildWall(){
 		ArrayList<Block> groundblocks = new ArrayList<Block>();
 		HashMap<Block, Buildr_Container_UndoBlock> undo = new HashMap<Block, Buildr_Container_UndoBlock>();
 		
@@ -70,13 +72,13 @@ public class Buildr_Runnable_Builder_Wallx extends Buildr_Runnable_Builder_Super
 		double pos1_z	= position1.getZ();
 		double pos2_z	= position2.getZ();
 		
-		double lenght 	= Math.sqrt((side_a*side_a)+(side_b*side_b));
-		double mod 		= 1/lenght;
+		double length 	= Math.sqrt((side_a*side_a)+(side_b*side_b));
+		double mod 		= 1/length;
 		double i		= 0;
 		
 		double pos_x,pos_z;
 		
-		while(i<=1){
+		while (i<=1) {
 			pos_x = pos1_x + i*(pos2_x-pos1_x);
 			pos_z = pos1_z + i*(pos2_z-pos1_z);
 			
@@ -93,11 +95,10 @@ public class Buildr_Runnable_Builder_Wallx extends Buildr_Runnable_Builder_Super
 				for (int j = 0; j < height; j++) {
 					Block toChange = block_handle.getRelative(0, j, 0);
 					if (replace) {
-						if (block_handle.getType().equals(replace_mat)) {
+						if (toChange.getType().equals(replace_mat)) {
 							changeBlock(toChange, undo);
 						}
-					}
-					else {
+					} else {
 						changeBlock(toChange, undo);
 					}
 				}
