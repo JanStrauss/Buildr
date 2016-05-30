@@ -23,9 +23,6 @@ import java.util.HashSet;
 import java.util.Set;
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.runnable.builder.SlopeBuilderTask;
-import me.simplex.buildr.util.Buildr_Interface_Building;
-import me.simplex.buildr.util.Buildr_Type_Wall;
-import me.simplex.buildr.util.MaterialAndData;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -72,6 +69,8 @@ public class SlopeBuilderManager extends AbstractBuilderManager {
         // the slope must be a 45 degree angle, i.e. deltaY == deltaX or deltaY == deltaZ.
         // Also, if deltaY == deltaX == deltaZ, orientation is arbitrary, so an orientation hint
         // must have been provided and must be valid for the given coordinates.
+        Block position1 = getPosition(1);
+        Block position2 = getPosition(2);
         int deltaY = Math.abs(position1.getY() - position2.getY());
         int deltaX = Math.abs(position1.getX() - position2.getX());
         int deltaZ = Math.abs(position1.getZ() - position2.getZ());
@@ -148,7 +147,7 @@ public class SlopeBuilderManager extends AbstractBuilderManager {
     @Override
     public void startBuild() {
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin,
-                new SlopeBuilderTask(plugin, creator, position1, position2, decidedOrientation,
+                new SlopeBuilderTask(plugin, creator, getPosition(1), getPosition(2), decidedOrientation,
                         material, material_data, replace_mat));
     }
 }

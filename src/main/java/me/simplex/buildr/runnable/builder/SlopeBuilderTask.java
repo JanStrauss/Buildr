@@ -20,9 +20,9 @@
 package me.simplex.buildr.runnable.builder;
 
 import java.util.HashMap;
+import java.util.Map;
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.util.Buildr_Container_UndoBlock;
-import me.simplex.buildr.util.MaterialAndData;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -78,7 +78,7 @@ public class SlopeBuilderTask extends Buildr_Runnable_Builder_Super {
         int north = Math.min(position1.getZ(), position2.getZ());
         int south = Math.max(position1.getZ(), position2.getZ());
 
-        HashMap<Block, Buildr_Container_UndoBlock> undoBlocks = null;
+        Map<Block, Buildr_Container_UndoBlock> undoBlocks = null;
         switch (orientation) {
             case NORTH:
                 undoBlocks = buildSlopeNorthSouth(low, high, west, east, north, 1);
@@ -98,19 +98,19 @@ public class SlopeBuilderTask extends Buildr_Runnable_Builder_Super {
         if (null != undoBlocks) {
             plugin.getUndoList().addToStack(undoBlocks, player);
             player.sendMessage(String.format("done! Placed %d blocks", undoBlocks.size()));
-            plugin.log(String.format("%s built a slope: %d blocks asffected.", player.getName(), 
+            plugin.log(String.format("%s built a slope: %d blocks affected.", player.getName(), 
                     undoBlocks.size()));
         }
     }
 
     
-    private HashMap<Block, Buildr_Container_UndoBlock> buildSlopeNorthSouth(int low,
+    private Map<Block, Buildr_Container_UndoBlock> buildSlopeNorthSouth(int low,
             int high,
             int west,
             int east,
             int startZ,
             int deltaZ) {
-		HashMap<Block, Buildr_Container_UndoBlock> undo = 
+		Map<Block, Buildr_Container_UndoBlock> undo = 
                 new HashMap<Block, Buildr_Container_UndoBlock>();
 
         int z = startZ;
@@ -129,13 +129,13 @@ public class SlopeBuilderTask extends Buildr_Runnable_Builder_Super {
     }
 
 
-    private HashMap<Block, Buildr_Container_UndoBlock> buildSlopeEastWest(int low,
+    private Map<Block, Buildr_Container_UndoBlock> buildSlopeEastWest(int low,
             int high,
             int north,
             int south,
             int startX,
             int deltaX) {
-		HashMap<Block, Buildr_Container_UndoBlock> undo =
+		Map<Block, Buildr_Container_UndoBlock> undo =
                 new HashMap<Block, Buildr_Container_UndoBlock>();
 
         int x = startX;

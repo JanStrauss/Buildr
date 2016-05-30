@@ -20,7 +20,7 @@
 package me.simplex.buildr.manager.commands;
 
 import me.simplex.buildr.Buildr;
-import me.simplex.buildr.manager.builder.Buildr_Manager_Builder_Cuboid;
+import me.simplex.buildr.manager.builder.CuboidBuilderManager;
 import me.simplex.buildr.util.Buildr_Type_Wool;
 import me.simplex.buildr.util.MaterialAndData;
 
@@ -55,7 +55,7 @@ public class Buildr_Manager_Command_Cuboid extends StdArgBuilderCommand {
         if (null != replace_mat) {
             replace_info = "Replace: " + ChatColor.BLUE + replace_mat;
         }
-        plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Cuboid((Player) sender, material,
+        plugin.getStartedBuildings().add(new CuboidBuilderManager((Player) sender, material,
                 replace_mat, hollow, plugin, material_data));
         String buildinfo = "Started new Cuboid. Info: Blocktype: " + ChatColor.BLUE + material.toString() + ChatColor.WHITE + " (ID:" + ChatColor.BLUE + material.
                 getId() + ChatColor.WHITE + ") " + replace_info + ChatColor.WHITE + " Hollow: " + ChatColor.BLUE + hollow;

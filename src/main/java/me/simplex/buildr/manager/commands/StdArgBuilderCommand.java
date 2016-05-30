@@ -20,7 +20,7 @@
 package me.simplex.buildr.manager.commands;
 
 import me.simplex.buildr.Buildr;
-import me.simplex.buildr.util.Buildr_Interface_Building;
+import me.simplex.buildr.manager.builder.BuilderManager;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -85,7 +85,7 @@ public abstract class StdArgBuilderCommand extends AbstractBuilderCommand {
      * @param hollow
      * @param replace_mat
      * @see Buildr#getStartedBuildings()
-     * @see Buildr_Interface_Building
+     * @see BuilderManager
      */
     protected abstract void doBuildCommand(CommandSender sender,
             Material material,

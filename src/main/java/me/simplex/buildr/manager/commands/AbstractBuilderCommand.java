@@ -28,23 +28,37 @@ import org.bukkit.entity.Player;
 
 /**
  * A Command handler that handles a few chores common to builder commands, i.e. those commands that build
- * stuff such as walls, cuboids, etc.
+ * stuff such as walls, cuboids, etc. A BuilderCommand parses arguments, constructs an appropriate
+ * {@link me.simplex.buildr.manager.builder.AbstractBuilderManager Manager}, and associates that Manager
+ * with the user that initiated the command so that the user&rsquo;s future actions, such as tapping with a
+ * stick, can advance the specified operation.
  * @author pwasson
  */
 public abstract class AbstractBuilderCommand extends Buildr_Manager_Command_Super {
     protected final String commandName;
     protected final String permission;
     protected final int maxArgs;
+    protected final int minArgs;
+
+
+    public AbstractBuilderCommand(Buildr plugin,
+            String commandName,
+            String permission,
+            int maxArgs,
+            int minArgs) {
+        super(plugin);
+        this.commandName = commandName;
+        this.permission = permission;
+        this.maxArgs = maxArgs;
+        this.minArgs = minArgs;
+    }
 
 
     public AbstractBuilderCommand(Buildr plugin,
             String commandName,
             String permission,
             int maxArgs) {
-        super(plugin);
-        this.commandName = commandName;
-        this.permission = permission;
-        this.maxArgs = maxArgs;
+        this(plugin, commandName, permission, maxArgs, 1);
     }
 
 
@@ -56,11 +70,11 @@ public abstract class AbstractBuilderCommand extends Buildr_Manager_Command_Supe
         if (!command.getName().equalsIgnoreCase(commandName)) {
             return false;
         }
-        if (args.length < 1 || args.length > maxArgs) {
+        if (args.length < minArgs || args.length > maxArgs) {
             return false;
         }
         if (!plugin.checkPermission((Player) sender, permission)) {
-            sendTo(sender, MsgType.ERROR, "You do not have permission to perform this action");
+            sendTo(sender, MsgType.ERROR, "You do not have permission to perform this action.");
             return true;
         }
 
@@ -78,7 +92,7 @@ public abstract class AbstractBuilderCommand extends Buildr_Manager_Command_Supe
      * @param command
      * @param label
      * @param args
-     * @return
+     * @return whether the arguments were acceptable.
      */
     protected abstract boolean onCommandSelf(CommandSender sender,
             Command command,

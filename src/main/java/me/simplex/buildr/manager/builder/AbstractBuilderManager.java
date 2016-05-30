@@ -19,8 +19,10 @@
  */
 package me.simplex.buildr.manager.builder;
 
+import java.util.ArrayList;
+import java.util.List;
 import me.simplex.buildr.Buildr;
-import me.simplex.buildr.util.Buildr_Interface_Building;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -31,7 +33,7 @@ import org.bukkit.entity.Player;
  * need to be so verbose.
  * @author pwasson
  */
-abstract class AbstractBuilderManager implements Buildr_Interface_Building {
+abstract class AbstractBuilderManager implements BuilderManager {
 	protected final Buildr plugin;
 	protected final Player creator;
     protected final String buildingName;
@@ -39,7 +41,7 @@ abstract class AbstractBuilderManager implements Buildr_Interface_Building {
 	protected final byte material_data;
 	protected final boolean replace;
 	protected final Material replace_mat;
-	protected Block position1,position2;
+	protected final List<Block> positions = new ArrayList<Block>();
 	protected boolean coordinate1placed = false;
 
     public AbstractBuilderManager(String inBuildingName,
@@ -57,29 +59,36 @@ abstract class AbstractBuilderManager implements Buildr_Interface_Building {
         this.replace_mat = inReplaceMaterial;
     }
 
+
+    /**
+     * get the Block position with the specified index.
+     * @param n the index of the position to get (1-based).
+     * @return the Block specifying the requested position.
+     */
+    protected Block getPosition(int n) {
+        if (n < 1 || n > positions.size()) {
+            throw new IllegalArgumentException("invalid position index");
+        } else {
+            return positions.get(n-1);
+        }
+    }
+
     
     @Override
-    public Player getBuildingcreater() {
+    public Player getBuildingCreator() {
         return creator;
     }
 
 
     @Override
-    public boolean isCoordinate1Placed() {
-		return coordinate1placed;
+    public boolean gotAllCoordinates() {
+		return (positions.size() > 1);
     }
 
 
     @Override
-    public void addCoordinate1(Block position1) {
-		this.position1 = position1;
-		coordinate1placed = true;
-    }
-
-
-    @Override
-    public void addCoordinate2(Block position2) {
-		this.position2 = position2;
+    public void addCoordinate(Block position) {
+		this.positions.add(position);
     }
 
 
@@ -92,5 +101,43 @@ abstract class AbstractBuilderManager implements Buildr_Interface_Building {
     @Override
     public String getBuildingName() {
         return buildingName;
+    }
+
+
+    @Override
+    public String getBuildingMessage() {
+        return String.format("Positions OK, building %s...", getBuildingName());
+    }
+
+    
+    protected String getCoordForChat(Block pos) {
+        return String.format("[%s%s%s, %s%s%s, %s%s%s]",
+                    ChatColor.BLUE, pos.getX(), ChatColor.WHITE,
+                    ChatColor.BLUE, pos.getY(), ChatColor.WHITE,
+                    ChatColor.BLUE, pos.getZ(), ChatColor.WHITE);
+    }
+
+
+    @Override
+    public String getLastPositionMessage() {
+        String s;
+        if (positions.isEmpty()) {
+            return "invalid";
+        } else {
+            Block pos = positions.get(positions.size() - 1);
+            return String.format("Got positon %d of your %s at %s",
+                    positions.size(), getBuildingName(), getCoordForChat(pos));
+        }
+    }
+
+
+    /**
+     * {@inheritDoc}
+     * This base version assumes there are only two required positions and the second is described
+     * as &ldquo;block 2&rdquo;.
+     */
+    @Override
+    public String getNextPositionMessage() {
+        return "Now right-click on block 2 (again with a stick) to continue";
     }
 }

@@ -19,43 +19,33 @@
  */
 package me.simplex.buildr.manager.builder;
 
+import me.simplex.buildr.Buildr;
+import me.simplex.buildr.runnable.builder.Buildr_Runnable_Builder_Wallx;
+
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-import me.simplex.buildr.Buildr;
-import me.simplex.buildr.runnable.builder.Buildr_Runnable_Builder_Sphere;
-import me.simplex.buildr.util.Buildr_Interface_Building;
 
-public class Buildr_Manager_Builder_Sphere extends AbstractBuilderManager {
-	private final boolean hollow;
-	private final boolean halfcube;
-
-
-    public Buildr_Manager_Builder_Sphere(
+public class WallxBuilderManager extends AbstractBuilderManager {
+    public WallxBuilderManager(
             Player inPlayer,
             Material inBuildMaterial,
             Material inReplaceMaterial,
-            boolean hollow,
-            boolean halfcube,
             Buildr inPlugin,
             byte inBuildMaterialData) {
-        super("Sphere", inPlugin, inPlayer, inBuildMaterial, inBuildMaterialData, inReplaceMaterial);
-        this.hollow = hollow;
-        this.halfcube = halfcube;
+        super("Wallx", inPlugin, inPlayer, inBuildMaterial, inBuildMaterialData, inReplaceMaterial);
     }
 
 
     @Override
     public String getCoordinateCheckFailed() {
-        return "Herp Derp";
+        return null;
     }
 
 
     @Override
     public void startBuild() {
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Sphere(
-                position1, position2, material, replace, replace_mat, hollow, halfcube, plugin, creator,
-                material_data));
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Wallx(
+                getPosition(1), getPosition(2), material, replace, replace_mat, plugin, creator, material_data));
     }
 }
