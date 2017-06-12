@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 s1mpl3x
+ * Copyright 2012-2015 s1mpl3x
  * 
  * This file is part of Buildr.
  * 
@@ -49,7 +49,8 @@ import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Wallx;
 import me.simplex.buildr.manager.commands.Buildr_Manager_Command_Wool;
 import me.simplex.buildr.manager.commands.SlopeCommand;
 import me.simplex.buildr.runnable.Buildr_Runnable_TimeChecker;
-import me.simplex.buildr.util.Buildr_Interface_Building;
+import me.simplex.buildr.manager.builder.BuilderManager;
+import me.simplex.buildr.manager.commands.CloneCommand;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -58,6 +59,8 @@ import org.bukkit.Server;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -66,7 +69,7 @@ public class Buildr extends JavaPlugin {
 	  //tech
 	  public Server server;
 	  
-	  private Logger log = Logger.getLogger("Minecraft");
+	  private final Logger log = Logger.getLogger("Minecraft");
 	  
 	  private String prefix;
 	  private String version;
@@ -99,6 +102,7 @@ public class Buildr extends JavaPlugin {
 	  private Buildr_Manager_Command_Wall cmdWall;
 	  private Buildr_Manager_Command_Wallx cmdWallx;
 	  private SlopeCommand cmdSlope;
+      private CloneCommand cmdClone;
 	  private Buildr_Manager_Command_Wool cmdWool;
 
 	  private String pluginDirectory;
@@ -109,7 +113,7 @@ public class Buildr extends JavaPlugin {
 	  private ArrayList<World> worldBuildMode;
 	  private ArrayList<World> worldBuildAllowed;
 	  private ArrayList<Player> playerBuildMode;
-	  private ArrayList<Buildr_Interface_Building> startedBuildings;
+	  private ArrayList<BuilderManager> startedBuildings;
 	  
 	  private LinkedList<Player> playerCuttingTree;
 
@@ -126,7 +130,7 @@ public class Buildr extends JavaPlugin {
 		
 		pluginDirectory 	=  "plugins/Buildr";
 		version 			= getDescription().getVersion();
-		version_cfg			= "0.8.0";
+		version_cfg			= "0.8.1";
 		prefix 				= "[Buildr] ";
 		
 		cfgManager 			= new Buildr_Manager_Configuration(this);
@@ -156,12 +160,13 @@ public class Buildr extends JavaPlugin {
 		cmdWall 			= new Buildr_Manager_Command_Wall(this);
 		cmdWallx 			= new Buildr_Manager_Command_Wallx(this);
         cmdSlope            = new SlopeCommand(this);
+        cmdClone            = new CloneCommand(this);
 		cmdWool 			= new Buildr_Manager_Command_Wool(this);
 
 		worldBuildMode 		= new ArrayList<World>();
 		worldBuildAllowed 	= new ArrayList<World>();
 		playerBuildMode 	= new ArrayList<Player>();
-		startedBuildings 	= new ArrayList<Buildr_Interface_Building>();
+		startedBuildings 	= new ArrayList<BuilderManager>();
 		playerCuttingTree 	= new LinkedList<Player>();
 	
 		if (cfgManager.checkDirectory()) {
@@ -213,6 +218,7 @@ public class Buildr extends JavaPlugin {
 		getCommand("wall").setExecutor(cmdWall);
 		getCommand("wallx").setExecutor(cmdWallx);
         getCommand("slope").setExecutor(cmdSlope);
+        getCommand("bclone").setExecutor(cmdClone);
 		getCommand("wool").setExecutor(cmdWool);
 		log("command executors set..");
 		
@@ -246,25 +252,31 @@ public class Buildr extends JavaPlugin {
 			log.info(prefix+msg);
 		}
 	}
-	
+
+
 	public void importantLog(String msg){
 		log.info(prefix+msg);
 	}
-	
+
+
 	public boolean checkPermission(Player player, String node){
 		if (!getConfigValue("GENERAL_USE_PERMISSIONS")) {
 			return player.isOp();
 		}
 		return player.hasPermission(node);
 	}
-	
+
+
 	public boolean checkWorldBuildMode(World world){
 		return worldBuildMode.contains(world);
 	}
+
+
 	public boolean checkPlayerBuildMode(Player player){
 		return playerBuildMode.contains(player);
 	}
-	
+
+
 	public void handlePlayerOnLogin(Player player){
 		//System.out.println("BM_STAY_AFTR_LGOUT"+getConfigValue("BUILDMODE_STAY_AFTER_LOGOUT"));
 		if (!getConfigValue("BUILDMODE_STAY_AFTER_LOGOUT") && checkPlayerBuildMode(player)) {
@@ -277,101 +289,129 @@ public class Buildr extends JavaPlugin {
 			//System.out.println("enter bm");
 		}
 	}
-	
-	public boolean checkPlayerHasStartedBuilding(Player player){
-		for (Buildr_Interface_Building wallbuilder : startedBuildings) {
-			if (wallbuilder.getBuildingcreater() == player) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean checkWorldHasBuildmodeUnlocked(World world){
-		for (World allowed : worldBuildAllowed) {
-			if (allowed.equals(world)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
+
+
+    public boolean checkPlayerHasStartedBuilding(Player player) {
+        for (BuilderManager wallbuilder : startedBuildings) {
+            if (wallbuilder.getBuildingCreator() == player) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+    public boolean checkWorldHasBuildmodeUnlocked(World world) {
+        for (World allowed : worldBuildAllowed) {
+            if (allowed.equals(world)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 	public boolean checkTreecuterFireOnLeaves(Block block) {
-		if (block.getType()== Material.LEAVES && getConfigValue("TREECUTTER_ACTIVATE_ON_LEAVES")) {
-			return true;
-		}
-		return false;
+		return (block.getType()== Material.LEAVES && getConfigValue("TREECUTTER_ACTIVATE_ON_LEAVES"));
 	}
-	
-	public Buildr_Interface_Building giveBuilderManager(Player player){
-		for (Buildr_Interface_Building builder : startedBuildings) {
-			if (builder.getBuildingcreater() == player) {
+
+
+	public BuilderManager giveBuilderManager(Player player){
+		for (BuilderManager builder : startedBuildings) {
+			if (builder.getBuildingCreator() == player) {
 				return builder;
 			}
 		}
 		return null;
 	}
-	
+
+
 	public void removeStartedBuilding(Player player){
-		for (Buildr_Interface_Building wallbuilder : startedBuildings) {
-			if (wallbuilder.getBuildingcreater() == player) {
+		for (BuilderManager wallbuilder : startedBuildings) {
+			if (wallbuilder.getBuildingCreator() == player) {
 				startedBuildings.remove(wallbuilder);
 				return;
 			}
 		}
 	}
-	
+
+
 	public boolean checkPlayerItemInHandIsPickaxe(Player player){
-		if (player.getItemInHand().getType() == Material.DIAMOND_PICKAXE ||
+		return (player.getItemInHand().getType() == Material.DIAMOND_PICKAXE ||
 			player.getItemInHand().getType() == Material.IRON_PICKAXE ||
 			player.getItemInHand().getType() == Material.STONE_PICKAXE ||
-			player.getItemInHand().getType() == Material.WOOD_PICKAXE) {
-			return true;
-		}
-		return false;
+			player.getItemInHand().getType() == Material.WOOD_PICKAXE);
 	}
 
+
 	public boolean checkPlayerItemInHandIsAxe(Player player) {
-		if (player.getItemInHand().getType() == Material.DIAMOND_AXE ||
+		return (player.getItemInHand().getType() == Material.DIAMOND_AXE ||
 			player.getItemInHand().getType() == Material.IRON_AXE ||
 			player.getItemInHand().getType() == Material.STONE_AXE ||
-			player.getItemInHand().getType() == Material.WOOD_AXE) {
-			return true;
-		}
-		return false;
+			player.getItemInHand().getType() == Material.WOOD_AXE);
 	}
-	
-	public boolean checkPlayerItemInHandIsStick(Player player) {
-		if (player.getItemInHand().getType() == Material.STICK){
-			return true;
-		}
-		return false;
+
+
+	public boolean checkPlayerItemInHandIsStick(Player player,
+            EquipmentSlot hand) {
+        // check HAND vs. OFF_HAND
+        ItemStack held = (EquipmentSlot.HAND == hand) ? player.getInventory().getItemInMainHand() : player.getInventory().getItemInOffHand();
+		return (held.getType() == Material.STICK);
 	}
+
 	
 	public boolean playerClickedBuildingBlock(Player player, Block clickedBlock) {
 		if (!checkPlayerHasStartedBuilding(player)) {
 			return false;
 		}
-		
-		Buildr_Interface_Building wallbuilder = giveBuilderManager(player);
-		if (!wallbuilder.isCoordinate1Placed()) {
+
+        // if we got here, player has at least one coordinate to add.
+
+		BuilderManager wallbuilder = giveBuilderManager(player);
+
+        wallbuilder.addCoordinate(clickedBlock);
+        player.sendMessage(wallbuilder.getLastPositionMessage());
+        if (wallbuilder.checkCoordinates()) {
+            if (wallbuilder.gotAllCoordinates()) {
+                player.sendMessage(wallbuilder.getBuildingMessage());
+                wallbuilder.startBuild();
+                removeStartedBuilding(player);
+            } else {
+                player.sendMessage(wallbuilder.getNextPositionMessage());
+            }
+        } else {// last coordinate placed was somehow invalid.
+            removeStartedBuilding(player);
+            player.sendMessage(String.format("%sERROR: %s%s",
+                    ChatColor.RED, ChatColor.WHITE, wallbuilder.getCoordinateCheckFailed()));
+        }
+/* old way
+        if (!wallbuilder.isCoordinate1Placed()) {
 			wallbuilder.addCoordinate1(clickedBlock);
-			player.sendMessage("Got positon 1 of your "+wallbuilder.getBuildingName()+" at ["+ChatColor.BLUE+clickedBlock.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getY()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getZ()+ChatColor.WHITE+"]");
+            player.sendMessage(
+                    "Got positon 1 of your " + wallbuilder.getBuildingName() + " at [" + ChatColor.BLUE 
+                        + clickedBlock.getX() + ChatColor.WHITE + ", " + ChatColor.BLUE + clickedBlock.getY()
+                        + ChatColor.WHITE + ", " + ChatColor.BLUE + clickedBlock.getZ() 
+                        + ChatColor.WHITE + "]");
 			player.sendMessage("Now rightclick on block 2 (again with a stick) to continue");
 		}
 		else {
-		player.sendMessage("Got positon 2 of your"+wallbuilder.getBuildingName()+" at ["+ChatColor.BLUE+clickedBlock.getX()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getY()+ChatColor.WHITE+", "+ChatColor.BLUE+clickedBlock.getZ()+ChatColor.WHITE+"]");
-		wallbuilder.addCoordinate2(clickedBlock);
-		if (wallbuilder.checkCoordinates()) {
-				player.sendMessage("Positions OK, build "+wallbuilder.getBuildingName()+"..");
-				wallbuilder.startBuild();
-				removeStartedBuilding(player);
-			}
-			else {
-				removeStartedBuilding(player);
-				player.sendMessage(ChatColor.RED+"ERROR: "+ChatColor.WHITE+wallbuilder.getCoordinateCheckFailed());
-			}
-		}
+            player.sendMessage(
+                    "Got positon 2 of your" + wallbuilder.getBuildingName() + " at [" + ChatColor.BLUE
+                        + clickedBlock.getX() + ChatColor.WHITE + ", " + ChatColor.BLUE + clickedBlock.getY()
+                        + ChatColor.WHITE + ", " + ChatColor.BLUE + clickedBlock.getZ()
+                        + ChatColor.WHITE + "]");
+            wallbuilder.addCoordinate2(clickedBlock);
+            if (wallbuilder.checkCoordinates()) {
+                player.sendMessage("Positions OK, build " + wallbuilder.getBuildingName() + "..");
+                wallbuilder.startBuild();
+                removeStartedBuilding(player);
+            } else {
+                removeStartedBuilding(player);
+                player.sendMessage(ChatColor.RED + "ERROR: " + ChatColor.WHITE
+                        + wallbuilder.getCoordinateCheckFailed());
+            }
+        }
+*/
 		return true;
 	}
 	
@@ -457,7 +497,7 @@ public class Buildr extends JavaPlugin {
 		return playerCuttingTree;
 	}
 
-	public ArrayList<Buildr_Interface_Building> getStartedBuildings() {
+	public ArrayList<BuilderManager> getStartedBuildings() {
 		return startedBuildings;
 	}
 

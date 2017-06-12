@@ -21,16 +21,14 @@ package me.simplex.buildr.manager.builder;
 
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.runnable.builder.Buildr_Runnable_Builder_Cylinder;
-import me.simplex.buildr.util.Buildr_Interface_Building;
 
 import org.bukkit.Material;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_Manager_Builder_Cylinder extends AbstractBuilderManager {
+public class CylinderBuilderManager extends AbstractBuilderManager {
 	private final boolean hollow;
 
-    public Buildr_Manager_Builder_Cylinder(
+    public CylinderBuilderManager(
             Player inPlayer,
             Material inBuildMaterial,
             Material inReplaceMaterial,
@@ -50,7 +48,7 @@ public class Buildr_Manager_Builder_Cylinder extends AbstractBuilderManager {
 	   @Override
     public void startBuild() {
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin,
-                new Buildr_Runnable_Builder_Cylinder(position1, position2, material, replace, replace_mat,
+                new Buildr_Runnable_Builder_Cylinder(getPosition(1), getPosition(2), material, replace, replace_mat,
                         hollow, plugin, creator, material_data));
     }
 }

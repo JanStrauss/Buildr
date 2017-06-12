@@ -21,17 +21,16 @@ package me.simplex.buildr.manager.builder;
 
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.runnable.builder.Buildr_Runnable_Builder_Cuboid;
-import me.simplex.buildr.util.Buildr_Interface_Building;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_Manager_Builder_Cuboid extends AbstractBuilderManager {
+public class CuboidBuilderManager extends AbstractBuilderManager {
 	private final boolean hollow;
 
 
-    public Buildr_Manager_Builder_Cuboid(
+    public CuboidBuilderManager(
             Player inPlayer,
             Material inBuildMaterial,
             Material inReplaceMaterial,
@@ -52,6 +51,6 @@ public class Buildr_Manager_Builder_Cuboid extends AbstractBuilderManager {
     @Override
     public void startBuild() {
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Cuboid(
-                position1, position2, material, replace, replace_mat, hollow, plugin, creator, material_data));
+                getPosition(1), getPosition(2), material, replace, replace_mat, hollow, plugin, creator, material_data));
     }
 }

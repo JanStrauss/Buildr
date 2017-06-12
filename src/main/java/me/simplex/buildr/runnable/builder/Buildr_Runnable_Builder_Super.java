@@ -18,7 +18,7 @@
  */
 package me.simplex.buildr.runnable.builder;
 
-import java.util.HashMap;
+import java.util.Map;
 
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.util.Buildr_Container_UndoBlock;
@@ -42,7 +42,7 @@ public abstract class Buildr_Runnable_Builder_Super implements Runnable {
 	@Override
 	public abstract void run();
 	
-	protected void changeBlock(Block block_handle, HashMap<Block, Buildr_Container_UndoBlock> undo){
+	protected void changeBlock(Block block_handle, Map<Block, Buildr_Container_UndoBlock> undo){
 		undo.put(block_handle, new Buildr_Container_UndoBlock(block_handle.getType(), block_handle.getData()));
 		if (canBuild(player, block_handle)) {
 			if (!plugin.checkPermission(player, "buildr.feature.break_bedrock")) {

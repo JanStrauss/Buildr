@@ -136,7 +136,7 @@ public class Buildr_Listener_Player implements Listener {
 		}
 		
 		// Builders
-		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsStick(event.getPlayer())) {
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.checkPlayerItemInHandIsStick(event.getPlayer(), event.getHand())) {
 			if (!plugin.playerClickedBuildingBlock(event.getPlayer(),event.getClickedBlock())) {
 				if (player.hasPermission("buildr.feature.block_info")) {
 					String loc = ChatColor.GOLD + "X: " +  block.getX() +  " Y: " +  block.getY() +  " Z: " +  block.getZ() + ChatColor.WHITE;

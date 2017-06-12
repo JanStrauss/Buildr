@@ -1,6 +1,6 @@
 name: Buildr
 main: me.simplex.buildr.Buildr
-version: 0.8.0
+version: 0.8.2
 website: http://forums.bukkit.org/threads/25644/
 author: simplex
 startup: startup
@@ -60,6 +60,11 @@ commands:
       aliases: [ramp]
       usage: |
             /<command> <material>{:data} {rReplace_material{:data}} {north|east|south|west}
+  bclone:
+      description: Starts cloning a cuboid
+      aliases: [bcl]
+      usage: |
+            /<command> {rAngle (rotation angle, multiple of 90, clockwise)}
   airfloor:
     description: places a block (area) of material x y blocks above the player
     aliases: [af,airf]
@@ -131,6 +136,7 @@ permissions:
             buildr.cmd.cylinder: true
             buildr.cmd.airfloor: true
             buildr.cmd.slope: true
+            buildr.cmd.clone: true
             buildr.cmd.top: true
             buildr.cmd.undo: true
             buildr.cmd.gv: true

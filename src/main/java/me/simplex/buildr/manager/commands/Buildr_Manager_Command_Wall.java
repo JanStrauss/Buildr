@@ -20,7 +20,7 @@
 package me.simplex.buildr.manager.commands;
 
 import me.simplex.buildr.Buildr;
-import me.simplex.buildr.manager.builder.Buildr_Manager_Builder_Wall;
+import me.simplex.buildr.manager.builder.WallBuilderManager;
 import me.simplex.buildr.util.Buildr_Type_Wool;
 
 import org.bukkit.ChatColor;
@@ -54,7 +54,7 @@ public class Buildr_Manager_Command_Wall extends StdArgBuilderCommand {
         if (null != replace_mat) {
             replace_info = "Replace: " + ChatColor.BLUE + replace_mat;
         }
-        plugin.getStartedBuildings().add(new Buildr_Manager_Builder_Wall((Player) sender, material,
+        plugin.getStartedBuildings().add(new WallBuilderManager((Player) sender, material,
                 replace_mat, plugin, material_data));
         String buildinfo = "Started new Wall. Info: Blocktype: " + ChatColor.BLUE + material.toString() + ChatColor.WHITE + " (ID:" + ChatColor.BLUE + material.
                 getId() + ChatColor.WHITE + ") " + replace_info;

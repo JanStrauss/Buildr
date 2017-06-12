@@ -21,17 +21,16 @@ package me.simplex.buildr.manager.builder;
 
 import me.simplex.buildr.Buildr;
 import me.simplex.buildr.runnable.builder.Buildr_Runnable_Builder_Wall;
-import me.simplex.buildr.util.Buildr_Interface_Building;
 import me.simplex.buildr.util.Buildr_Type_Wall;
 
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
-public class Buildr_Manager_Builder_Wall extends AbstractBuilderManager {
+public class WallBuilderManager extends AbstractBuilderManager {
 	private Buildr_Type_Wall type;
 	
-    public Buildr_Manager_Builder_Wall(
+    public WallBuilderManager(
             Player inPlayer,
             Material inBuildMaterial,
             Material inReplaceMaterial,
@@ -54,7 +53,10 @@ public class Buildr_Manager_Builder_Wall extends AbstractBuilderManager {
 
 
 	private Buildr_Type_Wall checkWallType() {
-		if (position1.getX() == position2.getX()) {
+        Block position1 = getPosition(1);
+        Block position2 = getPosition(2);
+
+        if (position1.getX() == position2.getX()) {
 			return Buildr_Type_Wall.WALL_X;
 		}
 		if (position1.getY() == position2.getY()) {
@@ -78,6 +80,6 @@ public class Buildr_Manager_Builder_Wall extends AbstractBuilderManager {
 	@Override
 	public void startBuild(){
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Buildr_Runnable_Builder_Wall(
-                position1, position2, type, material, replace, replace_mat, plugin, creator, material_data));
+                getPosition(1), getPosition(2), type, material, replace, replace_mat, plugin, creator, material_data));
 	}
 }

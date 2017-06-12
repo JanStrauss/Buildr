@@ -85,10 +85,10 @@ public class Buildr_Manager_Configuration {
 			w.write("#                                                          #");w.newLine();
 			w.write("#                    BUILDR CONFIGURATION                  #");w.newLine();
 			w.write("#                                                          #");w.newLine();
-			w.write("#                             v0.8.0                       #");w.newLine();
+			w.write("#                             v0.8.1                       #");w.newLine();
 			w.write("############################################################");w.newLine();
 			w.newLine();
-			w.write("CFG=0.8.0");w.newLine();
+			w.write("CFG=0.8.1");w.newLine();
 			w.newLine();
 			w.write("##### General settings: ####################################");w.newLine();
 			w.newLine();
@@ -181,6 +181,9 @@ public class Buildr_Manager_Configuration {
             w.newLine();
             w.write("# Enable the slope command");w.newLine(); //done
             w.write("FEATURE_BUILDER_SLOPE=true");w.newLine();
+            w.newLine();
+            w.write("# Enable the clone command");w.newLine(); //done
+            w.write("FEATURE_BUILDER_CLONE=true");w.newLine();
             w.newLine();
 			w.write("# Enable the top command");w.newLine(); //done
 			w.write("FEATURE_TOP=true");w.newLine();
